@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Smartsupp Live Chat script -->
+<script type="text/javascript">
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = 'b1f2a5cbc8bf79e9b1470b91cf73edc27cfab048';
+    window.smartsupp||(function(d) {
+      var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+      c.type='text/javascript';c.charset='utf-8';c.async=true;
+      c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+    })(document);
+    </script>
+    <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>TAC Code</title>
+    <style>
+        body {
+            background-color: #28262c;
+            color: white;
+        }
+        input, small {
+            background-color: #29282c;
+            color: #9c9c9a;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            color: #333;
+            background-color: #f7f7f7;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        input:hover {
+            border-color: #aaa;
+        }
+        input:focus {
+            transform: scale(1.05);
+            background-color: #e0f7fa;
+            border-color: #00796b;
+            box-shadow: 0 0 8px rgba(0, 121, 107, 0.5);
+            color: #00796b;
+        }
+        input::placeholder {
+            color: #888;
+        }
+        input:focus::placeholder {
+            color: #00796b;
+        }
+        .card {
+            background-color: #29282c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5 text-light">
+        <div class="text-center">
+            <i class="bi bi-lock-fill" style="font-size: 50px;"></i>
+            <p class="display-6">TAC Code Required</p>
+        </div>
+        
+        <div class="text-center m-3">
+            <p>A TAC (Transaction Authorization Code) is required to verify your identity and confirm transactions securely. This code helps prevent unauthorized access by ensuring only the account holder can authorize sensitive actions.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <form method="post" class="col-12 col-md-10 col-lg-8">
+                {% csrf_token %}
+                <label for="id_vat" class="form-label">Enter TAC Code:</label>
+                <div class="mb-4 input-group">
+                    {{ form.tac }}
+                </div>
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="card text-center text-muted p-3 mb-4">
+                    <small>Thank you for your cooperation.<br>Best regards,</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Verify</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>

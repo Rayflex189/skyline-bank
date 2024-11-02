@@ -1,0 +1,247 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyline Bank - Bank Transfer</title>
+    <!-- Smartsupp Live Chat script -->
+<script type="text/javascript">
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = 'b1f2a5cbc8bf79e9b1470b91cf73edc27cfab048';
+    window.smartsupp||(function(d) {
+      var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+      c.type='text/javascript';c.charset='utf-8';c.async=true;
+      c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+    })(document);
+    </script>
+    <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
+    <link rel="icon" href="{% static 'images/web_logo.jpg' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/dash.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Basic Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #06A3DA;
+            margin: 0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .bank-header {
+            background-color: #003366;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .bank-header h1 {
+            font-size: 1.8rem;
+            margin: 0;
+            padding-left: 20px;
+        }
+        .notification-bell, .open-sidebar-btn {
+            cursor: pointer;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #002244;
+            position: fixed;
+            right: -250px;
+            top: 0;
+            transition: right 0.4s ease;
+            color: #fff;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+        .sidebar.open {
+            right: 0;
+        }
+        .sidebar-header, .user-details, .sidebar ul li {
+            padding: 15px 20px;
+            border-bottom: 1px solid #004080;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+        .sidebar ul li a:hover {
+            background-color: #003366;
+        }
+
+        /* Centered Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        /* Transfer Section */
+        .transfer-header {
+            background-color: #004080;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+            width: 100%;
+        }
+        .transfer-form {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+        .transfer-form label {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .transfer-form input, .transfer-form select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .transfer-form button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0055cc;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .transfer-form button:hover {
+            background-color: #004080;
+        }
+        .errors {
+            color: #f00;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        /* Bottom Navbar */
+        .bottom-navbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #003366;
+            color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+        .nav-item a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Bank Header -->
+    <header class="bank-header">
+        <h1>Bank Transfer</h1>
+        <div class="notification-bell" onclick="toggleSidebar()">
+            <i class="fas fa-bell"></i>
+        </div>
+        <div class="open-sidebar-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Account Menu</h2>
+            <button onclick="toggleSidebar()">Close</button>
+        </div>
+        <div class="user-details">
+            <p>Username: <strong>{{ request.user }}</strong></p>
+            <p>Email: <strong>{{ user_profile.email }}</strong></p>
+        </div>
+        <ul>
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="{% url 'reset_profile' %}">Settings</a></li>
+            <li><a href="{% url 'LogOut' %}">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="transfer-header">Wire Transfer</div>
+        <div class="transfer-form">
+            {% if user_profile.is_linked %}
+                <p class="text-success">Your account is activated. You can proceed with transactions.</p>
+            {% else %}
+                <p class="text-danger">Your account is not activated. Please purchase an activation pin.</p>
+                <a href="{% url 'linking_view' %}" class="btn btn-primary">Activate Account</a>
+            {% endif %}
+            
+            <form action="" method="post">
+                {% csrf_token %}
+                <label>Current Balance ({{ user_profile.currency }}): {{ user_profile.balance|intcomma }}</label>
+                {{ form.amount }}
+                <label for="beneficiary_name">Beneficiary Account Name</label>
+                <input type="text" id="beneficiary_name" name="beneficiary_name">
+
+                <label for="bank_name">Bank Name</label>
+                <input type="text" id="bank_name" name="bank_name">
+
+                <label for="account_number">Beneficiary Account Number</label>
+                <input type="tel" id="account_number" name="account_number">
+
+                <label for="account_type">Select Account Type</label>
+                {{ form.account_type }}
+
+                <label for="purpose">Fund Purpose</label>
+                <input type="text" id="purpose" name="purpose">
+
+                <button type="submit">Continue</button>
+                <div class="errors">{{ form.errors }}</div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bottom Navbar -->
+    <div class="bottom-navbar">
+        <div class="nav-item"><a href="{% url 'home' %}">Home</a></div>
+        <div class="nav-item"><a href="{% url 'profile' %}">Profile</a></div>
+        <div class="nav-item"><a href="{% url 'dashboard' %}">Transactions</a></div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

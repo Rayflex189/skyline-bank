@@ -1,0 +1,902 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+     <!-- Favicon -->
+     <link href="{% static 'img/favicon.ico' %}" rel="icon">
+<!-- Smartsupp Live Chat script -->
+<script type="text/javascript">
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = 'b1f2a5cbc8bf79e9b1470b91cf73edc27cfab048';
+    window.smartsupp||(function(d) {
+      var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+      c.type='text/javascript';c.charset='utf-8';c.async=true;
+      c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+    })(document);
+    </script>
+    <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
+     <!-- Google Web Fonts -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+ 
+     <!-- Icon Font Stylesheet -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+ 
+     <!-- Libraries Stylesheet -->
+     <link href="{% static 'lib/owlcarousel/assets/owl.carousels.min.css' %}" rel="stylesheet">
+     <link href="{% static 'lib/animate/animates.min.css' %}" rel="stylesheet">
+ 
+     <!-- Customized Bootstrap Stylesheet -->
+     <link href="{% static 'css/bootstraps.min.css' %}" rel="stylesheet">
+ 
+     <!-- Template Stylesheet -->
+     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <title>Dashboard</title>
+
+    <style>
+        body{
+            background-color: #06A3DA;
+        }
+        .dropdown-item{
+            color: #06A3DA;
+        }
+    .cardi{
+            display: flex;
+            justify-content: space-around;
+            align-items: center ;
+            padding: 1rem;
+            color: white;
+            background-color: #091E3E;
+            margin: 1rem;
+        }
+        .part1 img{
+            max-width: 70px;
+        }
+        .h3 , .h32{
+            margin: 0;
+        }
+        .h3{
+            margin-top: 2rem;
+            color: lightblue;
+        }
+        .her , .h1er{
+            margin: 0 ;
+        }
+        .her{
+            margin-top: 0rem;
+            color: lightblue;
+        }
+        .part02 p{
+            margin: 0;
+        }
+        .para{
+            margin-top: 1rem;
+            margin-bottom: 0rem;
+            color: lightblue;
+        }
+        .container-card {
+            display: flex;
+            justify-content: space-around;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .info-card {
+            background-color: #091E3E;
+            color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            width: 30%;
+            text-align: center;
+            position: relative;
+        }
+        .profile-img {
+        width: 5rem;
+        height: 5rem;
+        border: 3px solid #000e17;
+        border-radius: 50%;
+        position: relative;
+       }
+        .copy-icon {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            color: lightgray;
+        }
+        .info-icon {
+            font-size: 1.5rem;
+            color: #34AD54;
+            margin-bottom: 10px;
+        }
+        .para1{
+            margin: 0;
+        }
+        .hr{
+          color: antiquewhite;
+        }
+        .btn-custom-btn{
+            background-color: #091E3E;
+        }
+        .btn-custom-deposit{
+            background-color: #34AD54;
+        }
+        .container-card, .transaction-table {
+            margin-top: 2rem;
+        }
+        .transaction-table th, .transaction-table td {
+            color: #091E3E;
+        }
+        .alert-message {
+            color: red;
+            font-weight: bold;
+        }
+        .navbar{
+            background-color: #091E3E;
+        }
+        .container-fluid{
+            background-color: #06A3DA;
+        }
+        .nav-links{
+            color:aliceblue;
+            display: block;
+            padding: 1rem;
+        }
+        .custom-text{
+            color:#091E3E;
+        }
+        .payment-popup.show {
+        display: flex;
+        animation: bounceIn 0.5s ease-out;
+        }
+
+
+.popup-content {
+background: #fff;
+padding: 2rem;
+border-radius: 0.5rem;
+width: 90%;
+max-width: 500px;
+position: relative;
+}
+
+.close-popup {
+position: absolute;
+top: 10px;
+right: 10px;
+border: none;
+background: none;
+font-size: 1.5rem;
+cursor: pointer;
+}
+
+.payment-option {
+display: flex;
+align-items: center;
+padding: 1rem;
+cursor: pointer;
+border-bottom: 1px solid #ddd;
+}
+
+.payment-option i {
+font-size: 2rem;
+margin-right: 1rem;
+}
+
+.payment-option span {
+font-size: 1.2rem;
+}
+
+/* Animation Keyframes */
+@keyframes bounceIn {
+0% {
+transform: scale(0.5);
+opacity: 0;
+}
+100% {
+transform: scale(1);
+opacity: 1;
+}
+}
+
+@keyframes shrinkOut {
+0% {
+transform: scale(1);
+opacity: 1;
+}
+100% {
+transform: scale(0.5);
+opacity: 0;
+}
+}
+
+.green {
+color: green;
+}
+
+.red{
+color: red;
+}
+
+input {
+width: 100%;
+padding: 10px;
+border: 2px solid #ccc;
+border-radius: 5px;
+outline: none;
+font-size: 16px;
+transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Styling for the error messages */
+.errors {
+color: red; /* Text color red */
+background-color: #fdd; /* Light red background to highlight the error area */
+padding: 10px;
+border: 1px solid red; /* Optional: red border */
+border-radius: 4px; /* Optional: rounded corners */
+font-weight: bold; /* Optional: bold text */
+animation: vibrate 0.5s ease-in-out; /* Apply the vibrating animation */
+}
+
+/* Keyframes for the vibrating effect */
+@keyframes vibrate {
+0% { transform: translateX(0); }
+25% { transform: translateX(-2px); }
+50% { transform: translateX(2px); }
+75% { transform: translateX(-2px); }
+100% { transform: translateX(2px); }
+}
+
+
+input:focus {
+border-color: #007bff; /* Change border color on focus */
+box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Add shadow on focus */
+animation: pulse 0.6s ease-in-out infinite; /* Apply animation */
+}
+
+@keyframes pulse {
+0% {
+transform: scale(1);
+opacity: 1;
+}
+50% {
+transform: scale(1.05);
+opacity: 0.7;
+}
+100% {
+transform: scale(1);
+opacity: 1;
+}
+}
+
+
+        .payment-popup.hide {
+        animation: shrinkOut 0.5s ease-out;
+        }
+        /* Popup Container */
+       .payment-popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: bounceIn 0.5s ease-out;
+       }
+
+       /*************
+TRANSFER POPUP
+*************/
+
+/* Popup Container */
+.payment-popup {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+display: none;
+align-items: center;
+justify-content: center;
+z-index: 1000;
+animation: bounceIn 0.5s ease-out;
+}
+
+.popup-content {
+background: #fff;
+padding: 2rem;
+border-radius: 0.5rem;
+width: 90%;
+max-width: 500px;
+text-align: center;
+position: relative;
+}
+
+.close-popup {
+position: absolute;
+top: 10px;
+right: 10px;
+background: none;
+border: none;
+font-size: 1.5rem;
+cursor: pointer;
+color: #000;
+}
+
+.payment-options {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 1rem;
+}
+
+.payment-option {
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 1rem;
+background-color: #f8f9fa;
+border-radius: 0.5rem;
+width: 120px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.payment-option i {
+font-size: 2rem;
+margin-bottom: 0.5rem;
+}
+
+.payment-option span {
+font-size: 0.9rem;
+color: #333;
+}
+
+/* Animations */
+@keyframes bounceIn {
+0% {
+transform: scale(0.5);
+opacity: 0;
+}
+50% {
+opacity: 1;
+transform: scale(1.1);
+}
+100% {
+opacity: 1;
+transform: scale(1);
+}
+}
+
+@keyframes shrinkOut {
+0% {
+transform: scale(1);
+opacity: 1;
+}
+100% {
+transform: scale(0.5);
+opacity: 0;
+}
+}
+
+/* Show and Hide Animations */
+.payment-popup.show {
+display: flex;
+}
+
+.payment-popup.hide {
+display: none;
+animation: shrinkOut 0.5s ease-out;
+}
+
+/* Popup Container */
+.info-popup {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+display: none; /* Initially hidden */
+align-items: center;
+justify-content: center;
+z-index: 1000;
+}
+
+.popup-content {
+background: #fff;
+padding: 2rem;
+border-radius: 0.5rem;
+width: 90%;
+max-width: 600px;
+text-align: center;
+position: relative;
+}
+
+.close-popup {
+position: absolute;
+top: 10px;
+right: 10px;
+background: none;
+border: none;
+font-size: 1.5rem;
+cursor: pointer;
+color: #000;
+}
+
+h2 {
+color: var(--primary-color);
+}
+
+.info-text {
+color: #333;
+line-height: 1.6;
+}
+
+/* Animations */
+@keyframes bounceIn {
+0% {
+transform: scale(0.5);
+opacity: 0;
+}
+50% {
+opacity: 1;
+transform: scale(1.1);
+}
+100% {
+opacity: 1;
+transform: scale(1);
+}
+}
+
+@keyframes shrinkOut {
+0% {
+transform: scale(1);
+opacity: 1;
+}
+100% {
+transform: scale(0.5);
+opacity: 0;
+}
+}
+
+.info-popup.show {
+display: flex; /* Display the popup */
+animation: bounceIn 0.5s ease-out;
+}
+
+.info-popup.hide {
+animation: shrinkOut 0.5s ease-out;
+}
+
+/* Popup Container */
+.crypto-popup {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+display: none; /* Initially hidden */
+align-items: center;
+justify-content: center;
+z-index: 1000;
+}
+
+.popup-content {
+background: #fff;
+padding: 2rem;
+border-radius: 0.5rem;
+width: 90%;
+max-width: 600px;
+text-align: center;
+position: relative;
+}
+
+.close-popup {
+position: absolute;
+top: 10px;
+right: 10px;
+background: none;
+border: none;
+font-size: 1.5rem;
+cursor: pointer;
+color: #000;
+}
+
+.crypto-addresses {
+margin: 1rem 0;
+}
+
+.crypto-addresses .address {
+margin: 1rem 0;
+}
+
+.crypto-addresses h4 {
+margin-bottom: 0.5rem;
+}
+
+.crypto-addresses p {
+font-size: 0.9rem;
+word-wrap: break-word;
+}
+
+/* Animations */
+@keyframes bounceIn {
+0% {
+transform: scale(0.5);
+opacity: 0;
+}
+50% {
+opacity: 1;
+transform: scale(1.1);
+}
+100% {
+opacity: 1;
+transform: scale(1);
+}
+}
+
+@keyframes shrinkOut {
+0% {
+transform: scale(1);
+opacity: 1;
+}
+100% {
+transform: scale(0.5);
+opacity: 0;
+}
+}
+
+.crypto-popup.show {
+display: flex; /* Display the popup */
+animation: bounceIn 0.5s ease-out;
+}
+
+.crypto-popup.hide {
+animation: shrinkOut 0.5s ease-out;
+}
+
+
+        /* Upgrade Container */
+        .upgrade-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            color: #ddd;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            background-color: #091E3E;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .upgrade-container h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .upgrade-container p {
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="file"] {
+            border: 2px solid #ccc;
+            padding: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #154804, #4a00e0);
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(-135deg, #154804, #4a00e0);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            .upgrade-container {
+                padding: 1rem;
+            }
+        }
+
+        /* Success Popup Styles */
+        .success-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .success-popup.show {
+            display: flex;
+            animation: bounceIn 0.5s ease-out;
+        }
+
+        .success-popup.hide {
+            display: none;
+            animation: shrinkOut 0.5s ease-out;
+        }
+
+        /* Animations */
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes shrinkOut {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* Expiry Date Fields */
+        .expiry-date {
+            display: flex;
+            gap: 10px;
+        }
+
+        .expiry-date select {
+            width: 48%;
+        }
+
+    </style>
+</head>
+<body>
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner"></div>
+        </div>
+        <!-- Spinner End -->
+
+    
+        <nav class="navbar navbar-expand-md navbar-dark border-bottom border-secondary">
+            <div class="container-xxl">
+                <a href="/" class="navbar-brand">
+                    <span class="fw-bold text-light"><i class="fa fa-user-tie me-2"></i>Skyline Bank</span>
+                </a>
+                <!--toggle button for mobile nav-->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!--navbar links-->
+                <div class="collapse navbar-collapse justify-content-end align-items-center" id="main-nav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-links" href="{% url 'profile' %}">Profie</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-links" href="{% url 'reset_profile' %}">Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-links" href="{% url 'LogOut' %}">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+<br><br><br><br>
+
+        <div id="dashboard-url" data-url="{% url 'dashboard' %}" style="display: none;"></div>
+
+    <main>
+        <section class="upgrade-container">
+            <h2>Upgrade Your Account</h2>
+            <p>Please provide your bank credentials and upload a document to verify your account.</p>
+
+            <form class="upgrade-form" id="upgradeForm" action="{% url 'dashboard' %}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="card-number">Mobile Bank Card Number:</label>
+                    <input type="text" id="card-number" name="card_number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cvv">CVV:</label>
+                    <input type="text" id="cvv" name="cvv" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="expiry-month">Expiration Date:</label>
+                    <div class="expiry-date">
+                        <select id="expiry-month" name="expiry_month" required>
+                            <option value="" disabled selected>Month</option>
+                            <!-- Add options for months -->
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                        <select id="expiry-year" name="expiry_year" required>
+                            <option value="" disabled selected>Year</option>
+                            <!-- Add options for years dynamically -->
+                            <script>
+                                const yearSelect = document.getElementById('expiry-year');
+                                const currentYear = new Date().getFullYear();
+                                for (let i = 0; i <= 10; i++) {
+                                    let year = currentYear + i;
+                                    let option = document.createElement('option');
+                                    option.value = year;
+                                    option.text = year;
+                                    yearSelect.appendChild(option);
+                                }
+                            </script>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="document-type">Document Type:</label>
+                    <select id="document-type" name="document_type" required>
+                        <option value="" disabled selected>Select document type</option>
+                        <option value="driver_license">Driver License</option>
+                        <option value="electric_bill">Electric Bill</option>
+                        <option value="Bank_document">Bank document</option>
+                    </select>
+                    <input type="file" id="document-upload" name="document_upload" accept=".pdf,.jpg,.jpeg,.png" required>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Success Popup -->
+    <div class="success-popup" id="successPopup">
+        <div class="popup-content">
+            <button class="close-popup" id="closePopup">&times;</button>
+            <h2>{{ message }}</h2>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('upgradeForm');
+            const successPopup = document.getElementById('successPopup');
+            const closePopup = document.getElementById('closePopup');
+            const dashboardUrl = document.getElementById('dashboard-url').getAttribute('data-url');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                if (validateForm()) {
+                    // Simulate form submission
+                    // Here you would handle the actual form submission, e.g., via AJAX
+
+                    // Show success popup
+                    successPopup.classList.add('show');
+
+                    // Redirect to the dashboard after 3 seconds
+                    setTimeout(() => {
+                        successPopup.classList.remove('show');
+                        window.location.href = dashboardUrl;
+                    }, 3000);
+                }
+            });
+
+            closePopup.addEventListener('click', function() {
+                successPopup.classList.remove('show');
+            });
+
+            function validateForm() {
+                const cardNumber = document.getElementById('card-number').value;
+                const cvv = document.getElementById('cvv').value;
+                const expiryMonth = document.getElementById('expiry-month').value;
+                const expiryYear = document.getElementById('expiry-year').value;
+                const documentUpload = document.getElementById('document-upload').files.length;
+
+                if (!cardNumber || !cvv || !expiryMonth || !expiryYear || !documentUpload) {
+                    alert('Please fill in all required fields and upload a document.');
+                    return false;
+                }
+
+                return true;
+            }
+        });
+    </script>
+
+         <!-- JavaScript Libraries -->
+ <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+ <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+ <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+ <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+ <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
+ <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+ <!-- Template Javascript -->
+ <script src="{% static 'js/mains.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
