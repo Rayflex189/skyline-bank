@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +27,7 @@ SECRET_KEY = 'django-insecure-os%ceh%!b_zte(60bvi9)pujn1v#lyuh^u4l!hr+_-5)rmf&9-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -125,7 +127,13 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-import os
+# Define STATIC_ROOT to collect static files for production and staging
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+if not DEBUG:
+    # Use WhiteNoise storage for production
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
