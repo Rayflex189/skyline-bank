@@ -11,6 +11,21 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
+import dj_database_url
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'skyline_bank_dbs',
+        'USER': 'skyline_bank_dbs_user',
+        'PASSWORD': 'xhWkpg1XDtSiraXpWHjF2uiIEkvRA7Qp',
+        'HOST': 'dpg-cugq4i9u0jms73fpdm1g-a.oregon-postgres.render.com',  # Check this
+        'PORT': '5432',
+    },
+     'OPTIONS': {
+            'sslmode': 'require',
+        },
+}
 
 from pathlib import Path
 
@@ -27,7 +42,7 @@ SECRET_KEY = 'django-insecure-os%ceh%!b_zte(60bvi9)pujn1v#lyuh^u4l!hr+_-5)rmf&9-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['skylinebank.onrender.com']
 
 
 # Application definition
@@ -79,17 +94,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'bank_site.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 
 # Password validation
