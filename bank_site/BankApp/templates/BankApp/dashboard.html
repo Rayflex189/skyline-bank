@@ -623,7 +623,7 @@ animation: shrinkOut 0.5s ease-out;
   <div class="part2">
       <div class="part02">
           <h3 class="her">Available balance</h3>
-          <h1 class="h1er text-secondary">{{user_profile.currency}} {{user_profile.balance}}</h1>
+          <h1 class="h1er text-secondary">{{user_profile.currency}} {{user_profile.balance|intcomma}}</h1>
           <p class="text-secondary">{{user_profile.first_name}} {{user_profile.middle_name}}</p>
        </div>
        <div class="part01">
@@ -679,8 +679,8 @@ animation: shrinkOut 0.5s ease-out;
             <tr>
                 <td>{{ transaction.timestamp|date:"Y-m-d H:i:s" }}</td>
                 <td>{{ transaction.description }}</td>
-                <td>{{ transaction.amount }}</td>
-                <td>{{ transaction.balance_after }}</td>
+                <td>{{ transaction.amount|intcomma }}</td>
+                <td>{{ transaction.balance_after|intcomma }}</td>
             </tr>
             {% empty %}
             <tr>
