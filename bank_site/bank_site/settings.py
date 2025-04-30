@@ -16,10 +16,10 @@ import dj_database_url
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'skyline_bank_dbs',
-        'USER': 'skyline_bank_dbs_user',
-        'PASSWORD': 'xhWkpg1XDtSiraXpWHjF2uiIEkvRA7Qp',
-        'HOST': 'dpg-cugq4i9u0jms73fpdm1g-a.oregon-postgres.render.com',  # Check this
+        'NAME': 'skyline_dbs',
+        'USER': 'skyline_dbs_user',
+        'PASSWORD': 'uT6f68DYl7NLicy3Qc2CRWtFeYqN2Qvl',
+        'HOST': 'dpg-d05t5e2dbo4c7391eja0-a.oregon-postgres.render.com',  # Check this
         'PORT': '5432',
     },
      'OPTIONS': {
