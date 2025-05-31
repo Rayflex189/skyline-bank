@@ -32,4 +32,4 @@ RUN python manage.py create_admin
 EXPOSE 8000
 
 # Start server
-CMD ["gunicorn", "wealthbridge.wsgi:application", "--bind", "0.0.0.0:8030"]
+CMD ["gunicorn", "wealthbridge.wsgi:application", "--bind", "0.0.0.0:8000"]
