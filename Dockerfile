@@ -29,7 +29,7 @@ RUN python manage.py migrate
 RUN python manage.py create_admin
 
 # Expose port
-EXPOSE 8000
+EXPOSE 8010
 
 # Start server
-CMD ["gunicorn", "wealthbridge.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "wealthbridge.wsgi:application", "--bind", "0.0.0.0:8010"]
