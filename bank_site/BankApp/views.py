@@ -121,6 +121,8 @@ def reset_profile(request):
     }
     return render(request, 'BankApp/update_profile.html', context)
 
+
+@login_required(login_url='user_login')
 def dashboard(request):
     try:
         user_profile = UserProfile.objects.get(user=request.user)
