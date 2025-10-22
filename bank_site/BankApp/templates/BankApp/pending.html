@@ -4,140 +4,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="stylesheet" href="{% static 'css/dash.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dash.css' %}">
     <link rel="icon" href="{% static 'images/web_logo.jpg' %}" type="image/x-icon" />
-<!-- Smartsupp Live Chat script -->
-<script type="text/javascript">
-var _smartsupp = _smartsupp || {};
-_smartsupp.key = 'b1f2a5cbc8bf79e9b1470b91cf73edc27cfab048';
-window.smartsupp||(function(d) {
-  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-  c.type='text/javascript';c.charset='utf-8';c.async=true;
-  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
-})(document);
-</script>
-<noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>Pending Transaction - Axis Bank</title>
+    
+    <!-- Smartsupp Live Chat script -->
+    <script type="text/javascript">
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = 'b1f2a5cbc8bf79e9b1470b91cf73edc27cfab048';
+    window.smartsupp||(function(d) {
+      var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+      c.type='text/javascript';c.charset='utf-8';c.async=true;
+      c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+    })(document);
+    </script>
+    <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <title>Transaction Pending - Skybridge Finance</title>
+    
     <style>
-        /* Base styles and color scheme */
-        body, html {
+        :root {
+            --primary-color: #06A3DA;
+            --secondary-color: #091E3E;
+            --accent-color: #34AD54;
+            --warning-color: #FFC107;
+            --light-color: #F8F9FA;
+            --dark-color: #212529;
+            --text-color: #333333;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: linear-gradient(135deg, #06A3DA 0%, #091E3E 100%);
+            color: var(--text-color);
+            line-height: 1.6;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background-size: cover;
-    background-position: center;
-    background-repeat:no-repeat;
-    background-image: url("/static/img/carsol-1.jpg");
-            height: 100%;
-            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
-        .dashboard {
+        
+        .transaction-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .status-icon {
+            font-size: 4rem;
+            color: var(--warning-color);
+            margin-bottom: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .status-title {
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .status-subtitle {
+            color: #6c757d;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .user-greeting {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .status-message {
+            color: #6c757d;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+        
+        .action-buttons {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            gap: 1rem;
+            margin-top: 2rem;
         }
-        @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-        .loading-container {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);/* White background with 80% opacity */
-            border-radius: 10px;
-            animation: fadeIn 1s ease-in-out;
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-            animation: bounceIn 1s ease-in-out; /* Larger shadow for a more pronounced effect */
-            max-width: 400px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
-
-        .loading-container h2 {
-            color:linear-gradient(to top , #3d00a6, #000e17);
-            margin-bottom: 20px;
-        }
-
-
-        @keyframes bounce {
-    0% {
-        transform: translateY(0);
-    }
-    100% {
-        transform: translateY(-10px);
-    }
-}
-
-        .message {
-            margin-top: 20px;
-            color: #333;
-            font-size: 1rem;
-        }
-
-        .message a {
-            color: linear-gradient(to top , #3d00a6, #000e17);
+        
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
             text-decoration: none;
-            font-weight: bold;
+            display: inline-block;
         }
-
-        .message a:hover {
-            text-decoration: underline;
+        
+        .btn-primary-custom:hover {
+            background-color: #0489b7;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(6, 163, 218, 0.3);
         }
-
-        /* Styles for the infinity preloader */
-        * {
-            border: 0;
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        
+        .btn-secondary-custom {
+            background-color: var(--secondary-color);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
-
+        
+        .btn-secondary-custom:hover {
+            background-color: #06162d;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(9, 30, 62, 0.3);
+        }
+        
+        .loading-animation {
+            margin: 2rem 0;
+        }
+        
         .ip {
-            width: 256px;
-            height: 128px;
+            width: 200px;
+            height: 100px;
+            margin: 0 auto;
         }
-
+        
         .ip__track {
-            stroke: hsl(var(--hue), 90%, 90%);
-            transition: stroke var(--trans-dur);
+            stroke: #e9ecef;
         }
-
+        
         .ip__worm1,
         .ip__worm2 {
             animation: worm1 2s linear infinite;
         }
-
+        
         .ip__worm2 {
             animation-name: worm2;
         }
-
-        /* Dark theme */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: hsl(var(--hue), 90%, 5%);
-                --fg: hsl(var(--hue), 90%, 95%);
-            }
-
-            .ip__track {
-                stroke: hsl(var(--hue), 90%, 15%);
-            }
-        }
-
-        /* Animation */
+        
         @keyframes worm1 {
             from {
                 stroke-dashoffset: 0;
@@ -154,7 +212,7 @@ window.smartsupp||(function(d) {
                 stroke-dashoffset: 0;
             }
         }
-
+        
         @keyframes worm2 {
             from {
                 stroke-dashoffset: 358;
@@ -166,69 +224,105 @@ window.smartsupp||(function(d) {
                 stroke-dashoffset: -358;
             }
         }
-/* Style the Telegram icon */
-.telegram-icon {
-    position: fixed;
-    bottom: 20px; /* Distance from the bottom of the page */
-    left: 20px;   /* Distance from the left of the page */
-    background: #0088cc; /* Telegram's official color */
-    color: white;
-    border-radius: 50%;
-    padding: 15px; /* Increased padding for larger icon */
-    font-size: 40px; /* Increased font size for larger icon */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-decoration: none;
-    z-index: 9999; /* Ensure it's above other elements */
-}
-
-.telegram-icon:hover {
-    background: #007ab8; /* Darker color on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
+        
+        /* Telegram Icon */
+        .telegram-icon {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #0088cc;
+            color: white;
+            border-radius: 50%;
+            padding: 15px;
+            font-size: 24px;
+            box-shadow: var(--box-shadow);
+            text-decoration: none;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .telegram-icon:hover {
+            background: #007ab8;
+            transform: scale(1.1);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 576px) {
+            .transaction-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .status-icon {
+                font-size: 3rem;
+            }
+            
+            .status-title {
+                font-size: 1.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
     </style>
-    <!-- Link to Font Awesome CSS for the Telegram icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Link to your CSS file -->
 </head>
 <body>
-    <div class="dashboard">
-        <div class="loading-container">
-            <main>
-                <svg class="ip" viewBox="0 0 256 128" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="0">
-                            <stop offset="0%" stop-color="#5ebd3e" />
-                            <stop offset="33%" stop-color="#ffb900" />
-                            <stop offset="67%" stop-color="#f78200" />
-                            <stop offset="100%" stop-color="#e23838" />
-                        </linearGradient>
-                        <linearGradient id="grad2" x1="1" y1="0" x2="0" y2="0">
-                            <stop offset="0%" stop-color="#e23838" />
-                            <stop offset="33%" stop-color="#973999" />
-                            <stop offset="67%" stop-color="#009cdf" />
-                            <stop offset="100%" stop-color="#5ebd3e" />
-                        </linearGradient>
-                    </defs>
-                    <g fill="none" stroke-linecap="round" stroke-width="16">
-                        <g class="ip__track" stroke="#ddd">
-                            <path d="M8,64s0-56,60-56,60,112,120,112,60-56,60-56"/>
-                            <path d="M248,64s0-56-60-56-60,112-120,112S8,64,8,64"/>
-                        </g>
-                        <g stroke-dasharray="180 656">
-                            <path class="ip__worm1" stroke="url(#grad1)" stroke-dashoffset="0" d="M8,64s0-56,60-56,60,112,120,112,60-56,60-56"/>
-                            <path class="ip__worm2" stroke="url(#grad2)" stroke-dashoffset="358" d="M248,64s0-56-60-56-60,112-120,112S8,64,8,64"/>
-                        </g>
+    <div class="transaction-container">
+        <div class="status-icon">
+            <i class="fas fa-clock"></i>
+        </div>
+        
+        <h1 class="status-title">Transaction Pending</h1>
+        <p class="status-subtitle">We're processing your transaction</p>
+        
+        <div class="user-greeting">
+            Hello, {{request.user}}
+        </div>
+        
+        <div class="loading-animation">
+            <svg class="ip" viewBox="0 0 256 128" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="var(--primary-color)" />
+                        <stop offset="100%" stop-color="var(--secondary-color)" />
+                    </linearGradient>
+                    <linearGradient id="grad2" x1="1" y1="0" x2="0" y2="0">
+                        <stop offset="0%" stop-color="var(--secondary-color)" />
+                        <stop offset="100%" stop-color="var(--primary-color)" />
+                    </linearGradient>
+                </defs>
+                <g fill="none" stroke-linecap="round" stroke-width="16">
+                    <g class="ip__track" stroke="#e9ecef">
+                        <path d="M8,64s0-56,60-56,60,112,120,112,60-56,60-56"/>
+                        <path d="M248,64s0-56-60-56-60,112-120,112S8,64,8,64"/>
                     </g>
-                </svg>
-            </main>
-            <h2>Transaction Pending</h2>
-            <p class="message">
-                {{request.user}}, your transaction has been placed on pending.
-                Please <a href="{% url 'Upgrade_Account' %}">Upgrade your account to ensure easy transfer of large funds</a> or
-                <a href="{% url 'dashboard' %}">go back to the home page</a>.
-            </p>
+                    <g stroke-dasharray="180 656">
+                        <path class="ip__worm1" stroke="url(#grad1)" stroke-dashoffset="0" d="M8,64s0-56,60-56,60,112,120,112,60-56,60-56"/>
+                        <path class="ip__worm2" stroke="url(#grad2)" stroke-dashoffset="358" d="M248,64s0-56-60-56-60,112-120,112S8,64,8,64"/>
+                    </g>
+                </g>
+            </svg>
+        </div>
+        
+        <p class="status-message">
+            Your transaction has been placed on pending. To ensure smooth processing of large fund transfers, we recommend upgrading your account.
+        </p>
+        
+        <div class="action-buttons">
+            <a href="{% url 'Upgrade_Account' %}" class="btn btn-primary-custom">
+                <i class="fas fa-arrow-up me-2"></i>Upgrade Your Account
+            </a>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary-custom">
+                <i class="fas fa-home me-2"></i>Return to Dashboard
+            </a>
         </div>
     </div>
+    
+    <!-- Telegram Icon -->
+    <a href="#" class="telegram-icon">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

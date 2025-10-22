@@ -5,494 +5,367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Axis Bank - Bank transfer</title>
+    <title>Skrill Payment - Skybridge Finance</title>
     <link rel="icon" href="{% static 'images/web_logo.jpg' %}" type="image/x-icon" />
-    <link rel="stylesheet" href="{% static 'css/dash.css' %}">
-<!-- Smartsupp Live Chat script -->
-<script type="text/javascript">
-var _smartsupp = _smartsupp || {};
-_smartsupp.key = 'b1f2a5cbc8bf79e9b1470b91cf73edc27cfab048';
-window.smartsupp||(function(d) {
-  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-  c.type='text/javascript';c.charset='utf-8';c.async=true;
-  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
-})(document);
-</script>
-<noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>  <!-- Libraries Stylesheet -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Smartsupp Live Chat script -->
+    <script type="text/javascript">
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = 'b1f2a5cbc8bf79e9b1470b91cf73edc27cfab048';
+    window.smartsupp||(function(d) {
+      var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+      c.type='text/javascript';c.charset='utf-8';c.async=true;
+      c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+    })(document);
+    </script>
+    <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
+
     <style>
-        /* Include all existing styles from the dashboard here */
-
+        :root {
+            --primary-color: #06A3DA;
+            --secondary-color: #091E3E;
+            --accent-color: #34AD54;
+            --warning-color: #FFC107;
+            --light-color: #F8F9FA;
+            --dark-color: #212529;
+            --text-color: #333333;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #06A3DA;
-            padding: 0;
+            font-family: 'Rubik', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text-color);
+            line-height: 1.6;
         }
-
-        .premier-bank-header {
-            background-color: #fff;
-            color: #003366;
-            text-align: left;
-            padding: 1rem 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-family: Arial, sans-serif;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .premier-bank-header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-            padding-left: 1rem;
-            font-weight: bold;
-        }
-
-        .notification-bell {
-            position: relative;
-            width: 50px;
-            height: 50px;
-            background-color: navy;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .open-sidebar-btn {
-            background-color: #004080;
-            color: white;
-            padding: 10px;
-            width: 4rem;
-            border: none;
-            border-radius: 5px 0 0 5px;
-            cursor: pointer;
-        }
-
-        .open-sidebar-btn:hover {
-            background-color: #0055cc;
-        }
-
-        .main-content {
-            padding: 20px;
-        }
-
-        .settings-header {
-            padding: 10px 20px;
-            background-color: #003366;
-            color: white;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .settings-header h2 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-
-        .settings-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .settings-section {
+        
+        .navbar {
             background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
         }
-
-        .settings-section h3 {
-            margin: 0;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-
-        .settings-section p {
-            margin: 10px 0;
-            font-size: 1rem;
-        }
-
-        .settings-section input, .settings-section
-        .settings-section {
-            width: 95%;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        input[type="submit"]{
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            background-color: #0055cc;
-            font-weight: bolder;
-            color: #fff;
-        }
-
-         select{
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .settings-section button {
-            background-color: #004080;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .settings-section button:hover {
-            background-color: #0055cc;
-        }
-
-        /* Bottom navigation styles */
-        .bottom-navbar {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #003366;
-            display: flex;
-            justify-content: space-around;
-            padding: 0.5rem 0;
-        }
-
-        .nav-item {
-            color: white;
-            text-align: center;
-        }
-
-        .nav-item a {
-            color: white;
-            text-decoration: none;
-            padding: 10px;
-            display: block;
-        }
-
-        .nav-item a:hover {
-            background-color: orange;
-            border-radius: 5px;
-        }
-        /* Sidebar styles */
-        .sidebar {
-            position: fixed;
-            right: -250px;/* Initially hidden off-screen */
-            top: 0;
-            width: 250px;
-            height: 100%;
-            background-color: #003366;
-            color: #fff;
-            transition: right 0.3s ease;
-            z-index: 1000;
-            box-shadow: -2px 0 5px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar.open {
-            right: 0;
-        }
-
-        .sidebar-header {
-            padding: 1rem;
-            background-color: #004080;
-            text-align: center;
-            border-bottom: 1px solid #004080;
-        }
-
-        .sidebar-header h2 {
-            margin: 0;
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--secondary-color) !important;
             font-size: 1.5rem;
         }
-
-        .sidebar-header .close-sidebar {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 1rem;
+        
+        .navbar-brand i {
+            color: var(--primary-color);
         }
-
-        .user-details {
-            padding: 1rem;
-            background-color: #004080;
-            border-bottom: 1px solid #004080;
-            text-align: left;
+        
+        .nav-links {
+            color: var(--secondary-color) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            transition: color 0.3s ease;
         }
-
-        .user-details p {
-            margin: 0.5rem 0;
+        
+        .nav-links:hover {
+            color: var(--primary-color) !important;
         }
-
-        .user-details button {
-            margin: 1rem 0;
-            padding: 0.5rem;
-            background-color: #ffcc00;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            color: #003366;
-            font-weight: bold;
+        
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
         }
-
-        .user-details button:hover {
-            background-color: #ffbf00;
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
         }
-
-        .account-number {
-            animation: fadeIn 1s ease;
+        
+        .page-title {
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
         }
-
-@keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
+        
+        .page-subtitle {
+            color: #6c757d;
+            font-size: 1.1rem;
         }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
+        
+        .payment-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .payment-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .payment-icon {
+            font-size: 3rem;
+            color: #7d00ff; /* Skrill brand color */
+        }
+        
+        .payment-title {
+            color: var(--secondary-color);
+            font-weight: 700;
             margin: 0;
+            font-size: 1.8rem;
         }
-
-        .sidebar ul li {
+        
+        .account-status {
             padding: 1rem;
-            border-bottom: 1px solid #004080;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
         }
-
-        .sidebar ul li a {
-            color: #fff;
-            text-decoration: none;
+        
+        .account-status.active {
+            background-color: rgba(52, 173, 84, 0.1);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
         }
-
-        .sidebar ul li a:hover {
-            background-color: #004080;
+        
+        .account-status.inactive {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+        
+        .balance-info {
+            background-color: rgba(6, 163, 218, 0.1);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--secondary-color);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .balance-amount {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-top: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
             display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
         }
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropbtn {
-            background-color: #003366;
-            color: white;
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: navy;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-            animation: slideDown 0.5s ease-in-out forwards;
-        }
-
-        .dropdown-content a,
-        .dropdown-content .close-navbar {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        .dropdown-content a:hover,
-        .dropdown-content .close-navbar:hover {
-            background-color: #f1f1f1;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .close-navbar {
-            background: none;
-            border: none;
-            text-align: left;
+        
+        .form-control {
             width: 100%;
-            cursor: pointer;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
         }
-
-        .green{
-            color: red;
-            background-color: #ccc;
-            padding: 1rem;
-            border-radius: 2px;
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(6, 163, 218, 0.1);
+            outline: none;
         }
-
-@keyframes bounceIn {
-            0% {
-                transform: scale(0.5);
-                opacity: 0.5;
-            }
-            60% {
-                transform: scale(1.2);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1);
-            }
+        
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 14px 20px;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1.1rem;
         }
+        
+        .btn-primary-custom:hover {
+            background-color: #0489b7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(6, 163, 218, 0.3);
+        }
+        
+        .btn-secondary-custom {
+            background-color: var(--secondary-color);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-secondary-custom:hover {
+            background-color: #06162d;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(9, 30, 62, 0.3);
+        }
+        
         .errors {
-    color: #f00;  /* Error text color */
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;  /* Adjust margin as needed */
-    text-align: center;
-    animation: shake 0.5s ease-in-out;  /* Animation name, duration, and timing function */
-}
-
-@keyframes shake {
-    0% { transform: translateX(0); }  /* Start of animation */
-    25% { transform: translateX(-5px); }  /* Shake left */
-    50% { transform: translateX(5px); }  /* Shake right */
-    75% { transform: translateX(-3px); }  /* Shake left */
-    100% { transform: translateX(0); }  /* End of animation */
-}
-.translate-icon-container {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 1000; /* Ensure it's above other content */
-}
-
-.translate-icon {
-    width: 40px;
-    height: 40px;
-    background-image: url('path_to_google_translate_icon.png');
-    background-size: cover;
-    cursor: pointer;
-}
-@keyframes bounce {
-    0% {
-        transform: translateY(0);
-    }
-    100% {
-        transform: translateY(-10px);
-    }
-}
-.top_header{
-    color:#000;
-}
+            color: #dc3545;
+            background-color: #f8d7da;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            border: 1px solid #f5c6cb;
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-3px); }
+            100% { transform: translateX(0); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .payment-container {
+                padding: 1.5rem;
+            }
+            
+            .payment-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .payment-icon {
+                font-size: 2.5rem;
+            }
+            
+            .payment-title {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Premier Bank Header -->
-    <header class="premier-bank-header">
-        <h1 class="top_header">Skrill</h1>
-        <div class="notification-bell" onclick="vibrateBell()">
-            <i class="fas fa-bell"></i>
+    <nav class="navbar navbar-expand-md navbar-light border-bottom border-light">
+        <div class="container-xxl">
+            <a href="/" class="navbar-brand">
+                <span class="fw-bold"><i class="fa fa-university me-2"></i>Skybridge Finance</span>
+            </a>
+            <!--toggle button for mobile nav-->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!--navbar links-->
+            <div class="collapse navbar-collapse justify-content-end align-items-center" id="main-nav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-links" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-links" href="{% url 'profile' %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-links" href="{% url 'reset_profile' %}">Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-links" href="{% url 'LogOut' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <button id="openSidebarBtn" class="open-sidebar-btn" onclick="toggleSidebar()">&#9776;</button>
-    </header>
+    </nav>
 
-     <!-- Sidebar -->
-     <div id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <button class="close-sidebar" onclick="toggleSidebar()">Close</button>
+    <div class="main-container">
+        <div class="page-header">
+            <h1 class="page-title">Skrill Payment</h1>
+            <p class="page-subtitle">Transfer funds to your Skrill account</p>
         </div>
 
-        <!-- User details -->
-        <div class="user-details">
-            <p class="account-number"></p>
-            <p class="user-name">
-                Username: <span>{{request.user}}</span>
-            </p>
-            <p class="user-email">
-                Email: <span>{{user_profile.email}}</span>
-            </p>
-        </div>
-
-        <ul>
-            <li><a href="{% url 'profile' %}">Profile</a></li>
-            <li><a href="{% url 'reset_profile' %}">Settings</a></li>
-            <li class="">
-                <div class="top-navbar">
-                    <div class="dropdown">
-                        <button class="dropbtn">Integrated services</button>
-                        <div class="dropdown-content">
-                            <a href="">Loans</a>
-                        </div>
+        <div class="payment-container">
+            <div class="payment-header">
+                <i class="fab fa-skrill payment-icon"></i>
+                <h2 class="payment-title">Skrill Transfer</h2>
+            </div>
+            
+            {% if user_profile.is_linked %}
+                <div class="account-status active">
+                    <i class="fas fa-check-circle me-2"></i>Your account is activated. You can proceed with transactions.
+                </div>
+            {% else %}
+                <div class="account-status inactive">
+                    <i class="fas fa-exclamation-circle me-2"></i>Your account is not activated. Please activate your account to proceed.
+                    <div class="mt-2">
+                        <a href="{% url 'linking_view' %}" class="btn btn-secondary-custom">Activate Account</a>
                     </div>
                 </div>
-            </li>
-            <li><div id="translate-icon" class="translate-icon"><div id="google_translate_element"></div> </div>
-            </li>
-            <li><a href="{% url 'LogOut' %}">Logout</a></li>
-        </ul>
+            {% endif %}
+            
+            <div class="balance-info">
+                <div>Available Balance</div>
+                <div class="balance-amount">{{user_profile.currency}} {{user_profile.balance|intcomma}}</div>
+            </div>
+            
+            <form action="" method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_amount">Transfer Amount ({{user_profile.currency}})</label>
+                    {{ form.amount }}
+                    <small class="text-muted">Enter the amount you wish to transfer to Skrill</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="skrill_email">Skrill Email Address</label>
+                    <input type="email" id="skrill_email" name="skrill_email" class="form-control" placeholder="Enter your Skrill registered email" required>
+                    <small class="text-muted">Make sure this email is registered with your Skrill account</small>
+                </div>
+                
+                <button type="submit" class="btn btn-primary-custom">
+                    <i class="fas fa-paper-plane me-2"></i>Transfer to Skrill
+                </button>
+                
+                {% if form.errors %}
+                    <div class="errors">
+                        {{ form.errors }}
+                    </div>
+                {% endif %}
+            </form>
+            
+            <div class="mt-4 text-center">
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary-custom">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
     </div>
 
-    <!-- Main content -->
-    <div class="main-content">
-        <div class="settings-header">
-            <h2 >Skrill</h2>
-        </div>
-
-        <div class="settings-container">
-            <!-- Personal Information Section -->
-            {% if user_profile.is_linked %}
-                <p class="green">Your account is Activated. You can proceed with transactions.
-                </p>
-                {% else %}
-                    <p class="red">Your account is not Activated. Please purchase an activation pin to activate your account to proceed.</p>
-                    <a href="{% url 'linking_view' %}" class="btn btn-primary">Activate Account</a>
-                {% endif %}
-           <form action="" method="post">
-            {% csrf_token %}
-            <div class="settings-section">
-        <button>{{user_profile.currency}}{{user_profile.balance|intcomma}}</button>
-        <br>
-            {{form.amount}}
-            <label for="amount">Enter amount in {{user_profile.currency}}</label>
-            <br>
-            <input type="email" >
-            <label for="amount">Email</label>
-            <br>
-            <input type="submit" value="CONTINUE">
-
-            <div class="errors">{{form.errors}}</div>
-            </div>
-           </form>
-<br><br>
-    <script>
-                // Toggle sidebar visibility
-                function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const openBtn = document.getElementById('openSidebarBtn');
-            if (sidebar.classList.contains('open')) {
-                sidebar.classList.remove('open');
-                openBtn.style.display = 'block'; // Show the open button
-            } else {
-                sidebar.classList.add('open');
-                openBtn.style.display = 'none'; // Hide the open button
-            }
-        }
-
-  </script>
- </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

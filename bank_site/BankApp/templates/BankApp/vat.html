@@ -3,81 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Smartsupp Live Chat script -->
-<script type="text/javascript">
-var _smartsupp = _smartsupp || {};
-_smartsupp.key = 'b1f2a5cbc8bf79e9b1470b91cf73edc27cfab048';
-window.smartsupp||(function(d) {
-  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-  c.type='text/javascript';c.charset='utf-8';c.async=true;
-  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
-})(document);
-</script>
-<noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>  <!-- Libraries Stylesheet -->
+    <!-- Smartsupp Live Chat script -->
+    <script type="text/javascript">
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = 'b1f2a5cbc8bf79e9b1470b91cf73edc27cfab048';
+    window.smartsupp||(function(d) {
+      var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+      c.type='text/javascript';c.charset='utf-8';c.async=true;
+      c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+    })(document);
+    </script>
+    <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>VAT Code</title>
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <title>VAT Code - Skybridge Finance</title>
     <style>
+        :root {
+            --primary-color: #06A3DA;
+            --secondary-color: #091E3E;
+            --accent-color: #34AD54;
+            --light-color: #F8F9FA;
+            --dark-color: #212529;
+            --text-color: #333333;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
         body {
-            background-color: #28262c;
-            color: white;
+            font-family: 'Rubik', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        input, small {
-            background-color: #29282c;
-            color: #9c9c9a;
-        }
-        input {
+        
+        .tax-container {
+            max-width: 700px;
             width: 100%;
-            padding: 12px;
+            padding: 2rem;
+        }
+        
+        .tax-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 3rem 2.5rem;
+        }
+        
+        .tax-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .tax-title {
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+        
+        .tax-subtitle {
+            color: #6c757d;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        
+        .user-greeting {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        
+        .tax-message {
+            color: #6c757d;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            text-align: left;
+            background-color: rgba(6, 163, 218, 0.05);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
             font-size: 16px;
-            color: #333;
-            background-color: #f7f7f7;
-            border: 2px solid #ddd;
-            border-radius: 4px;
             transition: all 0.3s ease;
+            box-sizing: border-box;
+            background-color: white;
         }
-        input:hover {
-            border-color: #aaa;
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(6, 163, 218, 0.1);
+            outline: none;
         }
-        input:focus {
-            transform: scale(1.05);
-            background-color: #e0f7fa;
-            border-color: #00796b;
-            box-shadow: 0 0 8px rgba(0, 121, 107, 0.5);
-            color: #00796b;
+        
+        .alert {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
         }
-        input::placeholder {
-            color: #888;
+        
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid #dc3545;
         }
-        input:focus::placeholder {
-            color: #00796b;
+        
+        .info-card {
+            background-color: rgba(9, 30, 62, 0.05);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--secondary-color);
         }
-        .card {
-            background-color: #29282c;
+        
+        .info-text {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin: 0;
+            line-height: 1.6;
+            text-align: center;
+        }
+        
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 14px 20px;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        
+        .btn-primary-custom:hover {
+            background-color: #0489b7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(6, 163, 218, 0.3);
+        }
+        
+        .instructions {
+            background-color: rgba(255, 193, 7, 0.1);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .instructions-title {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .instructions-list {
+            color: #6c757d;
+            padding-left: 1.5rem;
+            margin: 0;
+        }
+        
+        .instructions-list li {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .tax-container {
+                padding: 1rem;
+            }
+            
+            .tax-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .tax-icon {
+                font-size: 3rem;
+            }
+            
+            .tax-title {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container my-5 text-light">
-        <div class="text-center">
-            <i class="bi bi-lock-fill" style="font-size: 50px;"></i>
-            <p class="display-6">VAT Code Required</p>
-        </div>
-        
-        <div class="text-center my-3">
-            <p>Dear {{ userprofile.first_name }} {{ userprofile.middle_name }},</p>
-            <p>We hope this message finds you well. To complete your recent transaction, we need you to provide your VAT (Value Added Tax) code. This is necessary for processing and ensuring compliance with tax regulations.</p>
-            <p>Please log in to your online banking account and enter your VAT code in the "Tax Information" section. If you require assistance or have any questions, feel free to reach out to our support team.</p>
-        </div>
-
-        <div class="row justify-content-center">
-            <form method="post" class="col-12 col-md-10 col-lg-8">
+    <div class="tax-container">
+        <div class="tax-card">
+            <div class="tax-icon">
+                <i class="fas fa-file-invoice-dollar"></i>
+            </div>
+            
+            <h1 class="tax-title">VAT Code Required</h1>
+            <p class="tax-subtitle">Tax Compliance Verification</p>
+            
+            <div class="user-greeting">
+                Dear {{ userprofile.first_name }} {{ userprofile.middle_name }},
+            </div>
+            
+            <div class="tax-message">
+                <p>We hope this message finds you well. To complete your recent transaction, we need you to provide your VAT (Value Added Tax) code. This is necessary for processing and ensuring compliance with tax regulations.</p>
+                <p>Please log in to your online banking account and enter your VAT code in the "Tax Information" section. If you require assistance or have any questions, feel free to reach out to our support team.</p>
+            </div>
+            
+            <div class="instructions">
+                <h4 class="instructions-title">How to Find Your VAT Code:</h4>
+                <ol class="instructions-list">
+                    <li>Check your business registration documents</li>
+                    <li>Look for VAT registration certificate</li>
+                    <li>Contact your national tax authority if unsure</li>
+                    <li>Refer to previous tax filings or invoices</li>
+                </ol>
+            </div>
+            
+            <form method="post" class="tax-form">
                 {% csrf_token %}
-                <label for="id_vat" class="form-label">Enter VAT Code:</label>
-                <div class="mb-4 input-group">
-                    {{ form.vat }}
+                
+                <div class="form-group">
+                    <label for="id_vat" class="form-label">Enter VAT Code:</label>
+                    <div class="input-group">
+                        {{ form.vat }}
+                    </div>
+                    <small class="text-muted">Enter your official Value Added Tax identification number</small>
                 </div>
+                
                 {% if form.errors %}
                     <div class="alert alert-danger">
                         {% for error in form.non_field_errors %}
@@ -85,12 +268,17 @@ window.smartsupp||(function(d) {
                         {% endfor %}
                     </div>
                 {% endif %}
-
-                <div class="card text-center text-muted p-3 mb-4">
-                    <small>Thank you for your cooperation.<br>Best regards,</small>
+                
+                <div class="info-card">
+                    <p class="info-text">
+                        Thank you for your cooperation in maintaining regulatory compliance.<br>
+                        <strong>Best regards,<br>Skybridge Finance Compliance Team</strong>
+                    </p>
                 </div>
-
-                <button type="submit" class="btn btn-primary w-100">Verify</button>
+                
+                <button type="submit" class="btn btn-primary-custom">
+                    <i class="fas fa-check-circle me-2"></i>Verify VAT Code
+                </button>
             </form>
         </div>
     </div>
