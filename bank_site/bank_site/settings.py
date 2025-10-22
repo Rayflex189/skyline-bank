@@ -43,8 +43,16 @@ SECRET_KEY = 'django-insecure-os%ceh%!b_zte(60bvi9)pujn1v#lyuh^u4l!hr+_-5)rmf&9-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['skybridge-finance.fly.dev']
-CSRF_TRUSTED_ORIGINS = ['https://skybridge-finance.fly.dev']
+ALLOWED_HOSTS = [
+    'skybridgefinance.online',
+    'www.skybridgefinance.online',
+    'skybridge-finance.fly.dev',
+]
+
+CSRF_TRUSTED_ORIGINS = ['https://skybridgefinance.online',
+                        'https://www.skybridgefinance.online',
+                        'https://www.skybridgefinance.online'
+                        ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
