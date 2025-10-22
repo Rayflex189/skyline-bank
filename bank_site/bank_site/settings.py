@@ -13,20 +13,15 @@ SUPERUSER_EMAIL = 'skylinebank@gmail.com'
 SUPERUSER_PASSWORD = 'Me12sleep'
 import os
 import dj_database_url
+# settings.py
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.nhuslrdnoeunvchefdat',
-        'PASSWORD': 'PeruFDald1cWZonh',
-        'HOST': 'aws-0-eu-central-1.pooler.supabase.com',  # Check this
-        'PORT': '6543',
-    },
-     'OPTIONS': {
-            'sslmode': 'require',
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
 
 from pathlib import Path
 
