@@ -17,12 +17,18 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-import os
-import dj_database_url
+# settings.py
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'NF9LmWjsfmAvlIqq',  # You'll need to add this
+        'HOST': 'db.dlqtckseeelkdraqnrsa.supabase.co',
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',  # Important for Supabase
+        },
     }
 }
 
