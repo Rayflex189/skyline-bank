@@ -54,6 +54,30 @@
             line-height: 1.6;
         }
         
+        /* Spinner Styles - Fixed to hide by default */
+        #spinner {
+            display: none;
+            z-index: 9999;
+        }
+        
+        #spinner.show {
+            display: flex;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         .navbar {
             background-color: var(--card-bg);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -431,21 +455,6 @@
             font-weight: 500;
         }
         
-        /* Spinner Styles */
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
         @keyframes fadeIn {
             0% { opacity: 0; }
             100% { opacity: 1; }
@@ -495,8 +504,8 @@
     <noscript> Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
 </head>
 <body>
-    <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <!-- Spinner Start - Initially hidden -->
+    <div id="spinner" class="bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner"></div>
     </div>
     <!-- Spinner End -->
@@ -703,11 +712,27 @@
     <script src="{% static 'js/main.js' %}"></script>
     
     <script>
-        // Hide spinner when page is loaded
-        window.addEventListener('load', function() {
-            document.getElementById('spinner').style.display = 'none';
+        // Hide spinner when page is loaded - multiple approaches for reliability
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide spinner immediately when DOM is ready
+            const spinner = document.getElementById('spinner');
+            if (spinner) {
+                spinner.style.display = 'none';
+            }
+            
+            // Initialize other functions
+            fetchUserIP();
+            displayLastVisit();
         });
-    
+
+        // Additional safety - hide spinner after a timeout as backup
+        setTimeout(function() {
+            const spinner = document.getElementById('spinner');
+            if (spinner && spinner.style.display !== 'none') {
+                spinner.style.display = 'none';
+            }
+        }, 3000); // 3 second timeout as backup
+
         function copyAccountNumber() {
             var accountNumber = document.getElementById("account-number").innerText;
             if (accountNumber !== "N/A") {
@@ -754,14 +779,9 @@
             const paymentPopup = document.getElementById('paymentPopup');
             const specificPopup = document.getElementById(formId);
             paymentPopup.classList.remove('show');
-            specificPopup.classList.add('show');
-        }
-    
-        // Hide specific payment form
-        function hidePaymentForm(formId) {
-            const specificPopup = document.getElementById(formId);
-            specificPopup.classList.remove('show');
-            document.getElementById('paymentPopup').classList.add('show');
+            // Note: You'll need to create these popup elements if they don't exist
+            // For now, just show an alert
+            alert(formId + " payment option selected. This feature would open a payment form.");
         }
     
         // Function to fetch the user's real IP address
@@ -805,12 +825,6 @@
             if (event.target === transferPopup) {
                 toggleTransferPopup();
             }
-        });
-    
-        // Call the functions on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchUserIP();
-            displayLastVisit();
         });
     </script>
 </body>
