@@ -8,6 +8,27 @@ import string
 from decimal import Decimal
 from cloudinary.models import CloudinaryField
 
+class InvestmentPlan(models.Model):
+    PLAN_TYPES = [
+        ('BASIC', 'Basic Plan'),
+        ('STANDARD', 'Standard Plan'),
+        ('PREMIUM', 'Premium Plan'),
+        ('VIP', 'VIP Plan'),
+    ]
+
+    name = models.CharField(max_length=100)
+    plan_type = models.CharField(max_length=20, choices=PLAN_TYPES)
+    min_amount = models.DecimalField(max_digits=15, decimal_places=2, default=100.00)
+    max_amount = models.DecimalField(max_digits=15, decimal_places=2, default=10000.00)
+    interest_rate = models.DecimalField(max_digits=5, decimal_places=2)  # Annual percentage
+    duration_days = models.IntegerField()  # Investment duration in days
+    description = models.TextField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.interest_rate}%"
+
 class UserInvestment(models.Model):
     STATUS_CHOICES = [
         ('ACTIVE', 'Active'),
@@ -58,26 +79,6 @@ class InvestmentTransaction(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.transaction_type} - ${self.amount}"
 
-class InvestmentPlan(models.Model):
-    PLAN_TYPES = [
-        ('BASIC', 'Basic Plan'),
-        ('STANDARD', 'Standard Plan'),
-        ('PREMIUM', 'Premium Plan'),
-        ('VIP', 'VIP Plan'),
-    ]
-
-    name = models.CharField(max_length=100)
-    plan_type = models.CharField(max_length=20, choices=PLAN_TYPES)
-    min_amount = models.DecimalField(max_digits=15, decimal_places=2, default=100.00)
-    max_amount = models.DecimalField(max_digits=15, decimal_places=2, default=10000.00)
-    interest_rate = models.DecimalField(max_digits=5, decimal_places=2)  # Annual percentage
-    duration_days = models.IntegerField()  # Investment duration in days
-    description = models.TextField()
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.name} - {self.interest_rate}%"
 
 def generate_code(length=6):
     characters = string.ascii_letters + string.digits
