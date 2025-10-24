@@ -13,6 +13,16 @@ SUPERUSER_EMAIL = 'skylinebank@gmail.com'
 SUPERUSER_PASSWORD = 'Me12sleep'
 import os
 from pathlib import Path
+import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+cloudinary.config(
+    cloud_name="dlzn0moho",
+    api_key="563396395915366",
+    api_secret="pCSSrLNvxfFSEzY4ZnaOiF5u93o"
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

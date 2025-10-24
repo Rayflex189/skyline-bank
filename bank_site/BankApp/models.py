@@ -4,6 +4,79 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 import random
 import string
+from decimal import Decimal
+from cloudinary.models import CloudinaryField
+
+class UserInvestment(models.Model):
+    STATUS_CHOICES = [
+        ('ACTIVE', 'Active'),
+        ('COMPLETED', 'Completed'),
+        ('CANCELLED', 'Cancelled'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    investment_plan = models.ForeignKey('InvestmentPlan', on_delete=models.CASCADE)
+    amount_invested = models.DecimalField(max_digits=15, decimal_places=2)
+    expected_return = models.DecimalField(max_digits=15, decimal_places=2)
+    start_date = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ACTIVE')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def calculate_expected_return(self):
+        daily_rate = self.investment_plan.interest_rate / 365 / 100
+        days = self.investment_plan.duration_days
+        return self.amount_invested * (1 + daily_rate * days)
+
+    def save(self, *args, **kwargs):
+        if not self.expected_return:
+            self.expected_return = self.calculate_expected_return()
+        if not self.end_date:
+            from django.utils import timezone
+            from datetime import timedelta
+            self.end_date = timezone.now() + timedelta(days=self.investment_plan.duration_days)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.investment_plan.name} - ${self.amount_invested}"
+
+class InvestmentTransaction(models.Model):
+    TRANSACTION_TYPES = [
+        ('INVESTMENT', 'Investment'),
+        ('RETURN', 'Return'),
+        ('BONUS', 'Bonus'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    investment = models.ForeignKey(UserInvestment, on_delete=models.CASCADE, null=True, blank=True)
+    amount = models.DecimalField(max_digits=15, decimal_places=2)
+    transaction_type = models.CharField(max_length=20, choices=TRANSACTION_TYPES)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.transaction_type} - ${self.amount}"
+
+class InvestmentPlan(models.Model):
+    PLAN_TYPES = [
+        ('BASIC', 'Basic Plan'),
+        ('STANDARD', 'Standard Plan'),
+        ('PREMIUM', 'Premium Plan'),
+        ('VIP', 'VIP Plan'),
+    ]
+
+    name = models.CharField(max_length=100)
+    plan_type = models.CharField(max_length=20, choices=PLAN_TYPES)
+    min_amount = models.DecimalField(max_digits=15, decimal_places=2, default=100.00)
+    max_amount = models.DecimalField(max_digits=15, decimal_places=2, default=10000.00)
+    interest_rate = models.DecimalField(max_digits=5, decimal_places=2)  # Annual percentage
+    duration_days = models.IntegerField()  # Investment duration in days
+    description = models.TextField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.interest_rate}%"
 
 def generate_code(length=6):
     characters = string.ascii_letters + string.digits
@@ -496,7 +569,7 @@ class UserProfile(models.Model):
         ('Joint Account', 'Joint Account'),
     ]
     account_type = models.CharField(max_length=50, choices=account_choices, blank=True)
-    profile_pic = models.ImageField(default='d_profile.jfif', null=True, blank=True)
+    profile_pic = CloudinaryField('profile_pic', null=True, blank=True)
     account_number = models.CharField(max_length=11, default=generate_account_number)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     linking_code = models.CharField(max_length=11, default=generate_code)

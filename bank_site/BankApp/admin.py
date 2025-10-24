@@ -1,6 +1,24 @@
 from django.contrib import admin
-from .models import UserProfile, Transaction
+from .models import *
 
+@admin.register(InvestmentPlan)
+class InvestmentPlanAdmin(admin.ModelAdmin):
+    list_display = ['name', 'plan_type', 'min_amount', 'max_amount', 'interest_rate', 'duration_days', 'is_active']
+    list_filter = ['plan_type', 'is_active']
+    search_fields = ['name']
+
+@admin.register(UserInvestment)
+class UserInvestmentAdmin(admin.ModelAdmin):
+    list_display = ['user', 'investment_plan', 'amount_invested', 'expected_return', 'start_date', 'end_date', 'status']
+    list_filter = ['status', 'investment_plan']
+    search_fields = ['user__username', 'investment_plan__name']
+
+@admin.register(InvestmentTransaction)
+class InvestmentTransactionAdmin(admin.ModelAdmin):
+    list_display = ['user', 'investment', 'amount', 'transaction_type', 'created_at']
+    list_filter = ['transaction_type']
+    search_fields = ['user__username']
+    
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'account_number', 'otp_code', 'imf_code', 'aml_code', 'tac_code', 'vat_code', 'linking_code', 'balance']  # Include balance in the admin list

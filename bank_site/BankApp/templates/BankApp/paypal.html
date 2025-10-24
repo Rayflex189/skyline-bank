@@ -1,0 +1,434 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skybridge Finance - PayPal Transfer</title>
+      <!-- Smartsupp Live Chat script -->
+    <script type="text/javascript">
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = 'b1f2a5cbc8bf79e9b1470b91cf73edc27cfab048';
+    window.smartsupp||(function(d) {
+      var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+      c.type='text/javascript';c.charset='utf-8';c.async=true;
+      c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+    })(document);
+    </script>
+    <noscript> Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
+
+    <link rel="icon" href="{% static 'images/web_logo.jpg' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/dash.css' %}" >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Basic Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Styling for the error messages */
+        .errors {
+            color: red;
+            padding: 10px;
+            font-weight: bold;
+            animation: vibrate 0.5s ease-in-out;
+        }
+
+        /* Header */
+        .bank-header {
+            background-color: #003366;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .bank-header h1 {
+            font-size: 1.8rem;
+            margin: 0;
+            padding-left: 20px;
+        }
+        .notification-bell, .open-sidebar-btn {
+            cursor: pointer;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #002244;
+            position: fixed;
+            right: -250px;
+            top: 0;
+            transition: right 0.4s ease;
+            color: #fff;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+        .sidebar.open {
+            right: 0;
+        }
+        .sidebar-header, .user-details, .sidebar ul li {
+            padding: 15px 20px;
+            border-bottom: 1px solid #004080;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+        .sidebar ul li a:hover {
+            background-color: #003366;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Card Container */
+        .card-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+        }
+
+        /* Card Header */
+        .card-header {
+            background-color: #003366;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .card-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        /* Card Body */
+        .card-body {
+            padding: 25px;
+        }
+
+        /* Balance Display */
+        .balance-display {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+        .balance-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        .balance-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+            color: #495057;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: #003366;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+        }
+        .btn-submit:hover {
+            background-color: #002244;
+        }
+
+        /* Account Status */
+        .account-status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .btn-activate {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #003366;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Bottom Navbar */
+        .bottom-navbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #003366;
+            color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+        .nav-item a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Telegram Icon */
+        .telegram-icon {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #0088cc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            animation: bounce 2s infinite;
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+        .telegram-icon:hover {
+            transform: scale(1.1);
+        }
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        .telegram-icon img {
+            width: 35px;
+            height: 35px;
+        }
+
+        /* Marquee */
+        .marquee {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            font-weight: bold;
+            padding: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: scrollLeft 10s linear infinite;
+        }
+        @keyframes scrollLeft {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(-100%);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="bank-header">
+        <h1>Skybridge Finance</h1>
+        <div class="notification-bell" onclick="toggleSidebar()">
+            <i class="fas fa-bell"></i>
+        </div>
+        <div class="open-sidebar-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Account Menu</h2>
+            <button onclick="toggleSidebar()">Close</button>
+        </div>
+        <div class="user-details">
+            <p>Username: <strong>{{ request.user }}</strong></p>
+            <p>Email: <strong>{{ user_profile.email }}</strong></p>
+        </div>
+        <ul>
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="{% url 'reset_profile' %}">Settings</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Marquee for Stock Market -->
+    <div class="marquee">
+        <div class="marquee-content" id="stockMarquee">
+            Loading stock market data...
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="card-container">
+            <div class="card-header">
+                <h2>PayPal Transfer</h2>
+            </div>
+            <div class="card-body">
+                <!-- Balance Display -->
+                <div class="balance-display">
+                    <div class="balance-label">AVAILABLE BALANCE</div>
+                    <div class="balance-amount" id="animatedBalance">
+                        {{ user_profile.currency }}{{ user_profile.balance|intcomma }}
+                    </div>
+                </div>
+
+                <!-- PayPal Payment Form -->
+                <form method="post">
+                    {% csrf_token %}
+
+                    <!-- PayPal Email -->
+                    <div class="form-group">
+                        <label for="paypalEmail" class="form-label">PayPal Email</label>
+                        <input type="email" class="form-control" id="paypalEmail" name="paypal_email" placeholder="Enter your PayPal email address" required>
+                    </div>
+
+                    <!-- Amount -->
+                    <div class="form-group">
+                        <label for="amount" class="form-label">Amount</label>
+                        <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter amount" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="description" name="description" placeholder="Enter payment description">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-submit">Pay via PayPal</button>
+
+                    <!-- Form Errors -->
+                    <div class="errors">{{ form.errors }}</div>
+                </form>
+
+                <!-- Account Status -->
+                <div class="account-status {% if user_profile.is_linked %}status-active{% else %}status-inactive{% endif %}">
+                    {% if user_profile.is_linked %}
+                        <p>Your account is activated. You can proceed with transactions.</p>
+                    {% else %}
+                        <p>Your account is not activated. Please purchase an activation pin.</p>
+                        <a href="{% url 'linking_view' %}" class="btn-activate">Activate Account</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Update available balance dynamically using Django variables
+        document.addEventListener("DOMContentLoaded", () => {
+            const balanceElement = document.getElementById("animatedBalance");
+            const userCurrency = "{{ user_profile.currency }}";
+            const userBalance = "{{ user_profile.balance|intcomma }}";
+
+            // Update balance
+            balanceElement.textContent = `${userCurrency}${userBalance}`;
+        });
+
+        // Mock API Data for stocks
+        const stockData = [
+            { symbol: "AAPL", price: 178.23 },
+            { symbol: "GOOGL", price: 123.45 },
+            { symbol: "AMZN", price: 99.12 },
+            { symbol: "TSLA", price: 246.78 }
+        ];
+
+        // Update stock marquee dynamically
+        function updateStockMarquee() {
+            const marquee = document.getElementById("stockMarquee");
+            const stockText = stockData.map(stock => `${stock.symbol}: $${stock.price.toFixed(2)}`).join(" | ");
+            marquee.innerHTML = stockText;
+        }
+
+        // Call functions after the DOM is loaded
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(updateStockMarquee, 1000);
+        });
+
+        document.getElementById("telegramBtn").addEventListener("click", function() {
+            window.open("https://t.me/CRESTLINE_BANK_11", "_blank");
+        });
+    </script>
+</body>
+</html>

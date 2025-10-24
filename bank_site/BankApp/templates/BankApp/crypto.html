@@ -5,10 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skybridge Finance - Bank Transfer</title>
+    <title>Skybridge Finance - Crypto Transfer</title>
     <link rel="icon" href="{% static 'images/IMG-20250820-WA0109.jpg' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/dash.css' %}" >
-  <!-- Smartsupp Live Chat script -->
+   <!-- Smartsupp Live Chat script -->
     <script type="text/javascript">
     var _smartsupp = _smartsupp || {};
     _smartsupp.key = 'b1f2a5cbc8bf79e9b1470b91cf73edc27cfab048';
@@ -20,8 +20,6 @@
     })(document);
     </script>
     <noscript> Powered by <a href="https://www.smartsupp.com" target="_blank">Smartsupp</a></noscript>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
@@ -39,6 +37,9 @@
             --success: #27AE60;
             --warning: #E67E22;
             --error: #E74C3C;
+            --crypto-green: #0FAE96;
+            --crypto-orange: #F7931A;
+            --crypto-purple: #627EEA;
         }
 
         * {
@@ -207,7 +208,7 @@
         }
 
         .transfer-header {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
+            background: linear-gradient(135deg, var(--crypto-green) 0%, var(--primary-blue) 100%);
             color: white;
             padding: 22px 40px;
             border-radius: 12px;
@@ -218,7 +219,7 @@
             text-align: center;
             width: 90%;
             max-width: 700px;
-            box-shadow: 0 10px 25px rgba(42, 110, 187, 0.25);
+            box-shadow: 0 10px 25px rgba(15, 174, 150, 0.25);
             position: relative;
             overflow: hidden;
         }
@@ -258,7 +259,7 @@
             left: 0;
             width: 100%;
             height: 5px;
-            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
+            background: linear-gradient(90deg, var(--crypto-green) 0%, var(--primary-blue) 100%);
         }
 
         @keyframes fadeInUp {
@@ -366,20 +367,20 @@
             padding: 16px;
             border: none;
             border-radius: 8px;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-blue) 100%);
+            background: linear-gradient(135deg, var(--crypto-green) 0%, var(--primary-blue) 100%);
             color: white;
             font-weight: 600;
             font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(42, 110, 187, 0.25);
+            box-shadow: 0 5px 15px rgba(15, 174, 150, 0.25);
             margin-top: 10px;
             font-family: 'Montserrat', sans-serif;
         }
 
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(42, 110, 187, 0.35);
+            box-shadow: 0 8px 20px rgba(15, 174, 150, 0.35);
         }
 
         .btn-primary:active {
@@ -454,6 +455,47 @@
             border-left: 4px solid var(--error);
         }
 
+        /* Crypto Icons */
+        .crypto-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .btc-icon {
+            background: var(--crypto-orange);
+        }
+
+        .eth-icon {
+            background: var(--crypto-purple);
+        }
+
+        .usdt-icon {
+            background: var(--crypto-green);
+        }
+
+        /* Network Fee Info */
+        .network-fee {
+            background: rgba(15, 174, 150, 0.08);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--crypto-green);
+            font-size: 0.9rem;
+        }
+
+        .network-fee i {
+            color: var(--crypto-green);
+            margin-right: 8px;
+        }
+
         /* Telegram Icon */
         .telegram-icon {
             position: fixed;
@@ -525,7 +567,7 @@
 <body>
     <!-- Bank Header -->
     <header class="bank-header">
-        <h1>Bank Transfer</h1>
+        <h1>Crypto Transfer</h1>
         <div class="header-controls">
             <div class="notification-bell" onclick="toggleSidebar()">
                 <i class="fas fa-bell"></i>
@@ -553,16 +595,16 @@
         </ul>
     </div>
 
-    <!-- Marquee for Stock Market -->
+    <!-- Marquee for Crypto Market -->
     <div class="marquee">
-        <div class="marquee-content" id="stockMarquee">
-            Loading stock market data...
+        <div class="marquee-content" id="cryptoMarquee">
+            Loading cryptocurrency data...
         </div>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
-        <div class="transfer-header">Wire Transfer</div>
+        <div class="transfer-header">Blockchain Payment</div>
 
         <div class="form-container">
             <h1>Skybridge Finance</h1>
@@ -572,67 +614,65 @@
                 Loading available balance...
             </div>
 
-            <!-- Bank Transfer Form -->
+            <!-- Network Fee Info -->
+            <div class="network-fee">
+                <i class="fas fa-info-circle"></i>
+                Network fees apply. Transactions typically confirm within 10-30 minutes.
+            </div>
+
+            <!-- Crypto Transfer Form -->
             <form method="post">
                 {% csrf_token %}
 
-                <!-- Bank Name -->
+                <!-- Wallet Address -->
                 <div class="mb-3">
-                    <label for="bankName" class="form-label">Bank Name</label>
+                    <label for="walletAddress" class="form-label">Wallet Address</label>
                     <div class="form-input-group">
-                        <input type="text" class="form-control" id="bankName" name="bank_name" placeholder="Enter bank name" required>
-                        <i class="fas fa-university input-icon"></i>
+                        <input type="text" class="form-control" id="walletAddress" name="wallet_address" placeholder="Enter recipient wallet address" required>
+                        <i class="fas fa-wallet input-icon"></i>
                     </div>
                 </div>
 
-                <!-- Routing Number -->
+                <!-- Cryptocurrency -->
                 <div class="mb-3">
-                    <label for="sortCode" class="form-label">Routing Number</label>
-                    <div class="form-input-group">
-                        <input type="text" class="form-control" id="sortCode" name="routing_number" placeholder="Enter routing number" required>
-                        <i class="fas fa-hashtag input-icon"></i>
-                    </div>
-                </div>
-
-                <!-- Account Number -->
-                <div class="mb-3">
-                    <label for="accountNumber" class="form-label">Account Number</label>
-                    <div class="form-input-group">
-                        <input type="text" class="form-control" id="accountNumber" name="account_number" placeholder="Enter account number" required>
-                        <i class="fas fa-list-ol input-icon"></i>
-                    </div>
-                </div>
-
-                <!-- Account Holder -->
-                <div class="mb-3">
-                    <label for="accountHolder" class="form-label">Account Holder</label>
-                    <div class="form-input-group">
-                        <input type="text" class="form-control" id="accountHolder" name="account_holder" placeholder="Enter account holder name" required>
-                        <i class="fas fa-user input-icon"></i>
-                    </div>
+                    <label for="cryptoType" class="form-label">Cryptocurrency</label>
+                    <select class="form-control" id="cryptoType" name="crypto_type" required>
+                        <option value="BTC">
+                            <span class="crypto-icon btc-icon">B</span>
+                            Bitcoin (BTC)
+                        </option>
+                        <option value="ETH">
+                            <span class="crypto-icon eth-icon">E</span>
+                            Ethereum (ETH)
+                        </option>
+                        <option value="USDT">
+                            <span class="crypto-icon usdt-icon">U</span>
+                            Tether (USDT)
+                        </option>
+                    </select>
                 </div>
 
                 <!-- Amount -->
-                <div class="mb-3">
+                <div class="m-3">
                     <label for="amount" class="form-label">Amount</label>
                     <div class="form-input-group">
                         {{ form.amount }}
-                        <i class="fas fa-money-bill-wave input-icon"></i>
+                        <i class="fas fa-coins input-icon"></i>
                     </div>
                 </div>
 
-                <!-- Description -->
+                <!-- Transaction Note -->
                 <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
+                    <label for="note" class="form-label">Transaction Note</label>
                     <div class="form-input-group">
-                        <input type="text" class="form-control" id="description" name="description" placeholder="Enter transaction description">
-                        <i class="fas fa-pencil-alt input-icon"></i>
+                        <input type="text" class="form-control" id="note" name="note" placeholder="Enter transaction description">
+                        <i class="fas fa-sticky-note input-icon"></i>
                     </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>
-Submit Transfer
+                    Send Crypto
                 </button>
 
                 <div class="errors">{{form.errors}}</div>
@@ -650,7 +690,6 @@ Submit Transfer
         </div>
     </div>
 
-
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -667,32 +706,31 @@ Submit Transfer
             balanceElement.textContent = `Current available balance (${userCurrency}): ${userBalance}`;
         });
 
-        // Mock API Data for stocks
-        const stockData = [
-            { symbol: "AAPL", price: 178.23, change: 1.25 },
-            { symbol: "GOOGL", price: 123.45, change: -0.75 },
-            { symbol: "AMZN", price: 99.12, change: 2.10 },
-            { symbol: "TSLA", price: 246.78, change: -1.50 },
-            { symbol: "MSFT", price: 335.21, change: 0.85 },
-            { symbol: "NFLX", price: 485.33, change: 3.20 }
+        // Mock API Data for cryptocurrencies
+        const cryptoData = [
+            { symbol: "BTC", price: 43256.78, change: 2.34 },
+            { symbol: "ETH", price: 2345.67, change: -1.23 },
+            { symbol: "USDT", price: 1.00, change: 0.01 },
+            { symbol: "BNB", price: 312.45, change: 3.45 },
+            { symbol: "XRP", price: 0.5678, change: -0.56 }
         ];
 
-        // Update stock marquee dynamically
-        function updateStockMarquee() {
-            const marquee = document.getElementById("stockMarquee");
-            const stockText = stockData.map(stock => {
-                const changeClass = stock.change >= 0 ? "text-success" : "text-danger";
-                const changeIcon = stock.change >= 0 ? "↗" : "↘";
-                return `<span class="${changeClass}">${stock.symbol}: $${stock.price.toFixed(2)} ${changeIcon} ${Math.abs(stock.change).toFixed(2)}%</span>`;
+        // Update crypto marquee dynamically
+        function updateCryptoMarquee() {
+            const marquee = document.getElementById("cryptoMarquee");
+            const cryptoText = cryptoData.map(crypto => {
+                const changeClass = crypto.change >= 0 ? "text-success" : "text-danger";
+                const changeIcon = crypto.change >= 0 ? "↗" : "↘";
+                return `<span class="${changeClass}">${crypto.symbol}: $${crypto.price.toFixed(2)} ${changeIcon} ${Math.abs(crypto.change).toFixed(2)}%</span>`;
             }).join(" &nbsp; | &nbsp; ");
 
-            marquee.innerHTML = stockText;
+            marquee.innerHTML = cryptoText;
         }
 
         // Call functions after the DOM is loaded
         document.addEventListener("DOMContentLoaded", () => {
-            setTimeout(updateStockMarquee, 1000);
+            setTimeout(updateCryptoMarquee, 1000);
         });
     </script>
 </body>
-</html>>
+</html>

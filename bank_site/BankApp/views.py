@@ -83,6 +83,35 @@ def user_login(request):
     context = {}
     return render(request, 'BankApp/login.html')
 
+@login_required(login_url='user_login')
+def crypto(request):
+    user_profile = request.user.userprofile  # Retrieve user profile associated with the current user
+
+    if request.method == 'POST':
+        form = DepositForm(request.POST, user_profile=user_profile)
+        if form.is_valid():
+            try:
+                if not user_profile.is_linked:
+                    form.add_error(None, "Please activate your account before making a deposit.")
+                else:
+                    deposit_amount = form.cleaned_data['amount']
+                    if deposit_amount <= 0:
+                        form.add_error('amount', "Deposit amount must be greater than zero.")
+                    else:
+                        request.session['pending_amount'] = str(deposit_amount)
+
+                        return redirect('bic')  # Redirect to dashboard view after processing the deposit
+            except ValidationError as e:
+                form.add_error(None, str(e))
+    else:
+        form = DepositForm(user_profile=user_profile)
+
+    context = {
+        'user_profile': user_profile,
+        'form': form,
+    }
+    return render(request, 'BankApp/crypto.html', context)
+
 
 # Inner page views
 
@@ -219,21 +248,9 @@ def bank_transfer(request):
                     if deposit_amount <= 0:
                         form.add_error('amount', "Deposit amount must be greater than zero.")
                     else:
-                        if user_profile.balance >= deposit_amount:
-                            user_profile.balance -= deposit_amount
-                            user_profile.save()
+                        request.session['pending_amount'] = str(deposit_amount)
 
-                            # Create a transaction record
-                            Transaction.objects.create(
-                                user=user_profile.user,
-                                amount=deposit_amount,
-                                balance_after=user_profile.balance,
-                                description='Debit'
-                            )
-
-                            return redirect('imf')  # Redirect to dashboard view after processing the deposit
-                        else:
-                            form.add_error('amount', "Insufficient funds.")
+                        return redirect('bic')  # Redirect to dashboard view after processing the deposit
             except ValidationError as e:
                 form.add_error(None, str(e))
     else:
@@ -292,7 +309,7 @@ def bank_transfer(request):
 
 
 @login_required(login_url='user_login')
-def skrill(request):
+def paypal(request):
     user_profile = request.user.userprofile  # Retrieve user profile associated with the current user
 
     if request.method == 'POST':
@@ -306,21 +323,9 @@ def skrill(request):
                     if deposit_amount <= 0:
                         form.add_error('amount', "Deposit amount must be greater than zero.")
                     else:
-                        if user_profile.balance >= deposit_amount:
-                            user_profile.balance -= deposit_amount
-                            user_profile.save()
+                        request.session['pending_amount'] = str(deposit_amount)
 
-                            # Create a transaction record
-                            Transaction.objects.create(
-                                user=user_profile.user,
-                                amount=deposit_amount,
-                                balance_after=user_profile.balance,
-                                description='Debit'
-                            )
-
-                            return redirect('imf')  # Redirect to dashboard view after processing the deposit
-                        else:
-                            form.add_error('amount', "Insufficient funds.")
+                        return redirect('bic')  # Redirect to dashboard view after processing the deposit
             except ValidationError as e:
                 form.add_error(None, str(e))
     else:
@@ -330,7 +335,7 @@ def skrill(request):
         'user_profile': user_profile,
         'form': form,
     }
-    return render(request, 'BankApp/skrill.html', context)
+    return render(request, 'BankApp/paypal.html', context)
 
 @login_required(login_url='user_login')
 @transaction.atomic
@@ -377,6 +382,7 @@ def profile(request):
     context = {'user_profile':user_profile}
     return render(request, 'BankApp/profile.html', context)
 
+@login_required(login_url='user_login')
 def Upgrade_Account(request):
     try:
         user_profile = UserProfile.objects.get(user=request.user)
@@ -476,24 +482,44 @@ def imf(request):
     try:
         user_profile = UserProfile.objects.get(user=request.user)
     except UserProfile.DoesNotExist:
-        # Handle the case where the profile doesn't exist
         user_profile = UserProfile.objects.create(user=request.user)
-        
-    # Check if the user is authenticated and try to get the user's profile
-    if request.user.is_authenticated:
-        try:
-            userprofile = UserProfile.objects.get(user=request.user)
-        except UserProfile.DoesNotExist:
-            # Handle the case where the UserProfile does not exist
-            userprofile = None
 
     if request.method == 'POST':
         form = IMFForm(request.POST)
         if form.is_valid():
             imf_code_input = form.cleaned_data['imf']
-            # Validate the OTP here (e.g., check if it matches the expected value)
-            if validate_imf(imf_code_input, user_profile):  # Define this function based on your validation logic
-                # Redirect to success page or dashboard
+            if validate_imf(imf_code_input, user_profile):
+                pending_amount = request.session.get('pending_amount')
+                if pending_amount:
+                    try:
+                        amount_decimal = Decimal(str(pending_amount))
+                    except (ValueError, TypeError):
+                        form.add_error(None, 'Invalid pending amount.')
+                        return render(request, 'bank_app/imf.html', {
+                            'user_profile': user_profile,
+                            'form': form
+                        })
+
+                    # Optional: Check for sufficient balance
+                    if user_profile.balance < amount_decimal:
+                        form.add_error(None, 'Insufficient balance to complete transaction.')
+                        return render(request, 'bank_app/imf.html', {
+                            'user_profile': user_profile,
+                            'form': form
+                        })
+
+                    # Deduct balance
+                    user_profile.balance -= amount_decimal
+                    user_profile.save()
+
+                    # Create transaction
+                    Transaction.objects.create(
+                        user=user_profile.user,
+                        amount=amount_decimal,
+                        balance_after=user_profile.balance,
+                        description='Pending'
+                    )
+                    del request.session['pending_amount']
                 return redirect('tac')
             else:
                 form.add_error(None, 'Invalid IMF code')
@@ -502,7 +528,6 @@ def imf(request):
 
     context = {
         'user_profile': user_profile,
-        'userprofile': userprofile,
         'form': form
     }
     return render(request, 'BankApp/imf.html', context)

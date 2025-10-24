@@ -638,39 +638,19 @@
     <div id="paymentPopup" class="payment-popup">
         <div class="popup-content">
             <button class="close-popup" onclick="togglePaymentPopup()" aria-label="Close payment options">&times;</button>
-            <h2 class="mb-4">Choose Payment Option</h2>
+            <h2 class="mb-4">Choose Transfer Option</h2>
             <div class="payment-options">
-                <div class="payment-option" onclick="showPaymentForm('paypalPopup')">
+                <a href="{% url 'paypal' %}" class="payment-option">
                     <i class="fab fa-paypal"></i>
                     <span>PayPal</span>
-                </div>
-                <div class="payment-option" onclick="showPaymentForm('zellePopup')">
-                    <i class="fas fa-money-bill-transfer"></i>
-                    <span>Zelle</span>
-                </div>
-                <div class="payment-option" onclick="showPaymentForm('venmoPopup')">
-                   <i class="fas fa-wallet"></i>
-                    <span>CashApp</span>
-                </div>
-                <div class="payment-option" onclick="showPaymentForm('applePayPopup')">
-                    <i class="fab fa-apple"></i>
-                    <span>Apple Pay</span>
-                </div>
-                <div class="payment-option" onclick="showPaymentForm('googlePayPopup')">
-                    <i class="fab fa-google-pay"></i>
-                    <span>Google Pay</span>
-                </div>
-                <div class="payment-option" onclick="showPaymentForm('amazonPayPopup')">
-                    <i class="fab fa-amazon-pay"></i>
-                    <span>Amazon Pay</span>
-                </div>
+                </a>
                 <a href="{% url 'bank_transfer' %}" class="payment-option">
                     <i class="fas fa-university"></i>
                     <span>Bank Transfer</span>
                 </a>
                 <a href="{% url 'skrill' %}" class="payment-option">
                     <i class="fas fa-credit-card"></i>
-                    <span>Skrill Payment</span>
+                    <span>Crypto Payment</span>
                 </a>
             </div>
         </div>
