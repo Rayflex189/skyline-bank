@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from datetime import timedelta
 import random
 import string
 from decimal import Decimal
@@ -582,6 +583,18 @@ class UserProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     is_linked = models.BooleanField(default=False)
     is_upgraded = models.BooleanField(default=False)
+    savings = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, editable=True)
+    last_increment = models.DateTimeField(default=timezone.now)
+
+    def update_savings(self):
+        """Increase savings by 10 every 24 hours."""
+        now = timezone.now()
+        time_diff = now - self.last_increment
+        if time_diff >= timedelta(hours=24):
+            days_passed = time_diff.days or 1
+            self.savings += 10 * days_passed
+            self.last_increment = now
+            self.save()
 
     def save(self, *args, **kwargs):
         if not self.account_number:

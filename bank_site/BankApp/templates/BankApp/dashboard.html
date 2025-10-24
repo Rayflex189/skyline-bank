@@ -543,10 +543,10 @@
             <p class="welcome-subtitle">A glance summary of your account</p>
             <div class="action-buttons">
                 <button class="btn btn-primary-custom" onclick="togglePaymentPopup()">
-                    <i class="fas fa-arrow-down me-2"></i>Deposit
+                    <i class="fas fa-arrow-down me-2"></i>Payment Options
                 </button>
                 <button class="btn btn-secondary-custom" onclick="toggleTransferPopup()">
-                    <i class="fas fa-exchange-alt me-2"></i>Transfer Funds
+                    <i class="fas fa-exchange-alt me-2"></i>Deposit Funds
                 </button>
             </div>
         </div>
@@ -589,9 +589,9 @@
 
             <!-- Savings Balance Card -->
             <div class="info-card">
-                <i class="info-icon bi bi-piggy-bank"></i>
+              <i class="bi bi-cash-stack"></i>
                 <h5>Savings Account Balance</h5>
-                <p>{{user_profile.currency|default:"$"}}5,000</p>
+                <p>{{user_profile.currency|default:"$"}}{{user_profile.savings|default:0|intcomma}}</p>
             </div>
 
             <!-- Current Balance Card -->
@@ -662,20 +662,16 @@
             <button class="close-popup" onclick="toggleTransferPopup()" aria-label="Close transfer options">&times;</button>
             <h2 class="mb-4">Transfer Funds</h2>
             <p class="text-muted mb-3">Select transfer method</p>
-            <div class="payment-options">
-                <a href="#" class="payment-option">
-                    <i class="fas fa-user-friends"></i>
-                    <span>To Another Account</span>
-                </a>
-                <a href="#" class="payment-option">
-                    <i class="fas fa-exchange-alt"></i>
-                    <span>Between Accounts</span>
-                </a>
-                <a href="#" class="payment-option">
-                    <i class="fas fa-globe"></i>
-                    <span>International</span>
-                </a>
-            </div>
+          <div class="payment-options text-center">
+    <a href="#" class="payment-option" onclick="alert('To make a deposit, please contact our bank support system for assistance.')">
+        <i class="fas fa-piggy-bank"></i>
+        <span>Make a Deposit</span>
+    </a>
+    <p class="mt-2 text-muted" style="font-size: 14px;">
+        For deposits, please inbox the bank support system directly.
+    </p>
+</div>
+
         </div>
     </div>
 

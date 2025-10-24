@@ -155,6 +155,7 @@ def reset_profile(request):
 def dashboard(request):
     try:
         user_profile = UserProfile.objects.get(user=request.user)
+        user_profile.update_savings()
     except UserProfile.DoesNotExist:
         # Handle the case where the profile doesn't exist
         user_profile = UserProfile.objects.create(user=request.user)
