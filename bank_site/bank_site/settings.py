@@ -32,10 +32,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'NF9LmWjsfmAvlIqq',  # You'll need to add this
-        'HOST': 'db.dlqtckseeelkdraqnrsa.supabase.co',
-        'PORT': '5432',
+        'USER': 'postgres.dlqtckseeelkdraqnrsa',
+        'PASSWORD': 'NF9LmWjsfmAvlIqq',  # sssYou'll need to add this
+        'HOST': 'aws-1-eu-north-1.pooler.supabase.com',
+        'PORT': '6543',
         'OPTIONS': {
             'sslmode': 'require',  # Important for Supabase
         },
