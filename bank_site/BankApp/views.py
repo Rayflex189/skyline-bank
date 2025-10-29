@@ -27,7 +27,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             messages.success(request, "Your account has been created successfully! You can now log in.")
-            return redirect('login')  # Redirect to the login view
+            return redirect('user_login')  # Redirect to the login view
     else:
         form = CustomUserCreationForm()
     return render(request, 'BankApp/register.html', {'form': form})
