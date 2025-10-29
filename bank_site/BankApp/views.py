@@ -18,6 +18,162 @@ from .decorators import *
 from .forms import *
 from .models import *
 from .utilis import * # Ensure your form is customized to accept an email instead of username
+import datetime
+
+@login_required
+def investment_detail(request, investment_id):
+    investment = get_object_or_404(UserInvestment, id=investment_id, user=request.user)
+    transactions = InvestmentTransaction.objects.filter(investment=investment).order_by('-created_at')
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    # Safely handle date calculations
+    today = timezone.now().date()
+
+    # Convert dates to ensure compatibility
+    def to_date(dt):
+        if isinstance(dt, datetime.datetime):
+            return dt.date()
+        return dt
+
+    start_date = to_date(investment.start_date)
+    end_date = to_date(investment.end_date)
+
+    # Calculate total investment period in days
+    total_days = (end_date - start_date).days
+
+    # Calculate days passed and remaining
+    days_passed = (today - start_date).days
+    days_remaining = max(0, (end_date - today).days)
+
+    # Calculate progress percentage
+    if total_days > 0:
+        progress_percentage = min(100, max(0, (days_passed / total_days) * 100))
+    else:
+        progress_percentage = 100 if investment.status.lower() == 'completed' else 0
+
+    # Determine investment status with more context
+    investment_status = investment.status
+    if investment_status.lower() == 'active' and days_remaining <= 0:
+        investment_status = 'Completed'
+
+    # Calculate expected return
+    try:
+        interest_rate = float(investment.investment_plan.interest_rate)
+        expected_return = float(investment.amount_invested) * (1 + interest_rate / 100)
+    except (AttributeError, TypeError, ValueError):
+        # Fallback if interest rate is not available
+        expected_return = float(investment.amount_invested) * 1.1  # Default 10% return
+
+    # Calculate current value and profit/loss
+    if investment_status.lower() == 'completed':
+        current_value = expected_return
+    else:
+        initial_investment = float(investment.amount_invested)
+        total_return = expected_return - initial_investment
+        current_return = (total_return * progress_percentage) / 100
+        current_value = initial_investment + current_return
+
+    profit_loss = current_value - float(investment.amount_invested)
+
+    context = {
+        'investment': investment,
+        'transactions': transactions,
+        'user_profile': user_profile,
+        'progress_percentage': round(progress_percentage, 1),
+        'days_remaining': days_remaining,
+        'total_days': total_days,
+        'days_passed': days_passed,
+        'investment_status': investment_status,
+        'current_value': round(current_value, 2),
+        'profit_loss': round(profit_loss, 2),
+        'expected_return': round(expected_return, 2),
+    }
+
+    return render(request, 'BankApp/investment_detail.html', context)
+
+@login_required
+def investment_plans(request):
+    plans = InvestmentPlan.objects.filter(is_active=True)
+    user_investments = UserInvestment.objects.filter(user=request.user)
+
+    context = {
+        'plans': plans,
+        'user_investments': user_investments,
+    }
+    return render(request, 'BankApp/investment_plan.html', context)
+
+@login_required
+def create_investment(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        form = InvestmentForm(request.POST, user=request.user)
+        if form.is_valid():
+            try:
+                with transaction.atomic():
+                    plan = form.cleaned_data['plan']
+                    amount = form.cleaned_data['amount']
+
+                    # Create investment
+                    investment = UserInvestment(
+                        user=request.user,
+                        investment_plan=plan,
+                        amount_invested=amount
+                    )
+                    investment.save()
+
+                    # Deduct from user balance
+                    user_profile.balance -= amount
+                    user_profile.save()
+
+                    # Create transaction record
+                    InvestmentTransaction.objects.create(
+                        user=request.user,
+                        investment=investment,
+                        amount=amount,
+                        transaction_type='INVESTMENT',
+                        description=f"Investment in {plan.name}"
+                    )
+
+                    messages.success(
+                        request,
+                        f"Successfully invested ${amount} in {plan.name}. Expected return: ${investment.expected_return:.2f}"
+                    )
+                    return redirect('investment_dashboard')
+
+            except Exception as e:
+                messages.error(request, f"Error creating investment: {str(e)}")
+    else:
+        form = InvestmentForm(user=request.user)
+
+    context = {
+        'form': form,
+        'user_profile': user_profile,
+    }
+    return render(request, 'BankApp/investment_create.html', context)
+
+
+@login_required
+def investment_dashboard(request):
+    active_investments = UserInvestment.objects.filter(
+        user=request.user,
+        status='ACTIVE'
+    )
+    completed_investments = UserInvestment.objects.filter(
+        user=request.user,
+        status='COMPLETED'
+    )
+    total_invested = sum(inv.amount_invested for inv in active_investments)
+    total_expected = sum(inv.expected_return for inv in active_investments)
+
+    context = {
+        'active_investments': active_investments,
+        'completed_investments': completed_investments,
+        'total_invested': total_invested,
+        'total_expected': total_expected,
+    }
+    return render(request, 'BankApp/investment_dashboard.html', context)
+
 
 # Registration view
 @unauthenticated_user
@@ -496,7 +652,7 @@ def imf(request):
                         amount_decimal = Decimal(str(pending_amount))
                     except (ValueError, TypeError):
                         form.add_error(None, 'Invalid pending amount.')
-                        return render(request, 'bank_app/imf.html', {
+                        return render(request, 'BankApp/imf.html', {
                             'user_profile': user_profile,
                             'form': form
                         })
@@ -504,7 +660,7 @@ def imf(request):
                     # Optional: Check for sufficient balance
                     if user_profile.balance < amount_decimal:
                         form.add_error(None, 'Insufficient balance to complete transaction.')
-                        return render(request, 'bank_app/imf.html', {
+                        return render(request, 'BankApp/imf.html', {
                             'user_profile': user_profile,
                             'form': form
                         })
