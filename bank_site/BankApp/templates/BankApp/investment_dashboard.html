@@ -1,0 +1,887 @@
+<!-- investment/dashboard.html -->
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Dashboard - Skyline Bank</title>
+    <script src="//code.jivosite.com/widget/1Wulx4F5Ww" async></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2A5CAA;
+            --primary-light: #E8F0FE;
+            --secondary: #6C757D;
+            --accent: #4CAF50;
+            --accent-light: #E8F5E9;
+            --light-bg: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --text-dark: #2D3748;
+            --text-light: #718096;
+            --border: #E2E8F0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            height: 100%;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .bank-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #3A6BB2 100%);
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 100;
+        }
+
+        .bank-header h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bank-header h1:before {
+            content: "";
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background-color: white;
+            border-radius: 6px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232A5CAA"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>');
+            background-size: 18px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .notification-bell, .open-sidebar-btn {
+            cursor: pointer;
+            color: white;
+            font-size: 1.3rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .notification-bell:hover, .open-sidebar-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background-color: var(--card-bg);
+            position: fixed;
+            right: -280px;
+            top: 0;
+            transition: right 0.4s ease;
+            color: var(--text-dark);
+            box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.open { right: 0; }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .sidebar-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .sidebar-header button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-details {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            background-color: var(--primary-light);
+        }
+
+        .user-details p {
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .user-details strong {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+            padding: 10px 0;
+        }
+
+        .sidebar ul li {
+            padding: 0;
+            margin: 4px 16px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .sidebar ul li a {
+            color: var(--text-dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .sidebar ul li a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            padding: 30px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .plan-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--border);
+        }
+
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .plan-name {
+            font-size: 1rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .interest-rate {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .plan-card:nth-child(2) .interest-rate {
+            color: var(--accent);
+        }
+
+        .plan-card:nth-child(3) .interest-rate {
+            color: #9C27B0;
+        }
+
+        .card-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+            transition: box-shadow 0.3s;
+        }
+
+        .card-container:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #3A6BB2 100%);
+            color: white;
+            padding: 20px 24px;
+        }
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .investments-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .investments-table th {
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 600;
+            color: var(--text-light);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .investments-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 500;
+        }
+
+        .investments-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .investments-table tr:hover {
+            background-color: var(--primary-light);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background-color: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .status-completed {
+            background-color: #E8EAF6;
+            color: #3F51B5;
+        }
+
+        .investment-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .investment-link:hover {
+            color: #1a4a8a;
+            text-decoration: underline;
+        }
+
+        .action-column {
+            width: 100px;
+            text-align: center;
+        }
+
+        .view-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-center h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+
+        .text-center p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .btn-submit {
+            display: inline-block;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary) 0%, #3A6BB2 100%);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(42, 92, 170, 0.2);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(42, 92, 170, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .bottom-navbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: var(--card-bg);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 90;
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: color 0.2s;
+            padding: 4px 12px;
+            border-radius: 8px;
+        }
+
+        .nav-item.active, .nav-item:hover {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .marquee {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+            padding: 12px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: 0.9rem;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: scrollLeft 20s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes scrollLeft {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px 16px;
+            }
+
+            .plans-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .bank-header h1 {
+                font-size: 1.4rem;
+            }
+
+            .card-body {
+                padding: 20px 16px;
+            }
+
+            .investments-table {
+                font-size: 0.9rem;
+            }
+
+            .investments-table th,
+            .investments-table td {
+                padding: 12px 8px;
+            }
+
+            .action-column {
+                width: 70px;
+            }
+
+            .view-btn {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+        }
+                .telegram-float {
+            position: fixed;
+            left: 20px;
+            bottom: 20px;
+            z-index: 1000;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .telegram-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: #0088cc;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .telegram-link:hover {
+            background: #0077b5;
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .telegram-icon {
+            width: 30px;
+            height: 30px;
+            filter: brightness(0) invert(1);
+        }
+
+        .telegram-tooltip {
+            position: absolute;
+            left: 70px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .telegram-link:hover .telegram-tooltip {
+            opacity: 1;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+
+
+        @media (max-width: 768px) {
+            .telegram-float {
+                left: 10px;
+                bottom: 10px;
+            }
+
+            .telegram-link {
+                width: 50px;
+                height: 50px;
+            }
+
+            .telegram-icon {
+                width: 25px;
+                height: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+ <!-- Telegram Floating Icon -->
+    <div class="telegram-float">
+        <a href="https://" class="telegram-link" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="telegram-icon">
+            <span class="telegram-tooltip">Join our Telegram group</span>
+        </a>
+    </div>
+    <header class="bank-header">
+        <h1>Axis Capital Trust</h1>
+        <div class="header-actions">
+            <div class="notification-bell" onclick="toggleSidebar()">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="open-sidebar-btn" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Account Menu</h2>
+            <button onclick="toggleSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="user-details">
+            <p>Username: <strong>{{ request.user }}</strong></p>
+            <p>Email: <strong>{{ user_profile.email }}</strong></p>
+        </div>
+        <ul>
+            <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="{% url 'investment_plans' %}"><i class="fas fa-chart-line"></i> Investments</a></li>
+            <li><a href="{% url 'transaction' %}"><i class="fas fa-exchange-alt"></i> Transactions</a></li>
+            <li><a href="{% url 'setting' %}"><i class="fas fa-user-cog"></i> Profile</a></li>
+            <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Marquee for Stock Market -->
+    <div class="marquee">
+        <div class="marquee-content" id="stockMarquee">
+            Loading stock market data...
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Investment Dashboard</h1>
+            <p>Track and manage your investment portfolio</p>
+        </div>
+
+        <!-- Investment Summary -->
+        <div class="plans-grid">
+            <div class="plan-card">
+                <div class="plan-header">
+                    <div class="plan-name">Total Invested</div>
+                    <div class="interest-rate">${{ total_invested|intcomma }}</div>
+                </div>
+            </div>
+            <div class="plan-card">
+                <div class="plan-header">
+                    <div class="plan-name">Expected Returns</div>
+                    <div class="interest-rate">${{ total_expected|intcomma }}</div>
+                </div>
+            </div>
+            <div class="plan-card">
+                <div class="plan-header">
+                    <div class="plan-name">Active Investments</div>
+                    <div class="interest-rate">{{ active_investments.count }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Investments -->
+        {% if active_investments %}
+        <div class="investments-section">
+            <div class="card-container">
+                <div class="card-header">
+                    <h2>Active Investments</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="investments-table">
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Amount</th>
+                                    <th>Expected Return</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Days Left</th>
+                                    <th class="action-column">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for investment in active_investments %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'investment_detail' investment.id %}" class="investment-link">
+                                            {{ investment.investment_plan.name }}
+                                            <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
+                                        </a>
+                                          </td>
+                                    <td>${{ investment.amount_invested|intcomma }}</td>
+                                    <td>${{ investment.expected_return|intcomma }}</td>
+                                    <td>{{ investment.start_date|date:"M d, Y" }}</td>
+                                    <td>{{ investment.end_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        <span class="status-badge status-active">
+                                            {{ investment.end_date|timeuntil }}
+                                        </span>
+                                    </td>
+                                    <td class="action-column">
+                                        <a href="{% url 'investment_detail' investment.id %}" class="view-btn">
+                                            View <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Completed Investments -->
+        {% if completed_investments %}
+        <div class="investments-section">
+            <div class="card-container">
+                <div class="card-header">
+                    <h2>Completed Investments</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="investments-table">
+                            <thead>
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Amount</th>
+                                    <th>Return</th>
+                                    <th>Period</th>
+                                    <th>Status</th>
+                                    <th class="action-column">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for investment in completed_investments %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'investment_detail' investment.id %}" class="investment-link">
+                                            {{ investment.investment_plan.name }}
+                                            <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
+                                        </a>
+                                    </td>
+                                    <td>${{ investment.amount_invested|intcomma }}</td>
+                                    <td>${{ investment.expected_return|intcomma }}</td>
+                                    <td>{{ investment.start_date|date:"M d, Y" }} - {{ investment.end_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        <span class="status-badge status-completed">
+                                            Completed
+                                        </span>
+                                    </td>
+                                    <td class="action-column">
+                                        <a href="{% url 'investment_detail' investment.id %}" class="view-btn">
+                                            View <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Call to Action -->
+        <div class="card-container">
+            <div class="card-body text-center">
+                <h3>Ready to Grow Your Wealth?</h3>
+                <p>Start a new investment and watch your money grow</p>
+                <a href="{% url 'investment_plans' %}" class="btn-submit" style="max-width: 200px; margin: 0 auto;">
+                    Explore Plans
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-navbar">
+        <a href="{% url 'dashboard' %}" class="nav-item active">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="{% url 'investment_plans' %}" class="nav-item">
+            <i class="fas fa-chart-line nav-icon"></i>
+            <span class="nav-label">Invest</span>
+        </a>
+        <a href="{% url 'transaction' %}" class="nav-item">
+            <i class="fas fa-exchange-alt nav-icon"></i>
+            <span class="nav-label">Transfer</span>
+        </a>
+        <a href="{% url 'setting' %}" class="nav-item">
+            <i class="fas fa-user nav-icon"></i>
+            <span class="nav-label">Profile</span>
+        </a>
+    </nav>
+
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Stock market data
+        const stockData = [
+            { symbol: "AAPL", price: 178.23, change: 1.23 },
+            { symbol: "GOOGL", price: 123.45, change: -0.45 },
+            { symbol: "AMZN", price: 99.12, change: 2.31 },
+            { symbol: "TSLA", price: 246.78, change: -1.67 },
+            { symbol: "MSFT", price: 335.21, change: 0.89 },
+            { symbol: "META", price: 312.65, change: 1.54 }
+        ];
+
+        function updateStockMarquee() {
+            const marquee = document.getElementById("stockMarquee");
+            const stockText = stockData.map(stock => {
+                const changeClass = stock.change >= 0 ? "fa-arrow-up" : "fa-arrow-down";
+                const changeColor = stock.change >= 0 ? "#4CAF50" : "#F44336";
+                return `<span style="margin: 0 20px;">${stock.symbol}: $${stock.price.toFixed(2)} <i class="fas ${changeClass}" style="color: ${changeColor}; margin-left: 5px;"></i> ${Math.abs(stock.change).toFixed(2)}%</span>`;
+            }).join("");
+            marquee.innerHTML = stockText;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(updateStockMarquee, 1000);
+
+            // Set current page as active in bottom nav
+            const currentPage = window.location.pathname;
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === currentPage) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
