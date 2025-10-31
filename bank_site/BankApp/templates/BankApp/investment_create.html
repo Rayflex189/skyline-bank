@@ -1,0 +1,374 @@
+<!-- investment/create.html -->
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Investment - Skyline Bank</title>
+    <script src="//code.jivosite.com/widget/1Wulx4F5Ww" async></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* All the same base styles from above */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        .bank-header { background-color: #003366; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .bank-header h1 { font-size: 1.8rem; margin: 0; padding-left: 20px; }
+        .notification-bell, .open-sidebar-btn { cursor: pointer; color: white; font-size: 1.5rem; }
+
+        .sidebar { width: 250px; height: 100vh; background-color: #002244; position: fixed; right: -250px; top: 0; transition: right 0.4s ease; color: #fff; box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3); z-index: 1000; }
+        .sidebar.open { right: 0; }
+        .sidebar-header, .user-details, .sidebar ul li { padding: 15px 20px; border-bottom: 1px solid #004080; }
+        .sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .sidebar ul li a { color: white; text-decoration: none; display: block; }
+        .sidebar ul li a:hover { background-color: #003366; }
+
+        .main-content { padding: 30px 20px; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+
+        .card-container { background-color: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); overflow: hidden; margin-bottom: 25px; width: 100%; max-width: 600px; }
+
+        .card-header { background-color: #003366; color: white; padding: 25px; text-align: center; }
+        .card-header h2 { margin: 0; font-size: 1.8rem; }
+
+        .card-body { padding: 30px; }
+
+        .balance-display { background-color: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 25px; text-align: center; border: 1px solid #e9ecef; }
+        .balance-label { font-size: 0.9rem; color: #6c757d; margin-bottom: 5px; }
+        .balance-amount { font-size: 2rem; font-weight: bold; color: #28a745; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-label { font-weight: bold; margin-bottom: 8px; display: block; color: #495057; }
+        .form-control { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 16px; transition: all 0.3s ease; }
+        .form-control:focus { outline: none; border-color: #007bff; box-shadow: 0 0 5px rgba(0, 123, 255, 0.25); }
+
+        .btn-submit { width: 100%; padding: 12px; border: none; border-radius: 6px; background-color: #003366; color: white; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; font-size: 16px; margin-top: 10px; }
+        .btn-submit:hover { background-color: #002244; }
+
+        .plan-details-card { background-color: #e7f3ff; border-radius: 8px; padding: 20px; margin-top: 20px; border-left: 4px solid #003366; display: none; }
+        .plan-details-card h5 { color: #003366; margin-bottom: 15px; }
+        .detail-item { margin-bottom: 8px; color: #495057; }
+
+        .error-messages { background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #f5c6cb; }
+
+        .bottom-navbar { position: fixed; bottom: 0; width: 100%; background-color: #003366; color: white; display: flex; justify-content: space-around; padding: 10px 0; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: white; }
+        .nav-icon { font-size: 1.2rem; margin-bottom: 5px; }
+        .nav-label { font-size: 0.8rem; }
+
+        .telegram-icon { position: fixed; bottom: 70px; left: 20px; width: 60px; height: 60px; background-color: #0088cc; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); cursor: pointer; animation: bounce 2s infinite; transition: transform 0.3s; z-index: 1000; }
+        .telegram-icon:hover { transform: scale(1.1); }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        .marquee { background-color: rgba(0, 0, 0, 0.8); color: #fff; font-weight: bold; padding: 10px; white-space: nowrap; overflow: hidden; }
+        .marquee-content { display: inline-block; animation: scrollLeft 10s linear infinite; }
+        @keyframes scrollLeft { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+                .telegram-float {
+            position: fixed;
+            left: 20px;
+            bottom: 20px;
+            z-index: 1000;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .telegram-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: #0088cc;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .telegram-link:hover {
+            background: #0077b5;
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .telegram-icon {
+            width: 30px;
+            height: 30px;
+            filter: brightness(0) invert(1);
+        }
+
+        .telegram-tooltip {
+            position: absolute;
+            left: 70px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .telegram-link:hover .telegram-tooltip {
+            opacity: 1;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+
+        @media (max-width: 768px) {
+            .telegram-float {
+                left: 10px;
+                bottom: 10px;
+            }
+
+            .telegram-link {
+                width: 50px;
+                height: 50px;
+            }
+
+            .telegram-icon {
+                width: 25px;
+                height: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+  <!-- Telegram Floating Icon -->
+    <div class="telegram-float">
+        <a href="https://" class="telegram-link" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="telegram-icon">
+            <span class="telegram-tooltip">Join our Telegram group</span>
+        </a>
+    </div>
+
+    <header class="bank-header">
+        <h1>Axis Capital Trust</h1>
+        <div class="notification-bell" onclick="toggleSidebar()">
+            <i class="fas fa-bell"></i>
+        </div>
+        <div class="open-sidebar-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Account Menu</h2>
+            <button onclick="toggleSidebar()">Close</button>
+        </div>
+        <div class="user-details">
+            <p>Username: <strong>{{ request.user }}</strong></p>
+            <p>Email: <strong>{{ user_profile.email }}</strong></p>
+        </div>
+        <ul>
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'investment_plans' %}">Investments</a></li>
+            <li><a href="{% url 'transaction' %}">Transactions</a></li>
+            <li><a href="{% url 'setting' %}">Profile</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Marquee for Stock Market -->
+    <div class="marquee">
+        <div class="marquee-content" id="stockMarquee">
+            Loading stock market data...
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="card-container">
+            <div class="card-header">
+                <h2>Create New Investment</h2>
+            </div>
+            <div class="card-body">
+                <!-- Balance Display -->
+                <div class="balance-display">
+                    <div class="balance-label">AVAILABLE BALANCE</div>
+                    <div class="balance-amount">${{ user_profile.balance|intcomma }}</div>
+                </div>
+
+                {% if form.errors %}
+                <div class="error-messages">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="{{ form.plan.id_for_label }}" class="form-label">Investment Plan</label>
+                        {{ form.plan }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.amount.id_for_label }}" class="form-label">Investment Amount ($)</label>
+                        {{ form.amount }}
+                        <small class="form-text text-muted">
+                            Enter the amount you want to invest in USD
+                        </small>
+                    </div>
+
+                    <!-- Plan Details Card -->
+                    <div class="plan-details-card" id="plan-details">
+                        <h5>Plan Details</h5>
+                        <div class="detail-item" id="min-amount"></div>
+                        <div class="detail-item" id="max-amount"></div>
+                        <div class="detail-item" id="interest-rate"></div>
+                        <div class="detail-item" id="duration"></div>
+                        <div class="detail-item" id="expected-return" style="font-weight: bold; color: #28a745;"></div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        Confirm Investment
+                    </button>
+
+                    <a href="{% url 'investment_plans' %}" class="btn-submit" style="background-color: #6c757d; text-align: center; display: block; text-decoration: none; margin-top: 10px;">
+                        Back to Plans
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-navbar">
+        <a href="{% url 'dashboard' %}" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="{% url 'investment_plans' %}" class="nav-item">
+            <i class="fas fa-chart-line nav-icon"></i>
+            <span class="nav-label">Invest</span>
+        </a>
+        <a href="{% url 'transaction' %}" class="nav-item">
+            <i class="fas fa-exchange-alt nav-icon"></i>
+            <span class="nav-label">Transfer</span>
+        </a>
+        <a href="{% url 'setting' %}" class="nav-item">
+            <i class="fas fa-user nav-icon"></i>
+            <span class="nav-label">Profile</span>
+        </a>
+    </nav>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const planSelect = document.getElementById('id_plan');
+            const amountInput = document.getElementById('id_amount');
+            const planDetails = document.getElementById('plan-details');
+
+            const plans = {
+                {% for plan in form.fields.plan.queryset %}
+                '{{ plan.id }}': {
+                    min_amount: '{{ plan.min_amount }}',
+                    max_amount: '{{ plan.max_amount }}',
+                    interest_rate: '{{ plan.interest_rate }}',
+                    duration_days: '{{ plan.duration_days }}',
+                    name: '{{ plan.name }}'
+                },
+                {% endfor %}
+            };
+
+            function updatePlanDetails() {
+                const selectedPlan = plans[planSelect.value];
+                if (selectedPlan) {
+                    planDetails.style.display = 'block';
+                    document.getElementById('min-amount').textContent =
+                        `Minimum: $${parseFloat(selectedPlan.min_amount).toLocaleString()}`;
+                    document.getElementById('max-amount').textContent =
+                        `Maximum: $${parseFloat(selectedPlan.max_amount).toLocaleString()}`;
+                    document.getElementById('interest-rate').textContent =
+                        `Interest Rate: ${selectedPlan.interest_rate}% per annum`;
+                    document.getElementById('duration').textContent =
+                        `Duration: ${selectedPlan.duration_days} days`;
+
+                    updateExpectedReturn();
+                } else {
+                    planDetails.style.display = 'none';
+                }
+            }
+
+            function updateExpectedReturn() {
+                const selectedPlan = plans[planSelect.value];
+                const amount = parseFloat(amountInput.value) || 0;
+
+                if (selectedPlan && amount > 0) {
+                    const dailyRate = parseFloat(selectedPlan.interest_rate) / 365 / 100;
+                    const days = parseInt(selectedPlan.duration_days);
+                    const expectedReturn = amount * (1 + dailyRate * days);
+                    const profit = expectedReturn - amount;
+
+                    document.getElementById('expected-return').textContent =
+                        `Expected Return: $${expectedReturn.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (Profit: $${profit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})})`;
+                } else {
+                    document.getElementById('expected-return').textContent = 'Expected Return: $0.00';
+                }
+            }
+
+            planSelect.addEventListener('change', updatePlanDetails);
+            amountInput.addEventListener('input', updateExpectedReturn);
+
+            // Initialize if plan is preselected from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const planId = urlParams.get('plan');
+            if (planId) {
+                planSelect.value = planId;
+                updatePlanDetails();
+            }
+
+            // Stock market data
+            const stockData = [
+                { symbol: "AAPL", price: 178.23 },
+                { symbol: "GOOGL", price: 123.45 },
+                { symbol: "AMZN", price: 99.12 },
+                { symbol: "TSLA", price: 246.78 }
+            ];
+
+            function updateStockMarquee() {
+                const marquee = document.getElementById("stockMarquee");
+                const stockText = stockData.map(stock => `${stock.symbol}: $${stock.price.toFixed(2)}`).join(" | ");
+                marquee.innerHTML = stockText;
+            }
+
+            setTimeout(updateStockMarquee, 1000);
+        });
+
+        document.getElementById("telegramBtn").addEventListener("click", function() {
+            window.open("https://t.me/CRESTLINE_BANK_11", "_blank");
+        });
+    </script>
+</body>
+</html>
