@@ -596,8 +596,8 @@
                     <i class="fas fa-user"></i>
                 </div>
                 <div>
-                    <div>User Account</div>
-                    <div style="font-size: 0.8rem;">usermail@gmail.com</div>
+                    <div>{{ request.user }}</div>
+                    <div style="font-size: 0.8rem;">{{ user_profile.email }}</div>
                 </div>
                 <div class="notification-bell" onclick="toggleSidebar()">
                     <i class="fas fa-bell"></i>
@@ -639,12 +639,12 @@
         <!-- Welcome Section -->
         <div class="welcome-section">
             <h2>Welcome Back</h2>
-            <p>Gustavo Redol</p>
+            <p>{{ request.user }}</p>
 
             <div class="balance-section">
                 <div class="balance-label">AVAILABLE BALANCE</div>
-                <div class="balance-amount">£0.00</div>
-                <div class="account-number">ACCOUNT NUMBER<br>8958606600</div>
+                <div class="balance-amount">${{ user_profile.balance|intcomma }}</div>
+                <div class="account-number">ACCOUNT NUMBER<br>${{ user_profile.accountnumber }}</div>
             </div>
 
             <div class="services-grid">
@@ -787,7 +787,7 @@
                     <i class="fas fa-exchange-alt nav-icon"></i>
                     <span>Transfer</span>
                 </a>
-                <a href="{% url 'setting' %}" class="nav-item">
+                <a href="{% url 'profile' %}" class="nav-item">
                     <i class="fas fa-user nav-icon"></i>
                     <span>Profile</span>
                 </a>
