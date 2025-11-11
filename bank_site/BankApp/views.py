@@ -21,6 +21,31 @@ from .utilis import * # Ensure your form is customized to accept an email instea
 import datetime
 
 @login_required
+def kyc(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        # Handle the case where the profile doesn't exist
+        user_profile = UserProfile.objects.create(user=request.user)
+    context = {
+        'user_profile': user_profile,
+    }
+    return render(request, 'BankApp/kyc.html', context)
+
+@login_required
+def loans(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        # Handle the case where the profile doesn't exist
+        user_profile = UserProfile.objects.create(user=request.user)
+    context = {
+        'user_profile': user_profile,
+    }
+    return render(request, 'BankApp/loans.html', context)
+    
+
+@login_required
 def investment_detail(request, investment_id):
     investment = get_object_or_404(UserInvestment, id=investment_id, user=request.user)
     transactions = InvestmentTransaction.objects.filter(investment=investment).order_by('-created_at')
