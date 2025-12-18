@@ -6,6 +6,7 @@ urlpatterns = [
     path('', views.verify, name='verify'),
     path('home/', views.home, name='home'),
     path('about/', views.about, name='about'),
+    path('verify-email/<uidb64>/<token>/', verify_email, name='verify_email'),
     path('blog/', views.blog, name='blog'),
     path('contact/', views.contact, name='contact'),
     path('detail/', views.detail, name='detail'),
