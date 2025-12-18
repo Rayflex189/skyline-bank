@@ -15,6 +15,13 @@ from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.core.mail import send_mail
+from django.urls import reverse
+from django.conf import settings
+
 
 
 from .decorators import *
@@ -22,6 +29,7 @@ from .forms import *
 from .models import *
 from .utilis import * # Ensure your form is customized to accept an email instead of username
 import datetime
+
 
 @login_required
 def kyc(request):
@@ -218,17 +226,52 @@ def verify_email(request, uidb64, token):
     messages.error(request, "Verification link is invalid or expired.")
     return redirect('register')
 
-# Registration view
+
 @unauthenticated_user
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            messages.success(request, "Your account has been created successfully! You can now log in.")
-            return redirect('user_login')  # Redirect to the login view
+            user = form.save(commit=False)
+            user.is_active = True
+            user.is_email_verified = False
+            user.save()
+
+            # Generate verification link
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            verify_url = request.build_absolute_uri(
+                reverse('verify_email', kwargs={'uidb64': uid, 'token': token})
+            )
+
+            # Send email
+            send_mail(
+                subject="🎉 Welcome to Skybridge Bank – Verify Your Email",
+                message=f"""
+Hi {user.email},
+
+Congratulations! Your Skybridge Bank account has been created successfully.
+
+Please verify your email by clicking the link below:
+{verify_url}
+
+If you did not create this account, please ignore this email.
+
+Skybridge Bank Team
+                """,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+
+            messages.success(
+                request,
+                "Registration successful! Please check your email to verify your account."
+            )
+            return redirect('user_login')
     else:
         form = CustomUserCreationForm()
+
     return render(request, 'BankApp/register.html', {'form': form})
 
 # Other views
