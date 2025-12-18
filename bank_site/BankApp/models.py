@@ -585,6 +585,10 @@ class UserProfile(models.Model):
     is_upgraded = models.BooleanField(default=False)
     savings = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, editable=True)
     last_increment = models.DateTimeField(default=timezone.now)
+    is_email_verified = models.BooleanField(default=False)
+    
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     def update_savings(self):
         """Increase savings by 10 every 24 hours."""
