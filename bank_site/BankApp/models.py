@@ -106,11 +106,17 @@ class Transaction(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     amount = models.DecimalField(decimal_places=2, max_digits=10)
     balance_after = models.DecimalField(decimal_places=2, max_digits=10)
-    timestamp = models.DateTimeField(auto_now_add=False, auto_now=True)
+    timestamp = models.DateTimeField(default=timezone.now)  # editable
     description = models.CharField(max_length=255, blank=True, null=True)
 
+    def clean(self):
+        one_year_ago = timezone.now() - timedelta(days=365)
+
+        if self.timestamp < one_year_ago:
+            raise ValidationError("You can only backdate transactions up to 1 year.")
+
     def __str__(self):
-        return f"{self.amount} - {self.user.username} - {self.timestamp}"
+        return f"{self.amount} - {self.user.email} - {self.timestamp}"
 
 
 class UserProfile(models.Model):
