@@ -106,7 +106,7 @@ class Transaction(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     amount = models.DecimalField(decimal_places=2, max_digits=10)
     balance_after = models.DecimalField(decimal_places=2, max_digits=10)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(auto_now_add=False, auto_now=True)
     description = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
