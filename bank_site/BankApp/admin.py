@@ -1,4 +1,8 @@
 from django.contrib import admin
+from django import forms
+from django.utils import timezone
+from .models import Transaction
+from datetime import timedelta
 from .models import *
 
 @admin.register(InvestmentPlan)
@@ -48,12 +52,38 @@ class UserProfileAdmin(admin.ModelAdmin):
                 pass
         super().save_model(request, obj, form, change)
 
+
+# ---- Custom Form to Make Timestamp Editable + Add 1-year Limit ----
+class TransactionForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = '__all__'
+        widgets = {
+            'timestamp': forms.DateTimeInput(attrs={'type': 'datetime-local'})
+        }
+
+    def clean_timestamp(self):
+        ts = self.cleaned_data.get("timestamp")
+        one_year_ago = timezone.now() - timedelta(days=365)
+
+        # Optional check: Prevent choosing a date older than 1 year
+        if ts < one_year_ago:
+            raise forms.ValidationError("You cannot backdate a transaction more than 1 year.")
+        
+        return ts
+
+
+# ---- Admin Panel ----
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ['user', 'amount', 'balance_after', 'timestamp', 'description']  # Specify fields to display in the admin list
-    search_fields = ['user__username', 'description']  # Search by user and description
-    list_filter = ['timestamp', 'user']  # Add filters for timestamp and user
+    form = TransactionForm   # 👈 Important: use custom form
+
+    list_display = ['user', 'amount', 'balance_after', 'timestamp', 'description']
+    search_fields = ['user__username', 'description']
+    fields = ('user', 'amount', 'balance_after', 'timestamp', 'description')
+    list_filter = ['timestamp', 'user']
     ordering = ['-timestamp']
+
 
 class YourModelAdmin(admin.ModelAdmin):
     list_display = ('image_display',)
