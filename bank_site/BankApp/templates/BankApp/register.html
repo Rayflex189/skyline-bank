@@ -189,6 +189,18 @@ input:focus::placeholder {
         <div class="col-md-6">
             <div class="login-form">
                 <h2 class="text-center">Register</h2>
+
+                <!-- Django messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-info text-center">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <p class="text-center text-muted" style="font-size:14px;">
+                    A verification email will be sent to you after registration.
+                </p>
+
                 <form method="post" action="{% url 'register' %}">
                     {% csrf_token %}
                     
@@ -225,11 +237,12 @@ input:focus::placeholder {
                     <div class="form-group">
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="rememberMe" required>
-                            <label class="form-check-label" for="rememberMe">Remember Me</label>
+                            <label class="form-check-label" for="rememberMe">I agree to create an account</label>
                         </div>
                     </div>
-                
-                    <button type="submit" class="btn btn-custom btn-block">Login</button>
+
+                    <!-- Button text fixed -->
+                    <button type="submit" class="btn btn-custom btn-block">Register</button>
                     
                     <p class="text-center mt-3">
                         <a href="{% url 'user_login' %}">Already have an account? Sign in here</a>
@@ -240,6 +253,7 @@ input:focus::placeholder {
         </div>
     </div>
 </div>
+
   <!-- Vendor Start -->
   <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
     <div class="container py-5 mb-5">

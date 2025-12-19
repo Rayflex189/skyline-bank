@@ -14,6 +14,11 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.core.mail import send_mail
+from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
@@ -210,6 +215,7 @@ def investment_dashboard(request):
     }
     return render(request, 'BankApp/investment_dashboard.html', context)
 
+<<<<<<< HEAD
 def verify_email(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -227,6 +233,8 @@ def verify_email(request, uidb64, token):
     return redirect('register')
 
 
+=======
+>>>>>>> 1e7d47b (Updated login and registration views)
 @unauthenticated_user
 def register(request):
     if request.method == 'POST':
@@ -274,6 +282,7 @@ Skybridge Bank Team
 
     return render(request, 'BankApp/register.html', {'form': form})
 
+
 # Other views
 
 def home(request):
@@ -308,6 +317,23 @@ def detail(request):
 
 def blog(request):  
     return render(request, 'BankApp/blog.html')
+
+
+def verify_email(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except:
+        user = None
+
+    if user and default_token_generator.check_token(user, token):
+        user.is_email_verified = True
+        user.save()
+        messages.success(request, "Email verified successfully! You can now log in.")
+        return redirect('user_login')
+
+    messages.error(request, "Verification link is invalid or expired.")
+    return redirect('register')
 
 @unauthenticated_user
 def user_login(request):  
