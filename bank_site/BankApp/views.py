@@ -8,9 +8,17 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from django.db import transaction
 from django.conf import settings
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.core.mail import send_mail
+from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 
 
@@ -199,19 +207,53 @@ def investment_dashboard(request):
     }
     return render(request, 'BankApp/investment_dashboard.html', context)
 
-
-# Registration view
 @unauthenticated_user
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            messages.success(request, "Your account has been created successfully! You can now log in.")
-            return redirect('user_login')  # Redirect to the login view
+            user = form.save(commit=False)
+            user.is_active = True
+            user.is_email_verified = False
+            user.save()
+
+            # Generate verification link
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            verify_url = request.build_absolute_uri(
+                reverse('verify_email', kwargs={'uidb64': uid, 'token': token})
+            )
+
+            # Send email
+            send_mail(
+                subject="🎉 Welcome to Skybridge Bank – Verify Your Email",
+                message=f"""
+Hi {user.email},
+
+Congratulations! Your Skybridge Bank account has been created successfully.
+
+Please verify your email by clicking the link below:
+{verify_url}
+
+If you did not create this account, please ignore this email.
+
+Skybridge Bank Team
+                """,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+
+            messages.success(
+                request,
+                "Registration successful! Please check your email to verify your account."
+            )
+            return redirect('user_login')
     else:
         form = CustomUserCreationForm()
+
     return render(request, 'BankApp/register.html', {'form': form})
+
 
 # Other views
 
@@ -248,6 +290,23 @@ def detail(request):
 def blog(request):  
     return render(request, 'BankApp/blog.html')
 
+
+def verify_email(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except:
+        user = None
+
+    if user and default_token_generator.check_token(user, token):
+        user.is_email_verified = True
+        user.save()
+        messages.success(request, "Email verified successfully! You can now log in.")
+        return redirect('user_login')
+
+    messages.error(request, "Verification link is invalid or expired.")
+    return redirect('register')
+
 @unauthenticated_user
 def user_login(request):  
     if request.method == 'POST':
@@ -257,12 +316,21 @@ def user_login(request):
         user = authenticate(request, email=email, password=password)
 
         if user is not None:
+
+            # ❗ Block login if email is not verified
+            if not user.is_email_verified:
+                messages.error(request, "Your email is not verified. Please check your inbox.")
+                return redirect('user_login')
+
+            # Login successful
             login(request, user)
             return redirect('reset_profile')
+
         else:
-            messages.info(request, 'Username OR password is incorrect')
-    context = {}
+            messages.error(request, 'Email or Password is incorrect.')
+
     return render(request, 'BankApp/login.html')
+
 
 @login_required(login_url='user_login')
 def crypto(request):
