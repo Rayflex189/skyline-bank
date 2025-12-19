@@ -318,12 +318,21 @@ def user_login(request):
         user = authenticate(request, email=email, password=password)
 
         if user is not None:
+
+            # ❗ Block login if email is not verified
+            if not user.is_email_verified:
+                messages.error(request, "Your email is not verified. Please check your inbox.")
+                return redirect('user_login')
+
+            # Login successful
             login(request, user)
             return redirect('reset_profile')
+
         else:
-            messages.info(request, 'Username OR password is incorrect')
-    context = {}
+            messages.error(request, 'Email or Password is incorrect.')
+
     return render(request, 'BankApp/login.html')
+
 
 @login_required(login_url='user_login')
 def crypto(request):
