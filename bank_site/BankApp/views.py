@@ -215,26 +215,6 @@ def investment_dashboard(request):
     }
     return render(request, 'BankApp/investment_dashboard.html', context)
 
-<<<<<<< HEAD
-def verify_email(request, uidb64, token):
-    try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        user = UserProfile.objects.get(pk=uid)
-    except:
-        user = None
-
-    if user and default_token_generator.check_token(user, token):
-        user.is_email_verified = True
-        user.save()
-        messages.success(request, "Email verified successfully! You can now log in.")
-        return redirect('user_login')
-
-    messages.error(request, "Verification link is invalid or expired.")
-    return redirect('register')
-
-
-=======
->>>>>>> 1e7d47b (Updated login and registration views)
 @unauthenticated_user
 def register(request):
     if request.method == 'POST':
