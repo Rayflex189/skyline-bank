@@ -8,6 +8,7 @@ import string
 from decimal import Decimal
 from cloudinary.models import CloudinaryField
 
+
 class InvestmentPlan(models.Model):
     PLAN_TYPES = [
         ('BASIC', 'Basic Plan'),
@@ -106,12 +107,15 @@ class Transaction(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     amount = models.DecimalField(decimal_places=2, max_digits=10)
     balance_after = models.DecimalField(decimal_places=2, max_digits=10)
-    timestamp = models.DateTimeField(default=timezone.now)  # editable
+
+    # ⬇️ Change this to allow editing
+    timestamp = models.DateTimeField(default=timezone.now)  # Editable at creation
+
     description = models.CharField(max_length=255, blank=True, null=True)
 
     def clean(self):
+        # Optional: Limit backdating to 1 year
         one_year_ago = timezone.now() - timedelta(days=365)
-
         if self.timestamp < one_year_ago:
             raise ValidationError("You can only backdate transactions up to 1 year.")
 
