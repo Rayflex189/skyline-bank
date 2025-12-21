@@ -333,7 +333,6 @@ def blog(request):
     return render(request, 'BankApp/blog.html')
 
 
-
 @unauthenticated_user
 def user_login(request):  
     if request.method == 'POST':
@@ -344,8 +343,8 @@ def user_login(request):
 
         if user is not None:
 
-            # ❗ Block login if email is not verified
-            if not user.is_email_verified:
+            # CHECK PROFILE, NOT USER
+            if not user.userprofile.is_email_verified:
                 messages.error(request, "Your email is not verified. Please check your inbox.")
                 return redirect('user_login')
 
@@ -357,6 +356,7 @@ def user_login(request):
             messages.error(request, 'Email or Password is incorrect.')
 
     return render(request, 'BankApp/login.html')
+
 
 
 @login_required(login_url='user_login')
