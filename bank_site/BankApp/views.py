@@ -35,7 +35,10 @@ from django.contrib import messages
 from django.core.signing import BadSignature, SignatureExpired, Signer
 from django.conf import settings
 
-from .models import User  # Your custom user model
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+ # Your custom user model
 
 
 signer = Signer()  # make sure this exists globally or inside the view
