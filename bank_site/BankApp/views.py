@@ -1,52 +1,101 @@
+# Django Core Imports
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db import transaction
-from django.core.signing import TimestampSigner
-
-from django.core.exceptions import ValidationError
-from django.core.exceptions import ObjectDoesNotExist
-
+from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.conf import settings
-from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_str
+from django.contrib import messages
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
+from django.core.mail import send_mail
+from django.urls import reverse
+
+# Utility Imports
+from datetime import timedelta, datetime
 from django.utils import timezone
-from datetime import timedelta
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.core.mail import send_mail
-from django.urls import reverse
-from django.contrib.auth import authenticate, login, logout
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
-from django.core.mail import send_mail
-from django.urls import reverse
 
-
-
+# Project Imports
 from .decorators import *
 from .forms import *
 from .models import *
-from .utilis import * # Ensure your form is customized to accept an email instead of username
-import datetime
-from django.shortcuts import redirect
-from django.contrib import messages
-from django.core.signing import BadSignature, SignatureExpired, Signer
-from django.conf import settings
+from .utilis import *  # If still required (consider limiting *)
+from BankApp.decorators import unauthenticated_user
+from BankApp.models import UserProfile
 
-from django.contrib.auth import get_user_model
 
 User = get_user_model()
- # Your custom user model
+signer = TimestampSigner()
 
 
-signer = Signer()  # make sure this exists globally or inside the view
+@unauthenticated_user
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            # Create user
+            user = form.save(commit=False)
+            user.is_active = True
+            user.save()
+
+            # Ensure user profile exists
+            profile, created = UserProfile.objects.get_or_create(user=user)
+            profile.is_email_verified = False
+            profile.save()
+
+            # Generate signed token with timestamp
+            signed_value = signer.sign(user.pk)
+
+            # Build verification link
+            verification_link = request.build_absolute_uri(
+                reverse('verify_email', args=[signed_value])
+            )
+
+            # Email content
+            email_body = f"""
+Hi {user.email},
+
+Your Skybridge Bank account has been successfully created.
+
+Please verify your email by clicking the link below:
+{verification_link}
+
+This link is valid for 7 days.
+
+If you did not create this account, simply ignore this message.
+
+Skybridge Bank Security Team
+"""
+
+            # Send email
+            send_mail(
+                subject="🎉 Welcome to Skybridge Bank – Verify Your Email",
+                message=email_body,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
+                fail_silently=False,
+            )
+
+            # Success message
+            messages.success(
+                request,
+                "Registration successful! A verification link has been sent to your email."
+            )
+            return redirect('user_login')
+
+    else:
+        form = CustomUserCreationForm()
+
+    return render(request, 'BankApp/register.html', {'form': form})
+
 
 
 def verify_email(request, signed_value):
     try:
-        # Validate the signed user ID (max_age = 7 days)
+        # Validate the signed user ID (max_age = 7 days = 604800 seconds)
         user_id = signer.unsign(signed_value, max_age=604800)
 
         user = User.objects.get(pk=user_id)
@@ -66,6 +115,7 @@ def verify_email(request, signed_value):
 
     messages.success(request, "Email verified successfully! You may now log in.")
     return redirect("user_login")
+
 
 
 @login_required
@@ -246,59 +296,6 @@ def investment_dashboard(request):
         'total_expected': total_expected,
     }
     return render(request, 'BankApp/investment_dashboard.html', context)
-
-@unauthenticated_user
-def register(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = True
-            user.save()
-
-            # Create user profile if not created automatically
-            profile = UserProfile.objects.get(user=user)
-            profile.is_email_verified = False
-            profile.save()
-
-            # Generate signed token
-            signed_value = signer.sign(user.pk)
-
-            # Build verification link (1 argument ONLY)
-            verification_link = request.build_absolute_uri(
-                reverse('verify_email', args=[signed_value])
-            )
-
-            # Send verification email
-            send_mail(
-                subject="🎉 Welcome to Skybridge Bank – Verify Your Email",
-                message=f"""
-Hi {user.email},
-
-Your Skybridge Bank account has been successfully created.
-
-Please verify your email by clicking the link below:
-{verification_link}
-
-If you did not create this account, simply ignore this message.
-
-Skybridge Bank Security Team
-                """,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[user.email],
-                fail_silently=False,
-            )
-
-            messages.success(
-                request,
-                "Registration successful! A verification link has been sent to your email."
-            )
-            return redirect('user_login')
-
-    else:
-        form = CustomUserCreationForm()
-
-    return render(request, 'BankApp/register.html', {'form': form})
 
 # Other views
 
