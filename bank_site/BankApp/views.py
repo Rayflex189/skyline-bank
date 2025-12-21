@@ -11,7 +11,6 @@ from django.db import transaction
 from django.conf import settings
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
-from django.contrib import messages
 from django.utils import timezone
 from datetime import timedelta
 from django.utils.http import urlsafe_base64_encode
@@ -23,8 +22,6 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.core.mail import send_mail
 from django.urls import reverse
-from django.conf import settings
-from django.core.signing import BadSignature, SignatureExpired
 
 
 
@@ -33,7 +30,40 @@ from .forms import *
 from .models import *
 from .utilis import * # Ensure your form is customized to accept an email instead of username
 import datetime
-signer = TimestampSigner()
+from django.shortcuts import redirect
+from django.contrib import messages
+from django.core.signing import BadSignature, SignatureExpired, Signer
+from django.conf import settings
+
+from .models import User  # Your custom user model
+
+
+signer = Signer()  # make sure this exists globally or inside the view
+
+
+def verify_email(request, signed_value):
+    try:
+        # Validate the signed user ID (max_age = 7 days)
+        user_id = signer.unsign(signed_value, max_age=604800)
+
+        user = User.objects.get(pk=user_id)
+
+    except SignatureExpired:
+        messages.error(request, "Verification link has expired. Please request a new one.")
+        return redirect("register")
+
+    except (BadSignature, User.DoesNotExist):
+        messages.error(request, "Invalid verification link.")
+        return redirect("register")
+
+    # Mark email as verified
+    profile = user.userprofile
+    profile.is_email_verified = True
+    profile.save()
+
+    messages.success(request, "Email verified successfully! You may now log in.")
+    return redirect("user_login")
+
 
 @login_required
 def kyc(request):
@@ -214,7 +244,6 @@ def investment_dashboard(request):
     }
     return render(request, 'BankApp/investment_dashboard.html', context)
 
-
 @unauthenticated_user
 def register(request):
     if request.method == 'POST':
@@ -232,8 +261,8 @@ def register(request):
             # Generate signed token
             signed_value = signer.sign(user.pk)
 
-            # Build verification link
-            verify_url = request.build_absolute_uri(
+            # Build verification link (1 argument ONLY)
+            verification_link = request.build_absolute_uri(
                 reverse('verify_email', args=[signed_value])
             )
 
@@ -246,7 +275,7 @@ Hi {user.email},
 Your Skybridge Bank account has been successfully created.
 
 Please verify your email by clicking the link below:
-{verify_url}
+{verification_link}
 
 If you did not create this account, simply ignore this message.
 
@@ -303,22 +332,6 @@ def detail(request):
 def blog(request):  
     return render(request, 'BankApp/blog.html')
 
-
-
-
-def verify_email(request, signed_value):
-    try:
-        user_id = signer.unsign(signed_value, max_age=604800)  # 7 days
-        user = User.objects.get(pk=user_id)
-    except (BadSignature, SignatureExpired, User.DoesNotExist):
-        messages.error(request, "Verification link is invalid or has expired.")
-        return redirect('register')
-
-    user.userprofile.is_email_verified = True
-    user.userprofile.save()
-
-    messages.success(request, "Email verified successfully! You may now log in.")
-    return redirect('login')
 
 
 @unauthenticated_user
