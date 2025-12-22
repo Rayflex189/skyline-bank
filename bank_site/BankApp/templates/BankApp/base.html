@@ -1,0 +1,57 @@
+{% include 'base.html' with page_title="Loan Summary" %}
+
+<body>
+<div class="summary-container">
+    <div class="summary-card">
+        <h2>Loan Request Summary</h2>
+
+        <div class="summary-field">
+            <strong>Loan Amount:</strong> {{ currency }} {{ amount }}
+        </div>
+
+        <div class="summary-field">
+            <strong>Loan Type:</strong> {{ loan_type }}
+        </div>
+
+        <div class="summary-field">
+            <strong>Duration:</strong> {{ duration }}
+        </div>
+
+        <div class="summary-field">
+            <strong>Interest Rate:</strong> {{ interest }}%
+        </div>
+
+        <div class="summary-field">
+            <strong>Total Payable:</strong> {{ currency }} {{ total }}
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit">Confirm Application</button>
+        </form>
+    </div>
+</div>
+</body>
+
+<style>
+.summary-container {
+    display:flex; justify-content:center;
+    padding-top:40px; background:#F8FAFC;
+    min-height:100vh;
+}
+.summary-card {
+    background:#fff; padding:30px;
+    width:420px; border-radius:10px;
+    box-shadow:0 5px 18px rgba(0,0,0,0.1);
+}
+.summary-card h2 { color:#1E3A8A; }
+.summary-field {
+    padding:12px 0; border-bottom:1px solid #eee;
+}
+button {
+    margin-top:20px; padding:12px;
+    width:100%; background:#1E3A8A;
+    border:none; border-radius:6px;
+    color:white; cursor:pointer;
+}
+</style>

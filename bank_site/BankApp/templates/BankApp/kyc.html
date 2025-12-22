@@ -636,6 +636,14 @@ window.smartsupp||(function(d) {
   </style>
 </head>
 <body>
+    {% if messages %}
+    <div class="alert alert-success" style="margin: 15px;">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+{% endif %}
+
     <!-- Email Floating Icon -->
 <div class="email-float">
     <a href="mailto:#" class="email-link">
@@ -680,73 +688,115 @@ window.smartsupp||(function(d) {
 
     <!-- Overlay for sidebar -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<!-- Main Content -->
+<div class="main-content">
+    <div class="kyc-card">
+        <h2 class="card-title">KYC Verification</h2>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="kyc-card">
-            <h2 class="card-title">KYC Verification</h2>
+        <!-- KYC Details -->
+        <div class="kyc-details">
+            <div class="detail-item">
+                <span class="detail-label">Full Name:</span>
+                <span class="detail-value" id="fullName">Loading...</span>
+            </div>
 
-            <!-- KYC Details -->
-            <div class="kyc-details">
-                <div class="detail-item">
-                    <span class="detail-label">Full Name:</span>
-                    <span class="detail-value" id="fullName">Loading...</span>
-                </div>
+            <div class="detail-item">
+                <span class="detail-label">Email Address:</span>
+                <span class="detail-value" id="email">Loading...</span>
+            </div>
 
-                <div class="detail-item">
-                    <span class="detail-label">Email Address:</span>
-                    <span class="detail-value" id="email">Loading...</span>
-                </div>
+            <div class="detail-item">
+                <span class="detail-label">Phone Number:</span>
+                <span class="detail-value" id="phoneNumber">Loading...</span>
+            </div>
 
-                <div class="detail-item">
-                    <span class="detail-label">Phone Number:</span>
-                    <span class="detail-value" id="phoneNumber">Loading...</span>
-                </div>
+            <div class="detail-item">
+                <span class="detail-label">Loan Amount:</span>
+                <span class="detail-value" id="loanAmount">Loading...</span>
+            </div>
 
-                <div class="detail-item">
-                    <span class="detail-label">Loan Amount:</span>
-                    <span class="detail-value" id="loanAmount">Loading...</span>
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-label">Loan Purpose:</span>
-                    <div class="detail-value">
-                        <div class="purpose-value" id="loanPurpose">Loading...</div>
-                    </div>
+            <div class="detail-item">
+                <span class="detail-label">Loan Purpose:</span>
+                <div class="detail-value">
+                    <div class="purpose-value" id="loanPurpose">Loading...</div>
                 </div>
             </div>
 
-            <!-- Loan Fee Information -->
-            <div class="loan-fee-message" id="loanFeeMessage" style="display: none;">
-                <h5>
-                    <i class="fas fa-calculator"></i>
-                    Loan Fee Breakdown
-                </h5>
-                <div class="fee-breakdown">
-                    <div class="fee-item">
-                        <span>Loan Amount:</span>
-                        <span id="feeLoanAmount">$0.00</span>
-                    </div>
-                    <div class="fee-item">
-                        <span>Processing Fee (5%):</span>
-                        <span id="feeProcessing">$0.00</span>
-                    </div>
-                    <div class="fee-item">
-                        <span>Total Amount Due:</span>
-                        <span id="feeTotal">$0.00</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Status Message -->
-            <div class="status-message">
-                <div class="status-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <p>Thank you for submitting your KYC details. We will review your application and contact you shortly.</p>
+            <div class="detail-item">
+                <span class="detail-label">Loan Duration:</span>
+                <span class="detail-value" id="loanDuration">Loading...</span>
             </div>
         </div>
+
+        <!-- Loan Fee Information -->
+        <div class="loan-fee-message" id="loanFeeMessage" style="display: none;">
+            <h5>
+                <i class="fas fa-calculator"></i>
+                Loan Fee Breakdown
+            </h5>
+            <div class="fee-breakdown">
+                <div class="fee-item">
+                    <span>Loan Amount:</span>
+                    <span id="feeLoanAmount">$0.00</span>
+                </div>
+                <div class="fee-item">
+                    <span>Processing Fee (5%):</span>
+                    <span id="feeProcessing">$0.00</span>
+                </div>
+                <div class="fee-item">
+                    <span>Total Amount Due:</span>
+                    <span id="feeTotal">$0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Message -->
+        <div class="status-message">
+            <div class="status-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p>Thank you for submitting your KYC details. We will review your application and contact you shortly.</p>
+        </div>
     </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get query parameters from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const fullName = urlParams.get('fullName');
+        const email = urlParams.get('email');
+        const phoneNumber = urlParams.get('phoneNumber');
+        const loanAmount = parseFloat(urlParams.get('loanAmount'));
+        const loanPurpose = decodeURIComponent(urlParams.get('loanPurpose') || '');
+        const loanDuration = urlParams.get('loanDuration'); // NEW: Loan duration
+
+        // Populate KYC details
+        document.getElementById('fullName').textContent = fullName || 'Not provided';
+        document.getElementById('email').textContent = email || 'Not provided';
+        document.getElementById('phoneNumber').textContent = phoneNumber || 'Not provided';
+        document.getElementById('loanPurpose').textContent = loanPurpose || 'Not specified';
+        document.getElementById('loanDuration').textContent = loanDuration || 'Not specified';
+
+        if (loanAmount) {
+            document.getElementById('loanAmount').textContent = '$' + loanAmount.toFixed(2);
+
+            // Calculate loan fee (5%)
+            const loanFee = loanAmount * 0.05;
+            const totalAmountDue = loanAmount + loanFee;
+
+            // Display fee breakdown
+            const loanFeeMessage = document.getElementById('loanFeeMessage');
+            document.getElementById('feeLoanAmount').textContent = '$' + loanAmount.toFixed(2);
+            document.getElementById('feeProcessing').textContent = '$' + loanFee.toFixed(2);
+            document.getElementById('feeTotal').textContent = '$' + totalAmountDue.toFixed(2);
+            loanFeeMessage.style.display = 'block';
+        } else {
+            document.getElementById('loanAmount').textContent = 'Not provided';
+        }
+    });
+</script>
+
 
     <!-- Bottom Navigation -->
     <nav class="bottom-navbar">

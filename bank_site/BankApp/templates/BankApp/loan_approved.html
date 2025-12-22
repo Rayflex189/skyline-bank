@@ -1,0 +1,38 @@
+{% include 'base.html' with page_title="Loan Approved" %}
+
+<body>
+<div class="approved-container">
+    <div class="approved-card">
+        <h2>🎉 Loan Approved!</h2>
+        <p>Your loan request has been successfully approved.</p>
+
+        <div class="approved-info">
+            <p><strong>Approved Amount:</strong> {{ currency }} {{ loan.amount }}</p>
+            <p><strong>Duration:</strong> {{ loan.duration }}</p>
+            <p><strong>Interest:</strong> {{ loan.interest }}%</p>
+            <p><strong>Total Payable:</strong> {{ currency }} {{ loan.total_payable }}</p>
+        </div>
+
+        <a href="/dashboard/" class="btn">Go to Dashboard</a>
+    </div>
+</div>
+</body>
+
+<style>
+.approved-container {
+    display:flex; justify-content:center;
+    padding-top:40px; background:#F0F9FF;
+    min-height:100vh;
+}
+.approved-card {
+    background:white; width:450px;
+    padding:30px; border-radius:10px;
+    box-shadow:0 5px 18px rgba(0,0,0,0.1);
+    text-align:center;
+}
+.btn {
+    display:inline-block; background:#1E3A8A;
+    color:white; padding:12px 20px;
+    border-radius:6px; margin-top:20px;
+}
+</style>

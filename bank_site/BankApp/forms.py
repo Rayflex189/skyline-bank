@@ -6,6 +6,21 @@ from .models import * # Import your UserProfile model
 
 from django.contrib.auth import get_user_model
 
+from django import forms
+from .models import KYC, Loan
+
+class KYCForm(forms.ModelForm):
+    class Meta:
+        model = KYC
+        fields = ['id_front', 'id_back', 'selfie']
+
+
+class LoanForm(forms.ModelForm):
+    class Meta:
+        model = Loan
+        fields = ['amount', 'loan_type', 'duration']
+
+
 
 class InvestmentForm(forms.ModelForm):
     plan = forms.ModelChoiceField(

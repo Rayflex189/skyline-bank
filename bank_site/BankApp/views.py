@@ -30,6 +30,149 @@ from BankApp.models import UserProfile
 User = get_user_model()
 signer = TimestampSigner()
 
+from .models import Loan
+
+from .models import KYC, Loan
+from .forms import KYCForm, LoanForm
+from .utils import calculate_interest
+
+def kyc_verification(request):
+    try:
+        kyc = KYC.objects.get(user=request.user)
+    except KYC.DoesNotExist:
+        kyc = None
+
+    if request.method == 'POST':
+        form = KYCForm(request.POST, request.FILES, instance=kyc)
+        if form.is_valid():
+            kyc = form.save(commit=False)
+            kyc.user = request.user
+            kyc.status = "Pending"
+            kyc.save()
+            messages.success(request, "KYC submitted successfully.")
+            return redirect('dashboard')
+    else:
+        form = KYCForm(instance=kyc)
+
+    return render(request, 'kyc_verification.html', {'form': form})
+
+
+def apply_loan(request):
+    if request.method == "POST":
+        form = LoanForm(request.POST)
+        if form.is_valid():
+            amount = form.cleaned_data['amount']
+            loan_type = form.cleaned_data['loan_type']
+            duration = form.cleaned_data['duration']
+
+            interest_rate, total = calculate_interest(float(amount), duration)
+
+            request.session['loan_data'] = {
+                'amount': float(amount),
+                'loan_type': loan_type,
+                'duration': duration,
+                'interest': interest_rate,
+                'total': float(total)
+            }
+
+            return redirect('loan_review')
+    else:
+        form = LoanForm()
+
+    return render(request, 'loan_apply.html', {'form': form})
+
+
+@login_required
+def loan_review(request):
+    data = request.session.get('loan_data')
+
+    if not data:
+        return redirect('apply_loan')
+
+    if request.method == "POST":
+        loan = Loan.objects.create(
+            user=request.user,
+            amount=data['amount'],
+            loan_type=data['loan_type'],
+            duration=data['duration'],
+            interest=data['interest'],
+            total_payable=data['total'],
+            status="Pending",
+        )
+
+        # Optional: Email to user
+        send_mail(
+            subject="Loan Application Submitted",
+            message=f"Your loan of {data['amount']} is now pending review.",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[request.user.email],
+        )
+
+        del request.session['loan_data']
+        return redirect('loan_pending')
+
+    return render(request, 'loan_review.html', data)
+
+
+@login_required
+def loan_pending(request):
+    return render(request, 'loan_pending.html')
+
+
+@login_required
+def loan_approved(request, loan_id):
+    loan = Loan.objects.get(id=loan_id, user=request.user)
+    return render(request, 'loan_approved.html', {'loan': loan})
+
+
+@login_required
+def process_loan(request):
+    if request.method == "POST":
+        full_name = request.POST.get('fullName')
+        email = request.POST.get('email')
+        phone = request.POST.get('phoneNumber')
+        loan_amount = Decimal(request.POST.get('loanAmount'))
+        loan_purpose = request.POST.get('loanPurpose')
+
+        processing_fee = loan_amount * Decimal('0.05')
+        total_due = loan_amount + processing_fee
+
+        loan = Loan.objects.create(
+            user=request.user,
+            full_name=full_name,
+            email=email,
+            phone_number=phone,
+            loan_amount=loan_amount,
+            loan_purpose=loan_purpose,
+            processing_fee=processing_fee,
+            total_amount_due=total_due,
+        )
+
+        # Send email
+        send_mail(
+            subject="Loan Application Received",
+            message=(
+                f"Hello {full_name},\n\n"
+                f"Your loan request of ${loan_amount:,.2f} has been received and is awaiting approval.\n\n"
+                f"Loan Breakdown:\n"
+                f"- Loan Amount: ${loan_amount:,.2f}\n"
+                f"- Processing Fee (5%): ${processing_fee:,.2f}\n"
+                f"- Total Amount Due: ${total_due:,.2f}\n\n"
+                "Our team is reviewing your application.\n"
+                "If you need help, contact support.\n\n"
+                "Thank you,\nSkyBridge Finance"
+            ),
+            from_email="noreply@skybridge-finance.com",
+            recipient_list=[email],
+        )
+
+        messages.success(request, "Your loan request has been submitted successfully!")
+        return redirect('kyc')
+
+    return redirect('loans')
+
+
+
 
 @unauthenticated_user
 def register(request):
@@ -142,6 +285,7 @@ def loans(request):
     }
     return render(request, 'BankApp/loans.html', context)
     
+
 
 @login_required
 def investment_detail(request, investment_id):

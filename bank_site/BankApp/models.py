@@ -8,6 +8,46 @@ import string
 from decimal import Decimal
 from cloudinary.models import CloudinaryField
 
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class KYC(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    id_front = models.FileField(upload_to="kyc/")
+    id_back = models.FileField(upload_to="kyc/")
+    selfie = models.FileField(upload_to="kyc/")
+    status = models.CharField(
+        max_length=20,
+        choices=[("Pending", "Pending"), ("Approved", "Approved"), ("Rejected", "Rejected")],
+        default="Pending"
+    )
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"KYC - {self.user.email}"
+
+
+class Loan(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    loan_type = models.CharField(max_length=100)
+    duration = models.CharField(max_length=50)
+    interest = models.FloatField()
+    total_payable = models.DecimalField(max_digits=12, decimal_places=2)
+    
+    status = models.CharField(
+        max_length=20,
+        choices=[("Pending", "Pending"), ("Approved", "Approved"), ("Rejected", "Rejected")],
+        default="Pending"
+    )
+
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Loan - {self.user.email} - {self.amount}"
+
 
 class InvestmentPlan(models.Model):
     PLAN_TYPES = [
@@ -121,7 +161,6 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.amount} - {self.user.email} - {self.timestamp}"
-
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

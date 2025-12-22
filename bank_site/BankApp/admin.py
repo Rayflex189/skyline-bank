@@ -17,6 +17,20 @@ class UserInvestmentAdmin(admin.ModelAdmin):
     list_filter = ['status', 'investment_plan']
     search_fields = ['user__username', 'investment_plan__name']
 
+from django.contrib import admin
+from .models import KYC, Loan
+
+@admin.register(KYC)
+class KYCAdmin(admin.ModelAdmin):
+    list_display = ('user', 'status', 'submitted_at')
+    list_filter = ('status',)
+
+@admin.register(Loan)
+class LoanAdmin(admin.ModelAdmin):
+    list_display = ('user', 'amount', 'loan_type', 'status', 'submitted_at')
+    list_filter = ('status', 'loan_type')
+
+
 @admin.register(InvestmentTransaction)
 class InvestmentTransactionAdmin(admin.ModelAdmin):
     list_display = ['user', 'investment', 'amount', 'transaction_type', 'created_at']

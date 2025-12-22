@@ -5,6 +5,22 @@ from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 
 signer = TimestampSigner()
 
+def calculate_interest(amount, duration):
+    months = int(duration.split()[0])
+
+    if months <= 3:
+        rate = 5
+    elif months <= 6:
+        rate = 10
+    else:
+        rate = 15
+
+    interest_amount = (amount * rate) / 100
+    total = amount + interest_amount
+
+    return rate, total
+
+
 # utils.py
 def validate_otp(input_otp, user_profile):
     # Compare the input OTP with the OTP stored in the user profile

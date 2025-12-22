@@ -1,0 +1,37 @@
+{% include 'base.html' with page_title="Loan Pending" %}
+
+<body>
+<div class="pending-container">
+    <div class="pending-card">
+        <h2>Your Loan Is Being Reviewed</h2>
+        <p>Our team is reviewing your loan request. You will be notified once it is approved.</p>
+
+        <div class="loader"></div>
+    </div>
+</div>
+</body>
+
+<style>
+.pending-container {
+    display:flex; justify-content:center;
+    align-items:center; height:100vh;
+    background:#EEF2F7;
+}
+.pending-card {
+    background:white; padding:30px;
+    width:420px; border-radius:10px;
+    box-shadow:0 5px 18px rgba(0,0,0,0.1);
+    text-align:center;
+}
+.loader {
+    width:50px; height:50px;
+    border:6px solid #ccc;
+    border-top-color:#1E3A8A;
+    border-radius:50%;
+    margin:20px auto;
+    animation:spin 1s linear infinite;
+}
+@keyframes spin {
+    to {transform:rotate(360deg);}
+}
+</style>
