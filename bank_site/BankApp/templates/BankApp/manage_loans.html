@@ -1,0 +1,51 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+<h2>Loan Applications</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Loan Amount</th>
+            <th>Purpose</th>
+            <th>Processing Fee</th>
+            <th>Total Due</th>
+            <th>Status</th>
+            <th>Submitted</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for loan in loans %}
+            <tr>
+                <td>{{ loan.full_name }}</td>
+                <td>${{ loan.loan_amount }}</td>
+                <td>{{ loan.loan_purpose|truncatewords:10 }}</td>
+                <td>${{ loan.processing_fee }}</td>
+                <td>${{ loan.total_amount_due }}</td>
+                <td>
+                    {% if loan.status == 'pending' %}
+                        <span class="badge bg-warning">Pending</span>
+                    {% elif loan.status == 'approved' %}
+                        <span class="badge bg-success">Approved</span>
+                    {% else %}
+                        <span class="badge bg-danger">Rejected</span>
+                    {% endif %}
+                </td>
+                <td>{{ loan.created_at }}</td>
+                <td>
+                    {% if loan.status == 'pending' %}
+                        <a href="{% url 'approve_loan' loan.id %}" class="btn btn-success btn-sm">Approve</a>
+                        <a href="{% url 'reject_loan' loan.id %}" class="btn btn-danger btn-sm">Reject</a>
+                    {% else %}
+                        No Action
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,98 @@
+{% include 'base.html' with page_title="Apply for Loan" %}
+
+<style>
+    .loan-container {
+        max-width: 650px;
+        margin: 50px auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        border-left: 5px solid #1E3A8A;
+    }
+    .loan-title {
+        text-align: center;
+        font-size: 27px;
+        font-weight: bold;
+        color: #1E3A8A;
+    }
+    .btn-main {
+        background-color: #1E3A8A;
+        color: #fff;
+        width: 100%;
+        padding: 12px;
+        font-size: 17px;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+    .btn-main:hover {
+        background-color: #162e6c;
+        color: #fff;
+    }
+    .info-box {
+        background: #F0F6FF;
+        border-left: 5px solid #1E3A8A;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        font-size: 15px;
+    }
+</style>
+
+<div class="loan-container">
+    <h3 class="loan-title">Loan Application</h3>
+    <p style="text-align:center; color:#555;">
+        Fill the form below to apply for a loan. Your approval letter will be emailed immediately.
+    </p>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        <label><strong>Full Name</strong></label>
+        {{ form.full_name }}
+
+        <label class="mt-3"><strong>Loan Amount (₦)</strong></label>
+        {{ form.loan_amount }}
+
+        <label class="mt-3"><strong>Loan Duration</strong></label>
+        {{ form.loan_duration }}
+
+        <label class="mt-3"><strong>Purpose of Loan</strong></label>
+        {{ form.loan_purpose }}
+
+        <div class="info-box mt-3">
+            <strong>Loan Preview:</strong><br>
+            Interest Rate: <span id="interest_rate">0%</span><br>
+            Total Repayment: ₦<span id="total_due">0</span>
+        </div>
+
+        <button class="btn-main" type="submit">Submit Loan</button>
+    </form>
+</div>
+
+
+<script>
+    const amountField = document.getElementById("id_loan_amount");
+    const durationField = document.getElementById("id_loan_duration");
+
+    function calculatePreview() {
+        let amount = parseFloat(amountField.value) || 0;
+        let duration = durationField.value;
+        let months = parseInt(duration) || 0;
+
+        let rate = 0;
+
+        if (months <= 3) rate = 5;
+        else if (months <= 6) rate = 10;
+        else rate = 15;
+
+        let interest = (amount * rate) / 100;
+        let total = amount + interest;
+
+        document.getElementById("interest_rate").innerText = rate + "%";
+        document.getElementById("total_due").innerText = total.toLocaleString();
+    }
+
+    amountField.addEventListener("input", calculatePreview);
+    durationField.addEventListener("change", calculatePreview);
+</script>

@@ -1,0 +1,24 @@
+<h2>Admin Overview</h2>
+
+<div class="stats">
+    <div class="stat-box">Total Users: {{ total_users }}</div>
+    <div class="stat-box">Total Loans: {{ total_loans }}</div>
+    <div class="stat-box">Approved Loans: {{ approved_loans }}</div>
+    <div class="stat-box">Pending Loans: {{ pending_loans }}</div>
+</div>
+
+<canvas id="loanChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+new Chart(document.getElementById("loanChart"), {
+    type: "doughnut",
+    data: {
+        labels: ["Approved", "Pending"],
+        datasets: [{
+            data: [{{ approved_loans }}, {{ pending_loans }}]
+        }]
+    }
+});
+</script>

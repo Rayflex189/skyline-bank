@@ -30,31 +30,161 @@ from BankApp.models import UserProfile
 User = get_user_model()
 signer = TimestampSigner()
 
-from .models import Loan
+from django.contrib.admin.views.decorators import staff_member_required
 
-from .models import KYC, Loan
-from .forms import KYCForm, LoanForm
-from .utils import calculate_interest
+from django.http import HttpResponse
+from docx import Document
 
-def kyc_verification(request):
+def submit_loan(request):
+    if request.method == "POST":
+        form = LoanForm(request.POST)
+
+        if form.is_valid():
+            loan = form.save(commit=False)
+            loan.user = request.user
+
+            # calculate interest
+            rate, total = calculate_interest(loan.loan_amount, loan.loan_duration)
+            loan.interest_rate = rate
+            loan.total_amount_due = total
+
+            loan.save()
+
+            # generate PDF
+            pdf_path = generate_loan_pdf(loan)
+
+            # email PDF
+            email_pdf(request.user.email, pdf_path)
+
+            messages.success(request, "Loan submitted successfully! Approval sent to email.")
+            return redirect("dashboard")
+    else:
+        form = LoanForm()
+
+    return render(request, "BankApp/submit_loans.html", {"form": form})
+
+
+def send_kyc_email(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    # Attach the user's latest KYC if you want
     try:
-        kyc = KYC.objects.get(user=request.user)
+        kyc = KYC.objects.get(user=user)
     except KYC.DoesNotExist:
         kyc = None
 
-    if request.method == 'POST':
-        form = KYCForm(request.POST, request.FILES, instance=kyc)
-        if form.is_valid():
-            kyc = form.save(commit=False)
-            kyc.user = request.user
-            kyc.status = "Pending"
-            kyc.save()
-            messages.success(request, "KYC submitted successfully.")
-            return redirect('dashboard')
-    else:
-        form = KYCForm(instance=kyc)
+    subject = "Your KYC Verification Status"
+    message = (
+        f"Dear {user.first_name},\n\n"
+        "Thank you for submitting your KYC details. "
+        "Your verification is being reviewed.\n\n"
+        "Best regards,\nYour Bank Team"
+    )
 
-    return render(request, 'kyc_verification.html', {'form': form})
+    email = EmailMessage(subject, message, settings.EMAIL_HOST_USER, [user.email])
+    email.send()
+
+    messages.success(request, "KYC email sent successfully.")
+    return redirect("dashboard")  # or anywhere you want
+
+
+
+def download_kyc_pdf(request, user_id):
+    user_profile = get_object_or_404(UserProfile, user_id=user_id)
+
+    # Create a DOCX file
+    doc = Document()
+    doc.add_heading("KYC Details", level=1)
+
+    doc.add_paragraph(f"Full Name: {user_profile.full_name}")
+    doc.add_paragraph(f"Email: {user_profile.user.email}")
+    doc.add_paragraph(f"Phone: {user_profile.phone}")
+    doc.add_paragraph(f"Address: {user_profile.address}")
+    doc.add_paragraph(f"Occupation: {user_profile.occupation}")
+    doc.add_paragraph(f"City: {user_profile.city}")
+    doc.add_paragraph(f"ZIP Code: {user_profile.zip_code}")
+
+    # Save to buffer
+    file_name = f"KYC_{user_profile.user.email}.docx"
+    file_path = f"/tmp/{file_name}"
+    doc.save(file_path)
+
+    with open(file_path, "rb") as file:
+        response = HttpResponse(file.read(), content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+        response["Content-Disposition"] = f'attachment; filename="{file_name}"'
+        return response
+
+
+
+@staff_member_required
+def manage_loans(request):
+    loans = Loan.objects.all().order_by('-created_at')
+    return render(request, 'BankApp/manage_loans.html', {'loans': loans})
+
+
+@staff_member_required
+def approve_loan(request, loan_id):
+    loan = Loan.objects.get(id=loan_id)
+    loan.status = 'approved'
+    loan.save()
+
+    # Send approval email
+    send_mail(
+        subject="Loan Approved",
+        message=(
+            f"Hello {loan.full_name},\n\n"
+            f"Good news! Your loan request of ${loan.loan_amount:,.2f} "
+            f"has been approved.\n\n"
+            f"Total Amount Due: ${loan.total_amount_due:,.2f}\n\n"
+            "Please contact support if you have any questions.\n\n"
+            "Thank you,\nSkyBridge Finance"
+        ),
+        from_email="noreply@skybridge-finance.com",
+        recipient_list=[loan.email],
+    )
+
+    messages.success(request, "Loan approved and user notified.")
+    return redirect('manage_loans')
+
+
+@staff_member_required
+def reject_loan(request, loan_id):
+    loan = Loan.objects.get(id=loan_id)
+    loan.status = 'rejected'
+    loan.save()
+
+    # Send rejection email
+    send_mail(
+        subject="Loan Application Update",
+        message=(
+            f"Hello {loan.full_name},\n\n"
+            "We regret to inform you that your recent loan request "
+            f"of ${loan.loan_amount:,.2f} has been rejected.\n\n"
+            "Feel free to contact support for more information.\n\n"
+            "Thank you,\nSkyBridge Finance"
+        ),
+        from_email="noreply@skybridge-finance.com",
+        recipient_list=[loan.email],
+    )
+
+    messages.error(request, "Loan rejected and user notified.")
+    return redirect('manage_loans')
+
+
+def admin_dashboard(request):
+    total_users = CustomUser.objects.count()
+    total_loans = Loan.objects.count()
+    approved_loans = Loan.objects.filter(status='approved').count()
+    pending_loans = Loan.objects.filter(status='pending').count()
+
+    return render(request, 'BankApp/admin_dashboard.html', {
+        'total_users': total_users,
+        'total_loans': total_loans,
+        'approved_loans': approved_loans,
+        'pending_loans': pending_loans,
+    })
+
+
 
 
 def apply_loan(request):
@@ -264,13 +394,22 @@ def verify_email(request, signed_value):
 @login_required
 def kyc(request):
     try:
-        user_profile = UserProfile.objects.get(user=request.user)
-    except UserProfile.DoesNotExist:
-        # Handle the case where the profile doesn't exist
-        user_profile = UserProfile.objects.create(user=request.user)
-    context = {
-        'user_profile': user_profile,
-    }
+        kyc = KYC.objects.get(user=request.user)
+    except KYC.DoesNotExist:
+        kyc = None
+
+    if request.method == 'POST':
+        form = KYCForm(request.POST, request.FILES, instance=kyc)
+        if form.is_valid():
+            kyc = form.save(commit=False)
+            kyc.user = request.user
+            kyc.status = "Pending"
+            kyc.save()
+            messages.success(request, "KYC submitted successfully.")
+            return redirect('dashboard')
+    else:
+        form = KYCForm(instance=kyc)
+
     return render(request, 'BankApp/kyc.html', context)
 
 @login_required

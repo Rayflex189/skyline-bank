@@ -1,0 +1,22 @@
+<h2 class="text-center mt-3">Loan History</h2>
+
+<div class="container">
+    {% for loan in loans %}
+        <div class="loan-card">
+            <h4>₦{{ loan.loan_amount|floatformat:2 }}</h4>
+            <p>{{ loan.loan_purpose|truncatechars:50 }}</p>
+
+            <span class="badge 
+                {% if loan.status == 'pending' %} bg-warning 
+                {% elif loan.status == 'approved' %} bg-success 
+                {% else %} bg-danger {% endif %}
+            ">
+            {{ loan.status|title }}
+            </span>
+
+            <p class="date">{{ loan.date_submitted }}</p>
+        </div>
+    {% empty %}
+        <p>No loan applications submitted yet.</p>
+    {% endfor %}
+</div>
