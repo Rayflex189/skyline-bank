@@ -1,15 +1,15 @@
-# fly.toml app configuration file generated for skybridge-finance on 2025-05-28T18:28:12Z
+# fly.toml app configuration file generated for skybridge-finance on 2025-12-23T17:56:03Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = 'skybridge-finance'
-primary_region = 'atl'
+primary_region = 'jnb'
 
 [build]
 
 [http_service]
-  internal_port = 8010
+  internal_port = 8080
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true
