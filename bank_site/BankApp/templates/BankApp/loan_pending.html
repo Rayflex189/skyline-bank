@@ -1,37 +1,573 @@
-{% include 'base.html' with page_title="Loan Pending" %}
+c<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Pending Review</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
+        body {
+            background-color: #0a192f; /* Navy blue background */
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background-color: #ffffff;
+            padding: 20px 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            color: #0a192f;
+            font-size: 28px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0a192f;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            color: #3b82f6;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-item {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: #0a192f;
+        }
+
+        .nav-item.active {
+            color: #0a192f;
+            font-weight: 600;
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #3b82f6;
+            border-radius: 2px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #0a192f;
+            font-weight: 500;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a192f;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .pending-container {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .pending-card {
+            background: white;
+            border-radius: 16px;
+            padding: 50px 40px;
+            box-shadow: 0 12px 30px rgba(10, 25, 47, 0.15);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pending-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #0a192f, #3b82f6);
+        }
+
+        .status-icon {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(10, 25, 47, 0.08);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: #0a192f;
+            font-size: 36px;
+        }
+
+        .pending-card h2 {
+            color: #0a192f;
+            font-size: 32px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .pending-card p {
+            color: #4a5568;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        /* Loader */
+        .loader-container {
+            margin: 30px 0 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .loader {
+            width: 70px;
+            height: 70px;
+            border: 6px solid #e2e8f0;
+            border-top-color: #0a192f;
+            border-right-color: #0a192f;
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Progress Info */
+        .progress-info {
+            background-color: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 30px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .progress-info h3 {
+            color: #0a192f;
+            font-size: 18px;
+            margin-bottom: 16px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-info h3 i {
+            color: #3b82f6;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #e2e8f0;
+            z-index: 1;
+        }
+
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            width: 25%;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0aec0;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .step-icon.completed {
+            background-color: #0a192f;
+            border-color: #0a192f;
+            color: white;
+        }
+
+        .step-icon.current {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 14px;
+            color: #4a5568;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .step-label.completed {
+            color: #0a192f;
+            font-weight: 500;
+        }
+
+        .step-label.current {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 35px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background-color: #0a192f;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1e3a8a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(10, 25, 47, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: #f1f5f9;
+            color: #0a192f;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #ffffff;
+            padding: 25px 40px;
+            margin-top: auto;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .footer-link {
+            color: #4a5568;
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: #0a192f;
+        }
+
+        .copyright {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .nav-menu {
+                gap: 20px;
+            }
+
+            .pending-card {
+                padding: 40px 25px;
+            }
+
+            .pending-card h2 {
+                font-size: 28px;
+            }
+
+            .timeline {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            .timeline::before {
+                display: none;
+            }
+
+            .timeline-step {
+                width: 45%;
+                margin-bottom: 15px;
+            }
+
+            .footer {
+                padding: 25px 20px;
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pending-card {
+                padding: 30px 20px;
+            }
+
+            .pending-card h2 {
+                font-size: 24px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .timeline-step {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
 <body>
-<div class="pending-container">
-    <div class="pending-card">
-        <h2>Your Loan Is Being Reviewed</h2>
-        <p>Our team is reviewing your loan request. You will be notified once it is approved.</p>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-university"></i>
+            </div>
+            <div class="logo-text">Prime<span>Bank</span></div>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="#" class="nav-item">Dashboard</a>
+            <a href="#" class="nav-item">Accounts</a>
+            <a href="#" class="nav-item active">Loans</a>
+            <a href="#" class="nav-item">Cards</a>
+            <a href="#" class="nav-item">Support</a>
+        </nav>
+        
+        <div class="user-info">
+            <div class="user-avatar">JS</div>
+            <span>John Smith</span>
+        </div>
+    </header>
 
-        <div class="loader"></div>
-    </div>
-</div>
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="pending-container">
+            <div class="pending-card">
+                <div class="status-icon">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+                
+                <h2>Your Loan Is Being Reviewed</h2>
+                <p>Our team is currently reviewing your loan application. This process usually takes 1-2 business days. You will be notified via email and SMS once a decision has been made.</p>
+                
+                <div class="loader-container">
+                    <div class="loader"></div>
+                </div>
+                
+                <div class="progress-info">
+                    <h3><i class="fas fa-tasks"></i> Application Progress</h3>
+                    
+                    <div class="timeline">
+                        <div class="timeline-step">
+                            <div class="step-icon completed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="step-label completed">Application Submitted</div>
+                        </div>
+                        
+                        <div class="timeline-step">
+                            <div class="step-icon completed">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="step-label completed">Document Review</div>
+                        </div>
+                        
+                        <div class="timeline-step">
+                            <div class="step-icon current">
+                                <i class="fas fa-sync-alt"></i>
+                            </div>
+                            <div class="step-label current">Under Review</div>
+                        </div>
+                        
+                        <div class="timeline-step">
+                            <div class="step-icon">
+                                <i class="far fa-clock"></i>
+                            </div>
+                            <div class="step-label">Decision</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-home"></i> Return to Dashboard
+                    </button>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-question-circle"></i> Get Help
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Terms of Service</a>
+            <a href="#" class="footer-link">Contact Us</a>
+            <a href="#" class="footer-link">FAQs</a>
+        </div>
+        <div class="copyright">
+            &copy; 2023 PrimeBank. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Simulate progress update (for demo purposes)
+        document.addEventListener('DOMContentLoaded', function() {
+            const loader = document.querySelector('.loader');
+            const currentStep = document.querySelector('.step-icon.current');
+            const currentLabel = document.querySelector('.step-label.current');
+            
+            // Animate the loader with color change
+            let colorIndex = 0;
+            const colors = ['#0a192f', '#3b82f6', '#1e40af'];
+            
+            function changeLoaderColor() {
+                loader.style.borderTopColor = colors[colorIndex];
+                loader.style.borderRightColor = colors[colorIndex];
+                colorIndex = (colorIndex + 1) % colors.length;
+            }
+            
+            // Change loader color every 2 seconds
+            setInterval(changeLoaderColor, 2000);
+            
+            // Simulate progress after 8 seconds (for demo)
+            setTimeout(() => {
+                // Move to next step
+                currentStep.classList.remove('current');
+                currentStep.classList.add('completed');
+                currentStep.innerHTML = '<i class="fas fa-check"></i>';
+                
+                currentLabel.classList.remove('current');
+                currentLabel.classList.add('completed');
+                
+                // Update next step
+                const nextStep = currentStep.parentElement.nextElementSibling.querySelector('.step-icon');
+                const nextLabel = currentStep.parentElement.nextElementSibling.querySelector('.step-label');
+                
+                nextStep.classList.add('current');
+                nextLabel.classList.add('current');
+                
+                // Update status message
+                const statusMessage = document.querySelector('p');
+                statusMessage.innerHTML = 'Great news! Your loan application has passed initial review and is now in the final approval stage. You will receive a decision within 24 hours.';
+                
+            }, 8000);
+        });
+    </script>
 </body>
-
-<style>
-.pending-container {
-    display:flex; justify-content:center;
-    align-items:center; height:100vh;
-    background:#EEF2F7;
-}
-.pending-card {
-    background:white; padding:30px;
-    width:420px; border-radius:10px;
-    box-shadow:0 5px 18px rgba(0,0,0,0.1);
-    text-align:center;
-}
-.loader {
-    width:50px; height:50px;
-    border:6px solid #ccc;
-    border-top-color:#1E3A8A;
-    border-radius:50%;
-    margin:20px auto;
-    animation:spin 1s linear infinite;
-}
-@keyframes spin {
-    to {transform:rotate(360deg);}
-}
-</style>
+</html>
