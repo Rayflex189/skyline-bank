@@ -23,7 +23,6 @@ urlpatterns = [
     path('feature/', views.feature, name='feature'),
     path('price/', views.price, name='price'),
     path('quote/', views.quote, name='quote'),
-    path('loans/', views.loans, name='loans'),
     path('verify-email/<uidb64>/<token>/', views.verify_email, name='verify_email'),
     path('kyc/', views.kyc, name='kyc'),
     path('service/', views.service, name='service'),
