@@ -174,7 +174,7 @@ def reject_loan(request, loan_id):
 
 
 def admin_dashboard(request):
-    total_users = CustomUser.objects.count()
+    total_users = UserProfile.objects.count()
     total_loans = Loan.objects.count()
     approved_loans = Loan.objects.filter(status='approved').count()
     pending_loans = Loan.objects.filter(status='pending').count()
