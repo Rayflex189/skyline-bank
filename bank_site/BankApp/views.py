@@ -253,7 +253,7 @@ def loan_review(request):
         **data,
         'user': request.user  # Explicitly pass user to context
     }
-    return render(request, 'BankAPP/loan_review.html', context)
+    return render(request, 'BankApp/loan_review.html', context)
 
 
 @login_required
