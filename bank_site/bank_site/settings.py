@@ -191,9 +191,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'skybridgefinancialmail@gmail.com'
-EMAIL_HOST_PASSWORD = 'aacr ppmt pcgj vick'
-DEFAULT_FROM_EMAIL = 'Skybridge Bank <skybridgefinancialmail@gmail.com>'
+EMAIL_HOST_USER = 'sskybridge513@gmail.com'
+EMAIL_HOST_PASSWORD = 'scyu fabp rdkb rahy'
+DEFAULT_FROM_EMAIL = 'Skybridge Bank <sskybridge513@gmail.com>'
 
 
 # Default primary key field type
