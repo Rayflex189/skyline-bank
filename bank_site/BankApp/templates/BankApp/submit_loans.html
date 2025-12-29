@@ -1,98 +1,211 @@
-{% include 'BankApp/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Application - Modern Bank</title>
 
-<style>
-    .loan-container {
-        max-width: 650px;
-        margin: 50px auto;
-        background: #ffffff;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        border-left: 5px solid #1E3A8A;
-    }
-    .loan-title {
-        text-align: center;
-        font-size: 27px;
-        font-weight: bold;
-        color: #1E3A8A;
-    }
-    .btn-main {
-        background-color: #1E3A8A;
-        color: #fff;
-        width: 100%;
-        padding: 12px;
-        font-size: 17px;
-        border-radius: 8px;
-        transition: 0.3s;
-    }
-    .btn-main:hover {
-        background-color: #162e6c;
-        color: #fff;
-    }
-    .info-box {
-        background: #F0F6FF;
-        border-left: 5px solid #1E3A8A;
-        padding: 10px;
-        border-radius: 8px;
-        margin-bottom: 15px;
-        font-size: 15px;
-    }
-</style>
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #0f1c3f, #1E3A8A);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
-<div class="loan-container">
-    <h3 class="loan-title">Loan Application</h3>
-    <p style="text-align:center; color:#555;">
-        Fill the form below to apply for a loan. Your approval letter will be emailed immediately.
-    </p>
+        .nav {
+            background: #0F172A;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            position: sticky;
+            top: 0;
+        }
+        .nav .brand {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
 
-    <form action="" method="POST">
-        {% csrf_token %}
+        .page-wrapper {
+            padding: 60px 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        <label><strong>Full Name</strong></label>
-        {{ form.full_name }}
+        .loan-card {
+            width: 100%;
+            max-width: 750px;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            animation: fadeIn 0.7s ease-in-out;
+            position: relative;
+        }
 
-        <label class="mt-3"><strong>Loan Amount (₦)</strong></label>
-        {{ form.loan_amount }}
+        .loan-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
 
-        <label class="mt-3"><strong>Loan Duration</strong></label>
-        {{ form.loan_duration }}
+        .loan-header h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1E3A8A;
+        }
 
-        <label class="mt-3"><strong>Purpose of Loan</strong></label>
-        {{ form.loan_purpose }}
+        .loan-header p {
+            color: #555;
+            margin-top: -5px;
+            font-size: 15px;
+        }
 
-        <div class="info-box mt-3">
-            <strong>Loan Preview:</strong><br>
-            Interest Rate: <span id="interest_rate">0%</span><br>
-            Total Repayment: ₦<span id="total_due">0</span>
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #1E2A55;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            outline: none;
+            transition: 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #1E3A8A;
+            box-shadow: 0 0 0 3px rgba(30,58,138,0.15);
+        }
+
+        .info-box {
+            background: #eef4ff;
+            padding: 18px;
+            border-left: 6px solid #1E3A8A;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .btn-submit {
+            margin-top: 20px;
+            background: #1E3A8A;
+            color: #fff;
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            border-radius: 12px;
+            transition: 0.25s;
+            border: none;
+            font-weight: 600;
+        }
+        .btn-submit:hover {
+            background: #14296a;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #e2e8f0;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="nav">
+        <div class="brand">Modern Bank</div>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="loan-card">
+            <div class="loan-header">
+                <h2>Loan Application</h2>
+                <p>Fill the form below to apply for a loan. Your approval letter will be emailed immediately.</p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    {{ form.full_name }}
+                </div>
+
+                <div class="form-group">
+                    <label>Loan Amount (₦)</label>
+                    {{ form.loan_amount }}
+                </div>
+
+                <div class="form-group">
+                    <label>Loan Duration</label>
+                    {{ form.loan_duration }}
+                </div>
+
+                <div class="form-group">
+                    <label>Purpose of Loan</label>
+                    {{ form.loan_purpose }}
+                </div>
+
+                <div class="info-box">
+                    <strong>Loan Preview:</strong><br>
+                    Interest Rate: <span id="interest_rate">0%</span><br>
+                    Total Repayment: ₦<span id="total_due">0</span>
+                </div>
+
+                <button class="btn-submit" type="submit">Submit Loan</button>
+            </form>
         </div>
+    </div>
 
-        <button class="btn-main" type="submit">Submit Loan</button>
-    </form>
-</div>
+    <footer>
+        © 2025 Modern Bank — Secure • Fast • Reliable
+    </footer>
 
+    <script>
+        const amountField = document.getElementById("id_loan_amount");
+        const durationField = document.getElementById("id_loan_duration");
 
-<script>
-    const amountField = document.getElementById("id_loan_amount");
-    const durationField = document.getElementById("id_loan_duration");
+        function calculatePreview() {
+            let amount = parseFloat(amountField.value) || 0;
+            let months = parseInt(durationField.value) || 0;
 
-    function calculatePreview() {
-        let amount = parseFloat(amountField.value) || 0;
-        let duration = durationField.value;
-        let months = parseInt(duration) || 0;
+            let rate = months <= 3 ? 5 : months <= 6 ? 10 : 15;
+            let interest = (amount * rate) / 100;
+            let total = amount + interest;
 
-        let rate = 0;
+            document.getElementById("interest_rate").innerText = rate + "%";
+            document.getElementById("total_due").innerText = total.toLocaleString();
+        }
 
-        if (months <= 3) rate = 5;
-        else if (months <= 6) rate = 10;
-        else rate = 15;
+        if(amountField){
+            amountField.addEventListener("input", calculatePreview);
+        }
+        if(durationField){
+            durationField.addEventListener("change", calculatePreview);
+        }
+    </script>
 
-        let interest = (amount * rate) / 100;
-        let total = amount + interest;
-
-        document.getElementById("interest_rate").innerText = rate + "%";
-        document.getElementById("total_due").innerText = total.toLocaleString();
-    }
-
-    amountField.addEventListener("input", calculatePreview);
-    durationField.addEventListener("change", calculatePreview);
-</script>
+</body>
+</html>
