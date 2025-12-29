@@ -64,7 +64,7 @@ def create_transaction_and_send_email(sender, instance, created, **kwargs):
         message = f"""
 Hi {instance.user.email},
 
-Your account has been {description.lower()}ed by: {currency} {amount:,.2f}
+Your account has been {description.lower()}ed with: {currency} {amount:,.2f}
 Your new balance is: {currency} {new_balance:,.2f}
 
 Thank you for banking with us!
