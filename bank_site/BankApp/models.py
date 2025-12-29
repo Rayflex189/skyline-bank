@@ -637,7 +637,11 @@ class UserProfile(models.Model):
     is_email_verified = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
+<<<<<<< HEAD
     REQUIRED_FIELDS = ['first_name']
+=======
+    REQUIRED_FIELDS = []
+>>>>>>> 1e7d47b18b21b6326104e993564409cdf7c07766
 
     def update_savings(self):
         """Increase savings by 10 every 24 hours."""

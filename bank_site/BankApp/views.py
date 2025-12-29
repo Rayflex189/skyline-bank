@@ -5,6 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.conf import settings
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
@@ -14,9 +17,8 @@ from django.urls import reverse
 # Utility Imports
 from datetime import timedelta, datetime
 from django.utils import timezone
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
-from django.contrib.auth.tokens import default_token_generator
+from datetime import timedelta
+from django.contrib.auth import authenticate, login, logout
 
 # Project Imports
 from .decorators import *
@@ -585,6 +587,20 @@ def investment_dashboard(request):
     }
     return render(request, 'BankApp/investment_dashboard.html', context)
 
+
+# Registration view
+@unauthenticated_user
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, "Your account has been created successfully! You can now log in.")
+            return redirect('user_login')  # Redirect to the login view
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'BankApp/register.html', {'form': form})
+
 # Other views
 
 def home(request):
@@ -620,7 +636,6 @@ def detail(request):
 def blog(request):  
     return render(request, 'BankApp/blog.html')
 
-
 @unauthenticated_user
 def user_login(request):  
     if request.method == 'POST':
@@ -630,13 +645,6 @@ def user_login(request):
         user = authenticate(request, email=email, password=password)
 
         if user is not None:
-
-            # CHECK PROFILE, NOT USER
-            if not user.userprofile.is_email_verified:
-                messages.error(request, "Your email is not verified. Please check your inbox.")
-                return redirect('user_login')
-
-            # Login successful
             login(request, user)
             return redirect('reset_profile')
 
@@ -644,8 +652,6 @@ def user_login(request):
             messages.error(request, 'Email or Password is incorrect.')
 
     return render(request, 'BankApp/login.html')
-
-
 
 @login_required(login_url='user_login')
 def crypto(request):
