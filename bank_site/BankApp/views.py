@@ -248,7 +248,7 @@ def loan_review(request):
         del request.session['loan_data']
         return redirect('loan_pending')
 
-    return render(request, 'BankAPP/loan_review.html', data)
+    return render(request, 'BankApp/loan_review.html', data)
 
 
 @login_required
