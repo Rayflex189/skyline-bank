@@ -67,20 +67,26 @@ class UserProfileAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-# ---- Custom Form to Make Timestamp Editable + Add 1-year Limit ----
+from django import forms
+from django.contrib import admin
+from django.utils import timezone
+from datetime import timedelta
+from .models import Transaction
+
+# ---- Simple Form Without Custom Widget ----
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
         fields = '__all__'
-        widgets = {
-            'timestamp': forms.DateTimeInput(attrs={'type': 'datetime-local'})
-        }
-
+    
     def clean_timestamp(self):
         ts = self.cleaned_data.get("timestamp")
+        
+        if not ts:
+            return ts
+            
+        # Check 1-year limit
         one_year_ago = timezone.now() - timedelta(days=365)
-
-        # Optional check: Prevent choosing a date older than 1 year
         if ts < one_year_ago:
             raise forms.ValidationError("You cannot backdate a transaction more than 1 year.")
         
@@ -90,13 +96,19 @@ class TransactionForm(forms.ModelForm):
 # ---- Admin Panel ----
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    form = TransactionForm   # 👈 Important: use custom form
-
+    form = TransactionForm
+    
     list_display = ['user', 'amount', 'balance_after', 'timestamp', 'description']
     search_fields = ['user__username', 'description']
     fields = ('user', 'amount', 'balance_after', 'timestamp', 'description')
     list_filter = ['timestamp', 'user']
     ordering = ['-timestamp']
+    
+    # Make timestamp read-only in the list view for safety
+    def get_readonly_fields(self, request, obj=None):
+        if obj:  # Editing an existing object
+            return ['timestamp']  # Make it read-only when editing
+        return []  # Allow setting when creating new
 
 
 class YourModelAdmin(admin.ModelAdmin):
