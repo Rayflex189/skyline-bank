@@ -226,12 +226,34 @@ def loan_review(request):
     if not data:
         return redirect('apply_loan')
 
+    # Extract numeric duration from string like "1 MONTH", "6 MONTHS"
+    duration_str = data.get('duration', '')
+    numeric_duration = 0
+    
+    # Try to extract numbers from the duration string
+    import re
+    if duration_str:
+        numbers = re.findall(r'\d+', duration_str)
+        if numbers:
+            numeric_duration = int(numbers[0])
+    
+    # Calculate processing fee (5% of loan amount)
+    try:
+        loan_amount = float(data.get('amount', 0))
+        processing_fee = round(loan_amount * 0.05, 2)
+    except (ValueError, TypeError):
+        processing_fee = 50.00  # Default fallback
+    
+    # Calculate monthly installment
+    total = float(data.get('total', 0))
+    monthly_installment = total / numeric_duration if numeric_duration > 0 else 0
+
     if request.method == "POST":
         loan = Loan.objects.create(
             user=request.user,
             amount=data['amount'],
             loan_type=data['loan_type'],
-            duration=data['duration'],
+            duration=numeric_duration,  # Store as integer
             interest=data['interest'],
             total_payable=data['total'],
             status="Pending",
@@ -248,13 +270,15 @@ def loan_review(request):
         del request.session['loan_data']
         return redirect('loan_pending')
 
-    # Add user to context explicitly
+    # Add user and calculated values to context
     context = {
         **data,
-        'user': request.user  # Explicitly pass user to context
+        'user': request.user,
+        'numeric_duration': numeric_duration,
+        'processing_fee': processing_fee,
+        'monthly_installment': round(monthly_installment, 2)
     }
     return render(request, 'BankApp/loan_review.html', context)
-
 
 @login_required
 def loan_pending(request):

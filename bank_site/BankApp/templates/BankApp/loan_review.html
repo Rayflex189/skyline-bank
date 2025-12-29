@@ -572,10 +572,10 @@
                         <span class="summary-label">Total Interest</span>
                         <span class="summary-value">${{ interest|add:"0" }}</span>
                     </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Processing Fee</span>
-                        <span class="summary-value">$50.00</span>
-                    </div>
+                  <div class="summary-item">
+    <span class="summary-label">Processing Fee (5%)</span>
+    <span class="summary-value">${{ processing_fee|floatformat:2 }}</span>
+</div>
                     <div class="summary-item" style="border-top: 2px solid rgba(255, 255, 255, 0.2); padding-top: 20px;">
                         <span class="summary-label">Total Payable Amount</span>
                         <span class="summary-value total-payable">${{ total }}</span>
