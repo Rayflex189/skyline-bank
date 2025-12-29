@@ -12,13 +12,13 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-new Chart(document.getElementById("loanChart"), {
-    type: "doughnut",
-    data: {
-        labels: ["Approved", "Pending"],
-        datasets: [{
-            data: [{{ approved_loans }}, {{ pending_loans }}]
-        }]
-    }
-});
+        new Chart(document.getElementById("loanChart"), {
+            type: "doughnut",
+            data: {
+                labels: ["Approved", "Pending"],
+                datasets: [{
+                    data: [{{ approved_loans }}, {{ pending_loans }}]
+                }]
+            }
+        });
 </script>
