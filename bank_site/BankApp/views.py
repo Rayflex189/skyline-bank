@@ -186,10 +186,14 @@ def admin_dashboard(request):
         'pending_loans': pending_loans,
     })
 
-
-
+ 
 
 def apply_loan(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        # Handle the case where the profile doesn't exist
+        user_profile = UserProfile.objects.create(user=request.user)
     if request.method == "POST":
         form = LoanForm(request.POST)
         if form.is_valid():
@@ -211,7 +215,8 @@ def apply_loan(request):
     else:
         form = LoanForm()
 
-    return render(request, 'BankApp/loan_apply.html', {'form': form})
+    return render(request, 'BankApp/loans.html', {'form': form, 'user_profile': user_profile,})
+
 
 
 @login_required
@@ -418,19 +423,6 @@ def kyc(request):
 
     return render(request, 'BankApp/kyc.html', context)
 
-
-@login_required
-def loans(request):
-    try:
-        user_profile = UserProfile.objects.get(user=request.user)
-    except UserProfile.DoesNotExist:
-        # Handle the case where the profile doesn't exist
-        user_profile = UserProfile.objects.create(user=request.user)
-    context = {
-        'user_profile': user_profile,
-    }
-    return render(request, 'BankApp/loans.html', context)
-    
 
 
 @login_required
