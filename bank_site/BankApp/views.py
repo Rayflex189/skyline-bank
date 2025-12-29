@@ -410,7 +410,12 @@ def kyc(request):
     else:
         form = KYCForm(instance=kyc)
 
+    context = {
+        "form":"form",
+    }
+
     return render(request, 'BankApp/kyc.html', context)
+
 
 @login_required
 def loans(request):
