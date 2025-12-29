@@ -248,7 +248,12 @@ def loan_review(request):
         del request.session['loan_data']
         return redirect('loan_pending')
 
-    return render(request, 'BankApp/loan_review.html', data)
+    # Add user to context explicitly
+    context = {
+        **data,
+        'user': request.user  # Explicitly pass user to context
+    }
+    return render(request, 'BankAPP/loan_review.html', context)
 
 
 @login_required

@@ -490,10 +490,30 @@
             <a href="#" class="nav-item">Support</a>
         </nav>
         
-        <div class="user-info">
-            <div class="user-avatar">{{ user.username|first|upper }}</div>
-            <span>{{ user.get_full_name|default:user.username }}</span>
-        </div>
+       <div class="user-info">
+    <div class="user-avatar">
+        {% if user and user.username %}
+            {% with first_char=user.username.0|upper %}
+                {{ first_char }}
+            {% endwith %}
+        {% else %}
+            U
+        {% endif %}
+    </div>
+    <span>
+        {% if user %}
+            {% if user.get_full_name %}
+                {{ user.get_full_name }}
+            {% elif user.username %}
+                {{ user.username }}
+            {% else %}
+                User
+            {% endif %}
+        {% else %}
+            Guest
+        {% endif %}
+    </span>
+</div>
     </header>
 
     <!-- Main Content -->
@@ -618,41 +638,52 @@
             &copy; 2023 PrimeBank. All rights reserved.
         </div>
     </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const agreeCheckbox = document.getElementById('agree-terms');
-            const submitBtn = document.getElementById('submit-btn');
-            const loanForm = document.getElementById('loan-form');
-            
-            // Enable/disable submit button based on checkbox
-            agreeCheckbox.addEventListener('change', function() {
-                submitBtn.disabled = !this.checked;
-            });
-            
-            // Form submission handler
-            loanForm.addEventListener('submit', function(e) {
-                if (!agreeCheckbox.checked) {
-                    e.preventDefault();
-                    alert('Please agree to the terms and conditions before submitting.');
-                    return false;
-                }
-                
-                // Show loading state
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-                submitBtn.disabled = true;
-                
-                // The form will now submit to the server
-                return true;
-            });
-            
-            // Initialize user avatar with first letter of username
-            const userAvatar = document.querySelector('.user-avatar');
-            if (userAvatar.textContent.trim() === '') {
-                // If Django template didn't render, use a default
-                userAvatar.textContent = '{{ user.username|first|upper }}' || 'U';
-            }
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle user info display
+    const userAvatar = document.querySelector('.user-avatar');
+    const userDisplayName = document.querySelector('.user-info span');
+    
+    // Fix empty avatar
+    if (userAvatar && userAvatar.textContent.trim() === '') {
+        userAvatar.textContent = 'U';
+    }
+    
+    // Fix empty display name
+    if (userDisplayName && userDisplayName.textContent.trim() === '') {
+        userDisplayName.textContent = 'User';
+    }
+    
+    // Loan form handling
+    const agreeCheckbox = document.getElementById('agree-terms');
+    const submitBtn = document.getElementById('submit-btn');
+    const loanForm = document.getElementById('loan-form');
+    
+    if (agreeCheckbox && submitBtn && loanForm) {
+        // Initialize submit button state
+        submitBtn.disabled = !agreeCheckbox.checked;
+        
+        // Enable/disable submit button based on checkbox
+        agreeCheckbox.addEventListener('change', function() {
+            submitBtn.disabled = !this.checked;
         });
-    </script>
+        
+        // Form submission handler
+        loanForm.addEventListener('submit', function(e) {
+            if (!agreeCheckbox.checked) {
+                e.preventDefault();
+                alert('Please agree to the terms and conditions before submitting.');
+                return false;
+            }
+            
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            submitBtn.disabled = true;
+            
+            return true;
+        });
+    }
+});
+</script>
 </body>
 </html>
