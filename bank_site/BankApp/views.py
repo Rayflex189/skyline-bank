@@ -282,7 +282,11 @@ def loan_review(request):
 
 @login_required
 def loan_pending(request):
-    return render(request, 'loan_pending.html')
+    user_profile = UserProfile.objects.get(user=request.user)
+    context = {
+        'user_profile': user_profile,
+    }
+    return render(request, 'BankApp/loan_pending.html', context)
 
 
 @login_required
