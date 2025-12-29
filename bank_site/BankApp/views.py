@@ -211,7 +211,7 @@ def apply_loan(request):
     else:
         form = LoanForm()
 
-    return render(request, 'loan_apply.html', {'form': form})
+    return render(request, 'BankApp/loan_apply.html', {'form': form})
 
 
 @login_required
