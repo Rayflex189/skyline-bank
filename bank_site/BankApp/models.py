@@ -1,4 +1,7 @@
+# models.py
 from django.db import models
+from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils import timezone
@@ -27,11 +30,6 @@ class KYC(models.Model):
     def __str__(self):
         return f"KYC - {self.user.email}"
 
-
-# models.py
-from django.db import models
-from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Loan(models.Model):
     # Define loan type choices
@@ -62,7 +60,11 @@ class Loan(models.Model):
         ('other', 'Other'),
     ]
     
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,  # FIXED: Use settings.AUTH_USER_MODEL
+        on_delete=models.CASCADE,
+        related_name='loans'
+    )
     amount = models.DecimalField(
         max_digits=12, 
         decimal_places=2,
