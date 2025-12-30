@@ -540,18 +540,7 @@
                     <li class="nav-item">
                         <a class="nav-links" href="{% url 'reset_profile' %}">Settings</a>
                     </li>
-                    <li class="nav-item">
-                            <!-- Staff-only section -->
-        {% if user.is_staff %}
-        <div class="nav-section">
-            <h5 class="section-title">Admin Tools</h5>
-            <a href="{% url 'manage_loans' %}" class="nav-item admin-item">
-                <i class="fas fa-tasks"></i> Manage Loans
-            </a>
-            <!-- Add other admin links here -->
-        </div>
-        {% endif %}
-                    </li>
+                
                     <li class="nav-item">
                         <a class="nav-links" href="{% url 'LogOut' %}">Logout</a>
                     </li>
@@ -609,6 +598,16 @@
                 <h5>Account Number</h5>
                 <p id="account-number">{{user_profile.account_number|default:"N/A"}}</p>
                 <i class="copy-icon bi bi-clipboard" onclick="copyAccountNumber()" title="Copy Account Number" aria-label="Copy Account Number"></i>
+                    <!-- Staff-only section -->
+        {% if user.is_staff %}
+        <div class="nav-section">
+            <h5 class="section-title">Admin Tools</h5>
+            <a href="{% url 'manage_loans' %}" class="nav-item admin-item">
+                <i class="fas fa-tasks"></i> Manage Loans
+            </a>
+            <!-- Add other admin links here -->
+        </div>
+        {% endif %}
             </div>
 
             <!-- Savings Balance Card -->
