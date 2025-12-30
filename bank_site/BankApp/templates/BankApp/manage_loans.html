@@ -1,9 +1,11 @@
+<!-- templates/BankApp/admin_dashboard.html -->
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loan Management System</title>
+    <title>Loan Management System - Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -30,6 +32,15 @@
         body {
             background-color: var(--light-bg);
             color: var(--text-dark);
+        }
+
+        /* Messages */
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
         }
 
         /* Admin Header */
@@ -190,6 +201,29 @@
             margin: 0;
         }
 
+        /* Loan Type Distribution */
+        .loan-type-distribution {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .type-badge {
+            padding: 6px 12px;
+            background: var(--light-bg);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--text-light);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .type-badge i {
+            font-size: 10px;
+        }
+
         /* Filters Section */
         .filters-section {
             background: white;
@@ -281,6 +315,7 @@
             align-items: center;
             gap: 8px;
             transition: all 0.3s;
+            text-decoration: none;
         }
 
         .btn-primary {
@@ -290,6 +325,7 @@
 
         .btn-primary:hover {
             background: var(--secondary-blue);
+            color: white;
         }
 
         .btn-success {
@@ -351,7 +387,7 @@
         .loan-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 1000px;
+            min-width: 1200px;
         }
 
         .loan-table thead th {
@@ -527,6 +563,24 @@
             opacity: 0.8;
         }
 
+        /* Chart Container */
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-title {
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         /* Responsive Design */
         @media (max-width: 1200px) {
             .main-container {
@@ -600,6 +654,18 @@
     </style>
 </head>
 <body>
+    <!-- Messages Container -->
+    <div class="alert-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
     <!-- Admin Header -->
     <header class="admin-header">
         <div class="logo-container">
@@ -613,28 +679,28 @@
         </div>
         
         <nav class="admin-nav">
-            <a href="#" class="nav-link active">
+            <a href="{% url 'admin_dashboard' %}" class="nav-link active">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{% url 'manage_loans' %}" class="nav-link">
+                <i class="fas fa-file-contract"></i> Manage Loans
             </a>
             <a href="#" class="nav-link">
                 <i class="fas fa-users"></i> Customers
             </a>
             <a href="#" class="nav-link">
-                <i class="fas fa-file-contract"></i> Contracts
-            </a>
-            <a href="#" class="nav-link">
                 <i class="fas fa-chart-line"></i> Analytics
             </a>
-            <a href="#" class="nav-link">
-                <i class="fas fa-cog"></i> Settings
+            <a href="{% url 'check_staff_status' %}" class="nav-link">
+                <i class="fas fa-cog"></i> Debug
             </a>
         </nav>
         
         <div class="user-info">
-            <div class="user-avatar">AD</div>
+            <div class="user-avatar">{{ user.username|make_list|first|upper }}</div>
             <div class="user-details">
-                <h4>Admin User</h4>
-                <p>Administrator</p>
+                <h4>{{ user.get_full_name|default:user.username }}</h4>
+                <p>{% if user.is_superuser %}Super Administrator{% else %}Administrator{% endif %}</p>
             </div>
         </div>
     </header>
@@ -648,7 +714,7 @@
                     <i class="fas fa-clock"></i>
                 </div>
                 <div class="stat-content">
-                    <h3>12</h3>
+                    <h3>{{ pending_loans }}</h3>
                     <p>Pending Applications</p>
                 </div>
             </div>
@@ -658,7 +724,7 @@
                     <i class="fas fa-check-circle"></i>
                 </div>
                 <div class="stat-content">
-                    <h3>45</h3>
+                    <h3>{{ approved_loans }}</h3>
                     <p>Approved Loans</p>
                 </div>
             </div>
@@ -668,7 +734,7 @@
                     <i class="fas fa-times-circle"></i>
                 </div>
                 <div class="stat-content">
-                    <h3>8</h3>
+                    <h3>{{ rejected_loans }}</h3>
                     <p>Rejected Loans</p>
                 </div>
             </div>
@@ -678,70 +744,111 @@
                     <i class="fas fa-chart-bar"></i>
                 </div>
                 <div class="stat-content">
-                    <h3>65</h3>
+                    <h3>{{ total_loans }}</h3>
                     <p>Total Applications</p>
                 </div>
             </div>
         </div>
 
-        <!-- Filters Section -->
-        <div class="filters-section">
-            <div class="filter-row">
-                <div class="search-container">
-                    <i class="fas fa-search"></i>
-                    <input type="text" class="search-input" placeholder="Search by name, email, or loan ID...">
+        <!-- Financial Overview -->
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--accent-blue);">
+                    <i class="fas fa-money-bill-wave"></i>
                 </div>
-                
-                <div class="filter-group">
-                    <button class="filter-btn active" data-filter="all">
-                        <i class="fas fa-filter"></i> All
-                    </button>
-                    <button class="filter-btn" data-filter="pending">
-                        <i class="fas fa-clock"></i> Pending
-                    </button>
-                    <button class="filter-btn" data-filter="approved">
-                        <i class="fas fa-check"></i> Approved
-                    </button>
-                    <button class="filter-btn" data-filter="rejected">
-                        <i class="fas fa-times"></i> Rejected
-                    </button>
+                <div class="stat-content">
+                    <h3>${{ total_loan_amount|floatformat:2 }}</h3>
+                    <p>Total Loan Amount</p>
                 </div>
             </div>
             
-            <div class="action-buttons">
-                <button class="btn btn-primary">
-                    <i class="fas fa-download"></i> Export Report
-                </button>
-                <button class="btn btn-outline">
-                    <i class="fas fa-print"></i> Print
-                </button>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success-color);">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>${{ total_approved_amount|floatformat:2 }}</h3>
+                    <p>Approved Loan Amount</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(168, 85, 247, 0.1); color: #8b5cf6;">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ recent_loans }}</h3>
+                    <p>Recent Applications (30 days)</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning-color);">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>${{ avg_loan_amount|floatformat:2 }}</h3>
+                    <p>Average Loan Amount</p>
+                </div>
             </div>
         </div>
 
-        <!-- Loans Table -->
+        <!-- Loan Type Distribution -->
+        <div class="chart-container">
+            <h3 class="chart-title"><i class="fas fa-chart-pie"></i> Loan Type Distribution</h3>
+            <div class="loan-type-distribution">
+                {% for type in loan_by_type %}
+                    <div class="type-badge">
+                        <i class="fas fa-circle" style="color: {% cycle '#3b82f6' '#10b981' '#f59e0b' '#ef4444' '#8b5cf6' '#ec4899' %};"></i>
+                        {{ type.loan_type|title }}: {{ type.count }} loans (${{ type.total_amount|floatformat:2 }})
+                    </div>
+                {% empty %}
+                    <p class="text-muted">No loan data available</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Status Distribution -->
+        <div class="chart-container">
+            <h3 class="chart-title"><i class="fas fa-chart-bar"></i> Status Distribution</h3>
+            <div class="loan-type-distribution">
+                {% for status, count in status_distribution.items %}
+                    <div class="type-badge">
+                        <i class="fas fa-circle" style="color: 
+                            {% if status == 'Pending' %}#f59e0b
+                            {% elif status == 'Approved' %}#10b981
+                            {% else %}#ef4444
+                            {% endif %};">
+                        </i>
+                        {{ status }}: {{ count }} loans
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Recent Loan Applications -->
         <div class="table-container">
             <div class="table-header">
                 <div class="table-title">
-                    <h3><i class="fas fa-list"></i> Loan Applications</h3>
+                    <h3><i class="fas fa-history"></i> Recent Loan Applications (Last 30 Days)</h3>
                 </div>
                 <div class="table-actions">
-                    <button class="btn btn-success">
-                        <i class="fas fa-check"></i> Bulk Approve
-                    </button>
-                    <button class="btn btn-danger">
-                        <i class="fas fa-times"></i> Bulk Reject
-                    </button>
+                    <a href="{% url 'manage_loans' %}" class="btn btn-primary">
+                        <i class="fas fa-list"></i> View All Loans
+                    </a>
                 </div>
             </div>
             
             <div class="table-responsive">
+                {% if recent_loan_apps %}
                 <table class="loan-table">
                     <thead>
                         <tr>
-                            <th>User</th>
-                            <th>Loan Amount</th>
-                            <th>Purpose</th>
-                            <th>Processing Fee</th>
+                            <th>Applicant</th>
+                            <th>Loan Type</th>
+                            <th>Amount</th>
+                            <th>Duration</th>
+                            <th>Interest</th>
                             <th>Total Due</th>
                             <th>Status</th>
                             <th>Submitted</th>
@@ -750,315 +857,196 @@
                     </thead>
                     
                     <tbody>
-                        <!-- Sample Loan 1 -->
+                        {% for loan in recent_loan_apps %}
                         <tr>
                             <td class="applicant-cell">
-                                <div class="applicant-avatar">JD</div>
+                                <div class="applicant-avatar">{{ loan.user.username|make_list|first|upper }}</div>
                                 <div class="applicant-details">
-                                    <h5>John Doe</h5>
-                                    <p>ID: #00123</p>
+                                    <h5>{{ loan.user.get_full_name|default:loan.user.username }}</h5>
+                                    <p>{{ loan.user.email }}</p>
                                 </div>
                             </td>
-                            <td class="amount-cell">$25,000.00</td>
-                            <td>Home renovation and furniture purchase for the new house...</td>
-                            <td class="amount-cell">$1,250.00</td>
-                            <td class="amount-cell total">$26,250.00</td>
+                            <td>{{ loan.get_loan_type_display }}</td>
+                            <td class="amount-cell">${{ loan.amount|floatformat:2 }}</td>
+                            <td>{{ loan.duration }} months</td>
+                            <td>{{ loan.interest }}%</td>
+                            <td class="amount-cell total">${{ loan.total_payable|floatformat:2 }}</td>
                             <td>
-                                <span class="badge badge-warning">
-                                    <i class="fas fa-clock"></i> Pending
+                                <span class="badge 
+                                    {% if loan.status == 'Pending' %}badge-warning
+                                    {% elif loan.status == 'Approved' %}badge-success
+                                    {% else %}badge-danger
+                                    {% endif %}">
+                                    <i class="fas 
+                                        {% if loan.status == 'Pending' %}fa-clock
+                                        {% elif loan.status == 'Approved' %}fa-check
+                                        {% else %}fa-times
+                                        {% endif %}">
+                                    </i> 
+                                    {{ loan.status }}
                                 </span>
                             </td>
-                            <td>2024-01-15 14:30</td>
+                            <td>{{ loan.submitted_at|date:"Y-m-d H:i" }}</td>
                             <td class="action-buttons-cell">
-                                <a href="#" class="btn btn-success btn-sm">
-                                    <i class="fas fa-check"></i> Approve
+                                {% if loan.status == 'Pending' %}
+                                <a href="{% url 'review_loan' loan.id %}" class="btn btn-success btn-sm">
+                                    <i class="fas fa-eye"></i> Review
                                 </a>
-                                <a href="#" class="btn btn-danger btn-sm">
-                                    <i class="fas fa-times"></i> Reject
-                                </a>
+                                {% else %}
+                                <span class="text-muted">Reviewed</span>
+                                {% endif %}
                             </td>
                         </tr>
-                        
-                        <!-- Sample Loan 2 -->
-                        <tr>
-                            <td class="applicant-cell">
-                                <div class="applicant-avatar">SJ</div>
-                                <div class="applicant-details">
-                                    <h5>Sarah Johnson</h5>
-                                    <p>ID: #00124</p>
-                                </div>
-                            </td>
-                            <td class="amount-cell">$15,000.00</td>
-                            <td>Business expansion and equipment purchase for startup...</td>
-                            <td class="amount-cell">$750.00</td>
-                            <td class="amount-cell total">$15,750.00</td>
-                            <td>
-                                <span class="badge badge-success">
-                                    <i class="fas fa-check"></i> Approved
-                                </span>
-                            </td>
-                            <td>2024-01-14 10:15</td>
-                            <td class="action-buttons-cell">
-                                <span class="text-muted">No Action</span>
-                            </td>
-                        </tr>
-                        
-                        <!-- Sample Loan 3 -->
-                        <tr>
-                            <td class="applicant-cell">
-                                <div class="applicant-avatar">MR</div>
-                                <div class="applicant-details">
-                                    <h5>Michael Roberts</h5>
-                                    <p>ID: #00125</p>
-                                </div>
-                            </td>
-                            <td class="amount-cell">$35,000.00</td>
-                            <td>Education funding for postgraduate studies abroad...</td>
-                            <td class="amount-cell">$1,750.00</td>
-                            <td class="amount-cell total">$36,750.00</td>
-                            <td>
-                                <span class="badge badge-danger">
-                                    <i class="fas fa-times"></i> Rejected
-                                </span>
-                            </td>
-                            <td>2024-01-13 16:45</td>
-                            <td class="action-buttons-cell">
-                                <span class="text-muted">No Action</span>
-                            </td>
-                        </tr>
-                        
-                        <!-- Sample Loan 4 -->
-                        <tr>
-                            <td class="applicant-cell">
-                                <div class="applicant-avatar">EC</div>
-                                <div class="applicant-details">
-                                    <h5>Emily Chen</h5>
-                                    <p>ID: #00126</p>
-                                </div>
-                            </td>
-                            <td class="amount-cell">$8,000.00</td>
-                            <td>Emergency medical expenses and hospital bills...</td>
-                            <td class="amount-cell">$400.00</td>
-                            <td class="amount-cell total">$8,400.00</td>
-                            <td>
-                                <span class="badge badge-warning">
-                                    <i class="fas fa-clock"></i> Pending
-                                </span>
-                            </td>
-                            <td>2024-01-12 09:20</td>
-                            <td class="action-buttons-cell">
-                                <a href="#" class="btn btn-success btn-sm">
-                                    <i class="fas fa-check"></i> Approve
-                                </a>
-                                <a href="#" class="btn btn-danger btn-sm">
-                                    <i class="fas fa-times"></i> Reject
-                                </a>
-                            </td>
-                        </tr>
-                        
-                        <!-- Sample Loan 5 -->
-                        <tr>
-                            <td class="applicant-cell">
-                                <div class="applicant-avatar">DK</div>
-                                <div class="applicant-details">
-                                    <h5>David Kim</h5>
-                                    <p>ID: #00127</p>
-                                </div>
-                            </td>
-                            <td class="amount-cell">$50,000.00</td>
-                            <td>Vehicle purchase and car loan for business transportation...</td>
-                            <td class="amount-cell">$2,500.00</td>
-                            <td class="amount-cell total">$52,500.00</td>
-                            <td>
-                                <span class="badge badge-success">
-                                    <i class="fas fa-check"></i> Approved
-                                </span>
-                            </td>
-                            <td>2024-01-11 11:30</td>
-                            <td class="action-buttons-cell">
-                                <span class="text-muted">No Action</span>
-                            </td>
-                        </tr>
-                        
-                        <!-- Add more sample loans as needed -->
+                        {% endfor %}
                     </tbody>
                 </table>
+                {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <h4>No Recent Applications</h4>
+                    <p>No loan applications have been submitted in the last 30 days.</p>
+                </div>
+                {% endif %}
             </div>
         </div>
 
-        <!-- Pagination -->
-        <div class="pagination-container">
-            <div class="pagination-info">
-                Showing 1 to 5 of 65 entries
-            </div>
-            <div class="pagination">
-                <a href="#" class="page-link active">1</a>
-                <a href="#" class="page-link">2</a>
-                <a href="#" class="page-link">3</a>
-                <a href="#" class="page-link">4</a>
-                <a href="#" class="page-link">5</a>
-                <a href="#" class="page-link">
-                    <i class="fas fa-chevron-right"></i>
+        <!-- Filters Section for All Loans -->
+        <div class="filters-section">
+            <form method="GET" action="{% url 'manage_loans' %}">
+                <div class="filter-row">
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" name="search" class="search-input" 
+                               placeholder="Search by name, email, or loan ID..." 
+                               value="{{ request.GET.search }}">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <button type="submit" name="status" value="all" 
+                                class="filter-btn {% if request.GET.status == 'all' or not request.GET.status %}active{% endif %}">
+                            <i class="fas fa-filter"></i> All
+                        </button>
+                        <button type="submit" name="status" value="Pending" 
+                                class="filter-btn {% if request.GET.status == 'Pending' %}active{% endif %}">
+                            <i class="fas fa-clock"></i> Pending
+                        </button>
+                        <button type="submit" name="status" value="Approved" 
+                                class="filter-btn {% if request.GET.status == 'Approved' %}active{% endif %}">
+                            <i class="fas fa-check"></i> Approved
+                        </button>
+                        <button type="submit" name="status" value="Rejected" 
+                                class="filter-btn {% if request.GET.status == 'Rejected' %}active{% endif %}">
+                            <i class="fas fa-times"></i> Rejected
+                        </button>
+                    </div>
+                </div>
+                
+                {% if loan_types %}
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <button type="submit" name="loan_type" value="all" 
+                                class="filter-btn {% if request.GET.loan_type == 'all' or not request.GET.loan_type %}active{% endif %}">
+                            All Types
+                        </button>
+                        {% for type in loan_types %}
+                        <button type="submit" name="loan_type" value="{{ type }}" 
+                                class="filter-btn {% if request.GET.loan_type == type %}active{% endif %}">
+                            {{ type|title }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </form>
+            
+            <div class="action-buttons">
+                <a href="{% url 'manage_loans' %}?export=csv" class="btn btn-primary">
+                    <i class="fas fa-download"></i> Export Report
                 </a>
+                <button class="btn btn-outline" onclick="window.print()">
+                    <i class="fas fa-print"></i> Print
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Stats Summary -->
+        <div class="pagination-container" style="flex-direction: column; align-items: flex-start;">
+            <h4>Quick Stats Summary</h4>
+            <div style="display: flex; gap: 30px; margin-top: 15px; flex-wrap: wrap;">
+                <div>
+                    <h5 style="color: var(--text-light); font-size: 14px; margin-bottom: 5px;">Total Users</h5>
+                    <p style="font-size: 20px; font-weight: bold; color: var(--primary-blue);">{{ total_users }}</p>
+                </div>
+                <div>
+                    <h5 style="color: var(--text-light); font-size: 14px; margin-bottom: 5px;">Approval Rate</h5>
+                    <p style="font-size: 20px; font-weight: bold; color: var(--success-color);">
+                        {% if total_loans > 0 %}
+                            {{ approved_loans|floatformat:0 }}%
+                        {% else %}
+                            0%
+                        {% endif %}
+                    </p>
+                </div>
+                <div>
+                    <h5 style="color: var(--text-light); font-size: 14px; margin-bottom: 5px;">Rejection Rate</h5>
+                    <p style="font-size: 20px; font-weight: bold; color: var(--danger-color);">
+                        {% if total_loans > 0 %}
+                            {{ rejected_loans|floatformat:0 }}%
+                        {% else %}
+                            0%
+                        {% endif %}
+                    </p>
+                </div>
             </div>
         </div>
     </main>
 
     <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Auto-dismiss alerts after 5 seconds
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+
             // Filter buttons functionality
-            const filterButtons = document.querySelectorAll('.filter-btn');
+            const filterButtons = document.querySelectorAll('.filter-btn[type="submit"]');
             const searchInput = document.querySelector('.search-input');
-            const tableRows = document.querySelectorAll('.loan-table tbody tr');
             
-            // Filter by status
+            // Add click handler for filter buttons
             filterButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Remove active class from all buttons in the same group
+                    const group = this.closest('.filter-group');
+                    if (group) {
+                        group.querySelectorAll('.filter-btn').forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                    }
                     
                     // Add active class to clicked button
                     this.classList.add('active');
-                    
-                    const filter = this.dataset.filter;
-                    
-                    // Show/hide rows based on filter
-                    tableRows.forEach(row => {
-                        const statusCell = row.querySelector('.badge');
-                        const status = statusCell.classList.contains('badge-warning') ? 'pending' :
-                                      statusCell.classList.contains('badge-success') ? 'approved' :
-                                      statusCell.classList.contains('badge-danger') ? 'rejected' : '';
-                        
-                        if (filter === 'all' || filter === status) {
-                            row.style.display = '';
-                        } else {
-                            row.style.display = 'none';
-                        }
-                    });
                 });
             });
-            
-            // Search functionality
+
+            // Search input debounce
+            let searchTimeout;
             searchInput.addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                
-                tableRows.forEach(row => {
-                    const rowText = row.textContent.toLowerCase();
-                    const isVisible = rowText.includes(searchTerm);
-                    
-                    // Only show if matches search AND current filter
-                    if (isVisible) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    this.form.submit();
+                }, 500);
             });
-            
-            // Approve/Reject button actions
-            document.querySelectorAll('.btn-success, .btn-danger').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    if (!this.classList.contains('btn-sm')) {
-                        return; // Skip bulk action buttons
-                    }
-                    
-                    e.preventDefault();
-                    
-                    const action = this.classList.contains('btn-success') ? 'approve' : 'reject';
-                    const row = this.closest('tr');
-                    const applicantName = row.querySelector('.applicant-details h5').textContent;
-                    
-                    if (confirm(`Are you sure you want to ${action} the loan application for ${applicantName}?`)) {
-                        // Update status badge
-                        const statusBadge = row.querySelector('.badge');
-                        statusBadge.className = 'badge';
-                        statusBadge.innerHTML = '';
-                        
-                        if (action === 'approve') {
-                            statusBadge.classList.add('badge-success');
-                            statusBadge.innerHTML = '<i class="fas fa-check"></i> Approved';
-                        } else {
-                            statusBadge.classList.add('badge-danger');
-                            statusBadge.innerHTML = '<i class="fas fa-times"></i> Rejected';
-                        }
-                        
-                        // Update action buttons
-                        const actionCell = row.querySelector('.action-buttons-cell');
-                        actionCell.innerHTML = '<span class="text-muted">No Action</span>';
-                        
-                        // Update statistics
-                        updateStats(action);
-                    }
-                });
-            });
-            
-            // Bulk action buttons
-            document.querySelectorAll('.table-actions .btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const action = this.classList.contains('btn-success') ? 'approve' : 'reject';
-                    const pendingRows = document.querySelectorAll('.loan-table tbody tr');
-                    
-                    if (pendingRows.length === 0) {
-                        alert('No pending applications to process.');
-                        return;
-                    }
-                    
-                    if (confirm(`Are you sure you want to ${action} all visible pending applications?`)) {
-                        pendingRows.forEach(row => {
-                            const statusBadge = row.querySelector('.badge');
-                            if (statusBadge.classList.contains('badge-warning')) {
-                                statusBadge.className = 'badge';
-                                statusBadge.innerHTML = '';
-                                
-                                if (action === 'approve') {
-                                    statusBadge.classList.add('badge-success');
-                                    statusBadge.innerHTML = '<i class="fas fa-check"></i> Approved';
-                                } else {
-                                    statusBadge.classList.add('badge-danger');
-                                    statusBadge.innerHTML = '<i class="fas fa-times"></i> Rejected';
-                                }
-                                
-                                const actionCell = row.querySelector('.action-buttons-cell');
-                                actionCell.innerHTML = '<span class="text-muted">No Action</span>';
-                            }
-                        });
-                        
-                        updateStats(action, 'bulk');
-                    }
-                });
-            });
-            
-            // Update statistics function
-            function updateStats(action, type = 'single') {
-                const pendingStat = document.querySelector('.stat-pending .stat-content h3');
-                const approvedStat = document.querySelector('.stat-approved .stat-content h3');
-                const rejectedStat = document.querySelector('.stat-rejected .stat-content h3');
-                const totalStat = document.querySelector('.stat-total .stat-content h3');
-                
-                if (type === 'single') {
-                    if (action === 'approve') {
-                        pendingStat.textContent = parseInt(pendingStat.textContent) - 1;
-                        approvedStat.textContent = parseInt(approvedStat.textContent) + 1;
-                    } else {
-                        pendingStat.textContent = parseInt(pendingStat.textContent) - 1;
-                        rejectedStat.textContent = parseInt(rejectedStat.textContent) + 1;
-                    }
-                } else {
-                    // For bulk actions, we'd need to count how many were actually processed
-                    const pendingCount = document.querySelectorAll('.badge-warning').length;
-                    pendingStat.textContent = pendingCount;
-                }
-            }
-            
-            // Export button functionality
-            document.querySelector('.filters-section .btn-primary').addEventListener('click', function() {
-                alert('Export functionality would generate a CSV report here.');
-            });
-            
-            // Print button functionality
-            document.querySelector('.filters-section .btn-outline').addEventListener('click', function() {
-                window.print();
+
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
             });
         });
     </script>

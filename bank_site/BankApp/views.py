@@ -704,47 +704,6 @@ def loan_success(request, loan_id):
         'loan': loan
     })
 
-# Admin view for managing loans (preserving original functionality)
-@staff_member_required
-def manage_loans(request):
-    """
-    Admin view to manage loan applications.
-    """
-    # Get filter parameters
-    status_filter = request.GET.get('status', 'all')
-    loan_type_filter = request.GET.get('loan_type', 'all')
-    search_query = request.GET.get('search', '')
-    
-    # Start with all loans
-    loans = Loan.objects.all().select_related('user').order_by('-submitted_at')
-    
-    # Apply filters
-    if status_filter != 'all':
-        loans = loans.filter(status=status_filter)
-    
-    if loan_type_filter != 'all':
-        loans = loans.filter(loan_type=loan_type_filter)
-    
-    if search_query:
-        loans = loans.filter(
-            Q(user__username__icontains=search_query) |
-            Q(user__email__icontains=search_query) |
-            Q(loan_type__icontains=search_query)
-        )
-    
-    # Get unique loan types for filter dropdown
-    loan_types = Loan.objects.values_list('loan_type', flat=True).distinct()
-    
-    context = {
-        'loans': loans,
-        'loan_types': loan_types,
-        'status_filter': status_filter,
-        'loan_type_filter': loan_type_filter,
-        'search_query': search_query,
-    }
-    
-    return render(request, 'BankApp/manage_loans.html', context)
-
 # Admin view to approve/reject loans
 @staff_member_required
 def review_loan(request, loan_id):
