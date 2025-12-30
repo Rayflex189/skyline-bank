@@ -16,7 +16,7 @@ class KYCForm(forms.ModelForm):
 
 
 
-class LoanApplicationForm(forms.ModelForm):
+class LoanForm(forms.ModelForm):
     class Meta:
         model = Loan
         fields = ['amount', 'loan_type', 'duration']
