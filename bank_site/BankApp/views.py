@@ -1,7 +1,9 @@
 # Django Core Imports
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, staff_member_required
+from django.db.models import Sum, Count
+import re
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.conf import settings
@@ -339,24 +341,96 @@ def view_loan_details(request, loan_id):
     return render(request, 'BankApp/loan_details.html', context)
 
 
+
+# Helper function to calculate interest (updated for new fields)
+def calculate_interest(amount, duration, loan_type=None, annual_income=None):
+    """
+    Calculate interest rate based on loan parameters.
+    Preserving original logic with enhancements for new fields.
+    """
+    # Base interest rate (preserving original logic)
+    base_rate = 5.0  # 5% base
+    
+    # Adjust based on loan type if provided
+    if loan_type:
+        loan_type_lower = loan_type.lower()
+        if 'mortgage' in loan_type_lower or loan_type == 'mortgage':
+            base_rate = 3.5
+        elif 'auto' in loan_type_lower or loan_type == 'auto':
+            base_rate = 4.5
+        elif 'education' in loan_type_lower or loan_type == 'education':
+            base_rate = 4.0
+        elif 'emergency' in loan_type_lower or loan_type in ['payday', 'emergency']:
+            base_rate = 10.0
+        elif 'business' in loan_type_lower or loan_type == 'business':
+            base_rate = 6.5
+        elif 'personal' in loan_type_lower or loan_type == 'personal':
+            base_rate = 7.5
+    
+    # Adjust based on duration (longer terms might have higher rates)
+    if duration > 60:  # More than 5 years
+        base_rate += 0.5
+    
+    # Adjust based on income if provided
+    if annual_income and amount:
+        try:
+            income_ratio = float(amount) / float(annual_income)
+            if income_ratio > 2:
+                base_rate += 1.0
+            elif income_ratio < 0.5:
+                base_rate -= 0.5
+        except (ValueError, TypeError):
+            pass  # Keep base rate if calculation fails
+    
+    # Calculate total payable (preserving original calculation method)
+    # Using simple interest for backward compatibility
+    total = float(amount) * (1 + (base_rate / 100) * (duration / 12))
+    
+    return base_rate, round(total, 2)
+
 @staff_member_required
 def admin_dashboard(request):
     """
     Admin dashboard with overview statistics.
+    Updated for new Loan model fields.
     """
+    # User statistics
     total_users = UserProfile.objects.count()
+    
+    # Loan statistics
     total_loans = Loan.objects.count()
-    approved_loans = Loan.objects.filter(status='approved').count()
-    pending_loans = Loan.objects.filter(status='pending').count()
-    rejected_loans = Loan.objects.filter(status='rejected').count()
+    approved_loans = Loan.objects.filter(status='Approved').count()  # Note: Case-sensitive
+    pending_loans = Loan.objects.filter(status='Pending').count()
+    rejected_loans = Loan.objects.filter(status='Rejected').count()
     
-    # Calculate total loan amounts
-    total_loan_amount = Loan.objects.aggregate(total=Sum('loan_amount'))['total'] or 0
-    total_approved_amount = Loan.objects.filter(status='approved').aggregate(total=Sum('loan_amount'))['total'] or 0
+    # Calculate total loan amounts (using new field name 'amount' instead of 'loan_amount')
+    total_loan_amount = Loan.objects.aggregate(total=Sum('amount'))['total'] or 0
+    total_approved_amount = Loan.objects.filter(status='Approved').aggregate(total=Sum('amount'))['total'] or 0
     
-    # Recent loans (last 30 days)
+    # Recent loans (last 30 days) - using submitted_at instead of created_at
     thirty_days_ago = datetime.datetime.now() - datetime.timedelta(days=30)
-    recent_loans = Loan.objects.filter(created_at__gte=thirty_days_ago).count()
+    recent_loans = Loan.objects.filter(submitted_at__gte=thirty_days_ago).count()
+    
+    # Additional statistics for new fields
+    loan_by_type = Loan.objects.values('loan_type').annotate(
+        count=Count('id'),
+        total_amount=Sum('amount')
+    )
+    
+    # Calculate average loan amounts
+    avg_loan_amount = total_loan_amount / total_loans if total_loans > 0 else 0
+    
+    # Loan status distribution for chart
+    status_distribution = {
+        'Pending': pending_loans,
+        'Approved': approved_loans,
+        'Rejected': rejected_loans
+    }
+    
+    # Recent loan applications
+    recent_loan_apps = Loan.objects.filter(
+        submitted_at__gte=thirty_days_ago
+    ).select_related('user').order_by('-submitted_at')[:10]
     
     context = {
         'total_users': total_users,
@@ -367,10 +441,13 @@ def admin_dashboard(request):
         'total_loan_amount': total_loan_amount,
         'total_approved_amount': total_approved_amount,
         'recent_loans': recent_loans,
+        'avg_loan_amount': round(avg_loan_amount, 2),
+        'loan_by_type': loan_by_type,
+        'status_distribution': status_distribution,
+        'recent_loan_apps': recent_loan_apps,
     }
     
     return render(request, 'BankApp/admin_dashboard.html', context)
-
 
 # Add this helper function for debugging
 def check_staff_status(request):
@@ -389,58 +466,123 @@ def check_staff_status(request):
         messages.info(request, f"User info: {user_info}")
     
     return redirect('manage_loans')
- 
 
+@login_required
 def apply_loan(request):
+    """
+    Apply for a loan with new form fields.
+    Preserving original functionality while adding new fields.
+    """
     try:
         user_profile = UserProfile.objects.get(user=request.user)
     except UserProfile.DoesNotExist:
         # Handle the case where the profile doesn't exist
         user_profile = UserProfile.objects.create(user=request.user)
+    
     if request.method == "POST":
         form = LoanForm(request.POST)
         if form.is_valid():
+            # Get all cleaned data
             amount = form.cleaned_data['amount']
             loan_type = form.cleaned_data['loan_type']
             duration = form.cleaned_data['duration']
-
-            interest_rate, total = calculate_interest(float(amount), duration)
-
-            request.session['loan_data'] = {
+            
+            # Get new fields if they exist in the form
+            purpose = form.cleaned_data.get('purpose', 'other')
+            employment_status = form.cleaned_data.get('employment_status', 'employed')
+            annual_income = form.cleaned_data.get('annual_income', 0)
+            repayment_frequency = form.cleaned_data.get('repayment_frequency', 'monthly')
+            collateral = form.cleaned_data.get('collateral', '')
+            requested_date = form.cleaned_data.get('requested_date', date.today())
+            notes = form.cleaned_data.get('notes', '')
+            
+            # Calculate interest (updated to accept new parameters)
+            interest_rate, total = calculate_interest(
+                float(amount), 
+                duration, 
+                loan_type, 
+                annual_income
+            )
+            
+            # Store in session for review
+            loan_data = {
                 'amount': float(amount),
                 'loan_type': loan_type,
                 'duration': duration,
                 'interest': interest_rate,
                 'total': float(total)
             }
+            
+            # Add new fields to session data if they exist
+            if 'purpose' in form.cleaned_data:
+                loan_data['purpose'] = purpose
+            if 'employment_status' in form.cleaned_data:
+                loan_data['employment_status'] = employment_status
+            if 'annual_income' in form.cleaned_data:
+                loan_data['annual_income'] = float(annual_income) if annual_income else 0
+            if 'repayment_frequency' in form.cleaned_data:
+                loan_data['repayment_frequency'] = repayment_frequency
+            if 'collateral' in form.cleaned_data:
+                loan_data['collateral'] = collateral
+            if 'requested_date' in form.cleaned_data:
+                loan_data['requested_date'] = requested_date.isoformat()
+            if 'notes' in form.cleaned_data:
+                loan_data['notes'] = notes
+            
+            request.session['loan_data'] = loan_data
 
             return redirect('loan_review')
+        else:
+            # Form validation failed
+            messages.error(request, "Please correct the errors below.")
     else:
-        form = LoanForm()
+        # Pre-fill initial data if available
+        initial_data = {}
+        
+        # Try to get annual income from user profile
+        if hasattr(user_profile, 'annual_income') and user_profile.annual_income:
+            initial_data['annual_income'] = user_profile.annual_income
+        
+        # Set today's date as default requested date
+        initial_data['requested_date'] = date.today()
+        
+        form = LoanForm(initial=initial_data)
 
-    return render(request, 'BankApp/loans.html', {'form': form, 'user_profile': user_profile,})
-
-
+    return render(request, 'BankApp/loans.html', {
+        'form': form, 
+        'user_profile': user_profile,
+        'page_title': 'Apply for Loan'
+    })
 
 @login_required
 def loan_review(request):
+    """
+    Review loan application before submission.
+    Updated to handle new fields while preserving original functionality.
+    """
     data = request.session.get('loan_data')
 
     if not data:
+        messages.warning(request, "No loan application data found. Please start a new application.")
         return redirect('apply_loan')
 
-    # Extract numeric duration from string like "1 MONTH", "6 MONTHS"
-    duration_str = data.get('duration', '')
+    # Extract numeric duration (handles both string and integer)
+    duration_value = data.get('duration', '')
     numeric_duration = 0
     
-    # Try to extract numbers from the duration string
-    import re
-    if duration_str:
-        numbers = re.findall(r'\d+', duration_str)
+    if isinstance(duration_value, str):
+        # Try to extract numbers from string like "1 MONTH", "6 MONTHS"
+        numbers = re.findall(r'\d+', duration_value)
         if numbers:
             numeric_duration = int(numbers[0])
+    else:
+        # Assume it's already a number
+        try:
+            numeric_duration = int(duration_value)
+        except (ValueError, TypeError):
+            numeric_duration = 0
     
-    # Calculate processing fee (5% of loan amount)
+    # Calculate processing fee (5% of loan amount) - preserving original logic
     try:
         loan_amount = float(data.get('amount', 0))
         processing_fee = round(loan_amount * 0.05, 2)
@@ -450,53 +592,222 @@ def loan_review(request):
     # Calculate monthly installment
     total = float(data.get('total', 0))
     monthly_installment = total / numeric_duration if numeric_duration > 0 else 0
+    
+    # Calculate additional metrics based on new fields
+    annual_income = float(data.get('annual_income', 0))
+    loan_to_income_ratio = (loan_amount / annual_income) * 100 if annual_income > 0 else 0
 
     if request.method == "POST":
-        loan = Loan.objects.create(
-            user=request.user,
-            amount=data['amount'],
-            loan_type=data['loan_type'],
-            duration=numeric_duration,  # Store as integer
-            interest=data['interest'],
-            total_payable=data['total'],
-            status="Pending",
-        )
+        # Create the loan object with all available fields
+        loan_data_for_db = {
+            'user': request.user,
+            'amount': data['amount'],
+            'loan_type': data['loan_type'],
+            'duration': numeric_duration,
+            'interest': data['interest'],
+            'total_payable': data['total'],
+            'status': "Pending",
+        }
+        
+        # Add optional new fields if they exist in session data
+        optional_fields = [
+            'purpose', 'employment_status', 'annual_income', 
+            'repayment_frequency', 'collateral', 'notes'
+        ]
+        
+        for field in optional_fields:
+            if field in data:
+                if field == 'requested_date':
+                    # Convert ISO string back to date
+                    try:
+                        loan_data_for_db[field] = datetime.datetime.fromisoformat(data[field]).date()
+                    except (ValueError, AttributeError):
+                        loan_data_for_db[field] = date.today()
+                elif field == 'annual_income':
+                    # Convert to Decimal if needed
+                    loan_data_for_db[field] = float(data[field])
+                else:
+                    loan_data_for_db[field] = data[field]
+        
+        # Create the loan
+        loan = Loan.objects.create(**loan_data_for_db)
 
-        # Optional: Email to user
-        send_mail(
-            subject="Loan Application Submitted",
-            message=f"Your loan of {data['amount']} is now pending review.",
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[request.user.email],
-        )
+        # Optional: Email to user (preserving original functionality)
+        try:
+            send_mail(
+                subject="Loan Application Submitted",
+                message=f"Your loan application for ${data['amount']} ({data.get('loan_type', 'Personal')}) has been submitted and is now pending review.\n\nApplication ID: {loan.id}",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[request.user.email],
+                fail_silently=True,
+            )
+        except Exception as e:
+            # Log error but don't break the flow
+            print(f"Email sending failed: {e}")
 
+        # Clear session data
         del request.session['loan_data']
+        
+        # Success message
+        messages.success(request, f"Loan application submitted successfully! Your application ID is {loan.id}.")
+        
         return redirect('loan_pending')
 
-    # Add user and calculated values to context
+    # Prepare context for template
     context = {
         **data,
         'user': request.user,
         'numeric_duration': numeric_duration,
         'processing_fee': processing_fee,
-        'monthly_installment': round(monthly_installment, 2)
+        'monthly_installment': round(monthly_installment, 2),
+        'loan_to_income_ratio': round(loan_to_income_ratio, 1)
     }
+    
+    # Add formatted dates for display
+    if 'requested_date' in data:
+        try:
+            requested_date = datetime.datetime.fromisoformat(data['requested_date'])
+            context['requested_date_formatted'] = requested_date.strftime("%B %d, %Y")
+        except (ValueError, AttributeError):
+            context['requested_date_formatted'] = "Not specified"
+    
     return render(request, 'BankApp/loan_review.html', context)
 
 @login_required
 def loan_pending(request):
-    user_profile = UserProfile.objects.get(user=request.user)
+    """
+    Show pending loan status page.
+    """
+    # Get user's most recent pending loan
+    recent_loan = Loan.objects.filter(
+        user=request.user, 
+        status='Pending'
+    ).order_by('-submitted_at').first()
+    
+    # Get all user's loans for history
+    user_loans = Loan.objects.filter(user=request.user).order_by('-submitted_at')[:5]
+    
+    return render(request, 'BankApp/loan_pending.html', {
+        'recent_loan': recent_loan,
+        'user_loans': user_loans
+    })
+
+# Additional helper view for loan success
+@login_required
+def loan_success(request, loan_id):
+    """
+    Show success page after loan application.
+    """
+    loan = get_object_or_404(Loan, id=loan_id, user=request.user)
+    
+    return render(request, 'BankApp/loan_success.html', {
+        'loan': loan
+    })
+
+# Admin view for managing loans (preserving original functionality)
+@staff_member_required
+def manage_loans(request):
+    """
+    Admin view to manage loan applications.
+    """
+    # Get filter parameters
+    status_filter = request.GET.get('status', 'all')
+    loan_type_filter = request.GET.get('loan_type', 'all')
+    search_query = request.GET.get('search', '')
+    
+    # Start with all loans
+    loans = Loan.objects.all().select_related('user').order_by('-submitted_at')
+    
+    # Apply filters
+    if status_filter != 'all':
+        loans = loans.filter(status=status_filter)
+    
+    if loan_type_filter != 'all':
+        loans = loans.filter(loan_type=loan_type_filter)
+    
+    if search_query:
+        loans = loans.filter(
+            Q(user__username__icontains=search_query) |
+            Q(user__email__icontains=search_query) |
+            Q(loan_type__icontains=search_query)
+        )
+    
+    # Get unique loan types for filter dropdown
+    loan_types = Loan.objects.values_list('loan_type', flat=True).distinct()
+    
     context = {
-        'user_profile': user_profile,
+        'loans': loans,
+        'loan_types': loan_types,
+        'status_filter': status_filter,
+        'loan_type_filter': loan_type_filter,
+        'search_query': search_query,
     }
-    return render(request, 'BankApp/loan_pending.html', context)
+    
+    return render(request, 'BankApp/manage_loans.html', context)
+
+# Admin view to approve/reject loans
+@staff_member_required
+def review_loan(request, loan_id):
+    """
+    Admin view to review and approve/reject a specific loan.
+    """
+    loan = get_object_or_404(Loan, id=loan_id)
+    
+    if request.method == "POST":
+        action = request.POST.get('action')
+        admin_notes = request.POST.get('admin_notes', '')
+        
+        if action in ['approve', 'reject']:
+            loan.status = 'Approved' if action == 'approve' else 'Rejected'
+            loan.reviewed_at = datetime.datetime.now()
+            
+            if admin_notes:
+                # Store admin notes (you might want to add a field for this)
+                if hasattr(loan, 'notes'):
+                    current_notes = loan.notes or ''
+                    loan.notes = f"[Admin Review] {admin_notes}\n\n{current_notes}"
+            
+            loan.save()
+            
+            # Send notification email to user
+            try:
+                status = "approved" if action == 'approve' else "rejected"
+                send_mail(
+                    subject=f"Loan Application {status.capitalize()}",
+                    message=f"Your loan application for ${loan.amount} has been {status}.\n\nApplication ID: {loan.id}",
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[loan.user.email],
+                    fail_silently=True,
+                )
+            except Exception as e:
+                print(f"Email sending failed: {e}")
+            
+            messages.success(request, f"Loan application has been {action}d.")
+            return redirect('manage_loans')
+    
+    # Calculate metrics for decision making
+    try:
+        user_profile = UserProfile.objects.get(user=loan.user)
+        user_annual_income = user_profile.annual_income if hasattr(user_profile, 'annual_income') else 0
+    except UserProfile.DoesNotExist:
+        user_annual_income = 0
+    
+    loan_to_income_ratio = (float(loan.amount) / float(user_annual_income)) * 100 if user_annual_income > 0 else 0
+    
+    context = {
+        'loan': loan,
+        'user_profile': user_profile if 'user_profile' in locals() else None,
+        'loan_to_income_ratio': round(loan_to_income_ratio, 1),
+        'monthly_payment': loan.monthly_payment() if hasattr(loan, 'monthly_payment') else 0,
+    }
+    
+    return render(request, 'BankApp/review_loan.html', context)
 
 
 @login_required
 def loan_approved(request, loan_id):
     loan = Loan.objects.get(id=loan_id, user=request.user)
     return render(request, 'loan_approved.html', {'loan': loan})
-
 
 
 @unauthenticated_user

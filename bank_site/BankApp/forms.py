@@ -9,20 +9,100 @@ from django.contrib.auth import get_user_model
 from django import forms
 from .models import KYC, Loan
 
+from django.core.validators import MinValueValidator
+import datetime
+
+class LoanForm(forms.ModelForm):
+    # Add custom widgets and validation
+    amount = forms.DecimalField(
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter amount',
+            'min': '100',
+            'step': '100'
+        }),
+        min_value=100
+    )
+    
+    duration = forms.IntegerField(
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Months (1-360)',
+            'min': '1',
+            'max': '360'
+        }),
+        min_value=1,
+        max_value=360
+    )
+    
+    annual_income = forms.DecimalField(
+        required=True,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Annual income',
+            'min': '0'
+        }),
+        min_value=0
+    )
+    
+    requested_date = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'type': 'date',
+            'min': datetime.date.today().isoformat()
+        }),
+        initial=datetime.date.today
+    )
+    
+    collateral = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 3,
+            'placeholder': 'Describe any collateral (property, vehicle, etc.)'
+        })
+    )
+    
+    notes = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 2,
+            'placeholder': 'Additional information'
+        })
+    )
+
+    class Meta:
+        model = Loan
+        fields = [
+            'amount', 'loan_type', 'purpose', 'duration',
+            'employment_status', 'annual_income', 'repayment_frequency',
+            'collateral', 'requested_date', 'notes'
+        ]
+        widgets = {
+            'loan_type': forms.Select(attrs={'class': 'form-control'}),
+            'purpose': forms.Select(attrs={'class': 'form-control'}),
+            'employment_status': forms.Select(attrs={'class': 'form-control'}),
+            'repayment_frequency': forms.Select(attrs={'class': 'form-control'}),
+        }
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        amount = cleaned_data.get('amount')
+        annual_income = cleaned_data.get('annual_income')
+        
+        # Validate that loan amount is not more than 5 times annual income
+        if amount and annual_income and annual_income > 0:
+            if amount > annual_income * 5:
+                self.add_error('amount', 'Loan amount cannot exceed 5 times your annual income')
+        
+        return cleaned_data
+
 class KYCForm(forms.ModelForm):
     class Meta:
         model = KYC
         fields = ['id_front', 'id_back', 'selfie']
 
-
-
-class LoanForm(forms.ModelForm):
-    class Meta:
-        model = Loan
-        fields = ['amount', 'loan_type', 'duration']
-        widgets = {
-            'loan_type': forms.Select(attrs={'class': 'form-control'}),
-        }
 
 
 

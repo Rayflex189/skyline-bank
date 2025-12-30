@@ -743,41 +743,106 @@ window.smartsupp||(function(d) {
         <div class="loan-card">
             <h2 class="card-title">Loan Application</h2>
             <p class="card-subtitle">Complete your application to get started with your loan request</p>
-            <!-- ====================== FORM START ====================== -->
-            <form method="POST" novalidate>
-                {% csrf_token %}
+           <!-- ====================== FORM START ====================== -->
+<form method="POST" novalidate>
+    {% csrf_token %}
 
-                <!-- Amount Input -->
-                <div class="form-group">
-                    <label class="form-label">Loan Amount</label>
-                    <div class="input-group">
-                        {{ form.amount }}
-                        <i class="fas fa-dollar-sign input-icon"></i>
-                    </div>
-                </div>
+    <!-- Amount Input -->
+    <div class="form-group">
+        <label class="form-label">Loan Amount ($)</label>
+        <div class="input-group">
+            {{ form.amount }}
+            <i class="fas fa-dollar-sign input-icon"></i>
+        </div>
+        <small class="form-text text-muted">Minimum: $100</small>
+    </div>
 
-                <!-- Loan Type -->
-                <div class="form-group">
-                    <label class="form-label">Loan Type</label>
-                    <div class="input-group">
-                        {{ form.loan_type }}
-                        <i class="fas fa-list input-icon"></i>
-                    </div>
-                </div>
+    <!-- Loan Type -->
+    <div class="form-group">
+        <label class="form-label">Loan Type</label>
+        <div class="input-group">
+            {{ form.loan_type }}
+            <i class="fas fa-list input-icon"></i>
+        </div>
+    </div>
 
-                <!-- Duration -->
-                <div class="form-group">
-                    <label class="form-label">Duration (Months)</label>
-                    <div class="input-group">
-                        {{ form.duration }}
-                        <i class="fas fa-clock input-icon"></i>
-                    </div>
-                </div>
+    <!-- Purpose -->
+    <div class="form-group">
+        <label class="form-label">Purpose of Loan</label>
+        <div class="input-group">
+            {{ form.purpose }}
+            <i class="fas fa-bullseye input-icon"></i>
+        </div>
+    </div>
 
-                <button type="submit" class="submit-btn">
-                    Proceed to Review
-                </button>
-            </form>
+    <!-- Duration -->
+    <div class="form-group">
+        <label class="form-label">Duration (Months)</label>
+        <div class="input-group">
+            {{ form.duration }}
+            <i class="fas fa-clock input-icon"></i>
+        </div>
+        <small class="form-text text-muted">1 to 360 months (1-30 years)</small>
+    </div>
+
+    <!-- Employment Status -->
+    <div class="form-group">
+        <label class="form-label">Employment Status</label>
+        <div class="input-group">
+            {{ form.employment_status }}
+            <i class="fas fa-briefcase input-icon"></i>
+        </div>
+    </div>
+
+    <!-- Annual Income -->
+    <div class="form-group">
+        <label class="form-label">Annual Income ($)</label>
+        <div class="input-group">
+            {{ form.annual_income }}
+            <i class="fas fa-money-bill-wave input-icon"></i>
+        </div>
+    </div>
+
+    <!-- Repayment Frequency -->
+    <div class="form-group">
+        <label class="form-label">Repayment Frequency</label>
+        <div class="input-group">
+            {{ form.repayment_frequency }}
+            <i class="fas fa-calendar-alt input-icon"></i>
+        </div>
+    </div>
+
+    <!-- Requested Date -->
+    <div class="form-group">
+        <label class="form-label">Requested Disbursement Date</label>
+        <div class="input-group">
+            {{ form.requested_date }}
+            <i class="fas fa-calendar input-icon"></i>
+        </div>
+    </div>
+
+    <!-- Collateral -->
+    <div class="form-group">
+        <label class="form-label">Collateral (Optional)</label>
+        <div class="input-group">
+            {{ form.collateral }}
+        </div>
+        <small class="form-text text-muted">Describe any assets you're willing to pledge as security</small>
+    </div>
+
+    <!-- Additional Notes -->
+    <div class="form-group">
+        <label class="form-label">Additional Notes (Optional)</label>
+        <div class="input-group">
+            {{ form.notes }}
+        </div>
+    </div>
+
+    <button type="submit" class="submit-btn">
+        <i class="fas fa-calculator"></i> Calculate & Proceed to Review
+    </button>
+</form>
+<!-- ====================== FORM END ====================== -->
 </div>
 </div>
     <!-- Bottom Navigation -->

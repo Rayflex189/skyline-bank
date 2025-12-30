@@ -28,6 +28,11 @@ class KYC(models.Model):
         return f"KYC - {self.user.email}"
 
 
+# models.py
+from django.db import models
+from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 class Loan(models.Model):
     # Define loan type choices
     LOAN_TYPE_CHOICES = [
@@ -38,12 +43,31 @@ class Loan(models.Model):
         ('education', 'Education Loan'),
         ('medical', 'Medical Loan'),
         ('debt_consolidation', 'Debt Consolidation'),
-        ('payday', 'Short-term/Payday Loan'),  # Use with caution
+        ('emergency', 'Emergency Loan'),
+        ('home_improvement', 'Home Improvement'),
+        ('other', 'Other'),
+    ]
+    
+    # Define purpose choices (more specific than loan type)
+    PURPOSE_CHOICES = [
+        ('debt_consolidation', 'Debt Consolidation'),
+        ('home_improvement', 'Home Improvement'),
+        ('medical_expenses', 'Medical Expenses'),
+        ('education_fees', 'Education/Tuition Fees'),
+        ('business_expansion', 'Business Expansion'),
+        ('vehicle_purchase', 'Vehicle Purchase'),
+        ('wedding', 'Wedding Expenses'),
+        ('travel', 'Travel/Vacation'),
+        ('emergency', 'Emergency Funds'),
         ('other', 'Other'),
     ]
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    amount = models.DecimalField(
+        max_digits=12, 
+        decimal_places=2,
+        validators=[MinValueValidator(100)]  # Minimum $100
+    )
     
     # Updated loan_type field with choices
     loan_type = models.CharField(
@@ -52,9 +76,62 @@ class Loan(models.Model):
         default='personal'
     )
     
-    duration = models.CharField(max_length=50)
-    interest = models.FloatField()
+    # New field: Purpose of the loan
+    purpose = models.CharField(
+        max_length=50,
+        choices=PURPOSE_CHOICES,
+        default='other'
+    )
+    
+    # New field: Repayment frequency
+    repayment_frequency = models.CharField(
+        max_length=20,
+        choices=[
+            ('monthly', 'Monthly'),
+            ('biweekly', 'Bi-weekly'),
+            ('weekly', 'Weekly'),
+        ],
+        default='monthly'
+    )
+    
+    # Duration in months (better as IntegerField)
+    duration = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(360)]  # 1 month to 30 years
+    )
+    
+    interest = models.FloatField(
+        validators=[MinValueValidator(0.0), MaxValueValidator(100.0)]
+    )
     total_payable = models.DecimalField(max_digits=12, decimal_places=2)
+    
+    # New field: Employment status
+    employment_status = models.CharField(
+        max_length=30,
+        choices=[
+            ('employed', 'Employed'),
+            ('self_employed', 'Self-Employed'),
+            ('unemployed', 'Unemployed'),
+            ('student', 'Student'),
+            ('retired', 'Retired'),
+        ],
+        default='employed'
+    )
+    
+    # New field: Annual income (for eligibility)
+    annual_income = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=0.00
+    )
+    
+    # New field: Collateral description
+    collateral = models.TextField(blank=True, null=True)
+    
+    # New field: Request date (can be different from submitted_at)
+    requested_date = models.DateField()
+    
+    # New field: Expected disbursement date
+    expected_disbursement_date = models.DateField(null=True, blank=True)
     
     status = models.CharField(
         max_length=20,
@@ -64,9 +141,20 @@ class Loan(models.Model):
 
     submitted_at = models.DateTimeField(auto_now_add=True)
     reviewed_at = models.DateTimeField(null=True, blank=True)
+    
+    # New field: Notes or additional information
+    notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"Loan - {self.user.email} - {self.amount}"
+        return f"Loan - {self.user.email} - ${self.amount} - {self.get_loan_type_display()}"
+
+    # Calculate monthly payment
+    def monthly_payment(self):
+        if self.duration > 0 and self.interest > 0:
+            monthly_rate = (self.interest / 100) / 12
+            payment = (monthly_rate * float(self.amount)) / (1 - (1 + monthly_rate) ** -self.duration)
+            return round(payment, 2)
+        return 0
 
 class InvestmentPlan(models.Model):
     PLAN_TYPES = [
