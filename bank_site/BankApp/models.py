@@ -30,7 +30,6 @@ class KYC(models.Model):
     def __str__(self):
         return f"KYC - {self.user.email}"
 
-
 class Loan(models.Model):
     # Define loan type choices
     LOAN_TYPE_CHOICES = [
@@ -61,31 +60,29 @@ class Loan(models.Model):
     ]
     
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,  # FIXED: Use settings.AUTH_USER_MODEL
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='loans'
     )
+    
     amount = models.DecimalField(
         max_digits=12, 
         decimal_places=2,
-        validators=[MinValueValidator(100)]  # Minimum $100
+        validators=[MinValueValidator(100)]
     )
     
-    # Updated loan_type field with choices
     loan_type = models.CharField(
         max_length=50,
         choices=LOAN_TYPE_CHOICES,
         default='personal'
     )
     
-    # New field: Purpose of the loan
     purpose = models.CharField(
         max_length=50,
         choices=PURPOSE_CHOICES,
         default='other'
     )
     
-    # New field: Repayment frequency
     repayment_frequency = models.CharField(
         max_length=20,
         choices=[
@@ -96,17 +93,16 @@ class Loan(models.Model):
         default='monthly'
     )
     
-    # Duration in months (better as IntegerField)
     duration = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(360)]  # 1 month to 30 years
+        validators=[MinValueValidator(1), MaxValueValidator(360)]
     )
     
     interest = models.FloatField(
         validators=[MinValueValidator(0.0), MaxValueValidator(100.0)]
     )
+    
     total_payable = models.DecimalField(max_digits=12, decimal_places=2)
     
-    # New field: Employment status
     employment_status = models.CharField(
         max_length=30,
         choices=[
@@ -119,20 +115,17 @@ class Loan(models.Model):
         default='employed'
     )
     
-    # New field: Annual income (for eligibility)
     annual_income = models.DecimalField(
         max_digits=12,
         decimal_places=2,
         default=0.00
     )
     
-    # New field: Collateral description
     collateral = models.TextField(blank=True, null=True)
     
-    # New field: Request date (can be different from submitted_at)
-    requested_date = models.DateField()
+    # FIXED: Added default value
+    requested_date = models.DateField(default=timezone.now)
     
-    # New field: Expected disbursement date
     expected_disbursement_date = models.DateField(null=True, blank=True)
     
     status = models.CharField(
@@ -144,19 +137,23 @@ class Loan(models.Model):
     submitted_at = models.DateTimeField(auto_now_add=True)
     reviewed_at = models.DateTimeField(null=True, blank=True)
     
-    # New field: Notes or additional information
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"Loan - {self.user.email} - ${self.amount} - {self.get_loan_type_display()}"
 
-    # Calculate monthly payment
     def monthly_payment(self):
         if self.duration > 0 and self.interest > 0:
             monthly_rate = (self.interest / 100) / 12
             payment = (monthly_rate * float(self.amount)) / (1 - (1 + monthly_rate) ** -self.duration)
             return round(payment, 2)
         return 0
+    
+    def save(self, *args, **kwargs):
+        # Auto-set requested_date if not provided (backup)
+        if not self.requested_date:
+            self.requested_date = timezone.now().date()
+        super().save(*args, **kwargs)
 
 class InvestmentPlan(models.Model):
     PLAN_TYPES = [
