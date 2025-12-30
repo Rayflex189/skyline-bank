@@ -29,9 +29,29 @@ class KYC(models.Model):
 
 
 class Loan(models.Model):
+    # Define loan type choices
+    LOAN_TYPE_CHOICES = [
+        ('personal', 'Personal Loan'),
+        ('business', 'Business Loan'),
+        ('mortgage', 'Mortgage'),
+        ('auto', 'Auto Loan'),
+        ('education', 'Education Loan'),
+        ('medical', 'Medical Loan'),
+        ('debt_consolidation', 'Debt Consolidation'),
+        ('payday', 'Short-term/Payday Loan'),  # Use with caution
+        ('other', 'Other'),
+    ]
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
-    loan_type = models.CharField(max_length=100)
+    
+    # Updated loan_type field with choices
+    loan_type = models.CharField(
+        max_length=50,
+        choices=LOAN_TYPE_CHOICES,
+        default='personal'
+    )
+    
     duration = models.CharField(max_length=50)
     interest = models.FloatField()
     total_payable = models.DecimalField(max_digits=12, decimal_places=2)
@@ -47,7 +67,6 @@ class Loan(models.Model):
 
     def __str__(self):
         return f"Loan - {self.user.email} - {self.amount}"
-
 
 class InvestmentPlan(models.Model):
     PLAN_TYPES = [

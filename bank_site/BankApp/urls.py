@@ -2,9 +2,11 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('admin/loans/',views.manage_loans, name='manage_loans'),
-    path('admin/loans/approve/<int:loan_id>/', views.approve_loan, name='approve_loan'),
-    path('admin/loans/reject/<int:loan_id>/', views.reject_loan, name='reject_loan'),
+    # Loan management
+    path('staff/loans/', views.manage_loans, name='manage_loans'),
+    path('staff/loans/approve/<int:loan_id>/', views.approve_loan, name='approve_loan'),
+    path('staff/loans/reject/<int:loan_id>/', views.reject_loan, name='reject_loan'),
+    path('staff/loans/view/<int:loan_id>/', views.view_loan_details, name='view_loan_details'),
     path('', views.verify, name='verify'),
     path('home/', views.home, name='home'),
     path('about/', views.about, name='about'),

@@ -117,75 +117,281 @@ def download_kyc_pdf(request, user_id):
         return response
 
 
+from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import Loan, UserProfile
+from django.contrib.auth.models import User
+from django.db.models import Count, Q
+import datetime
 
 @staff_member_required
 def manage_loans(request):
+    """
+    Main loan management view for staff members.
+    Includes filtering, search, and statistics.
+    """
+    # Get all loans ordered by creation date
     loans = Loan.objects.all().order_by('-created_at')
-    return render(request, 'BankApp/manage_loans.html', {'loans': loans})
+    
+    # Get filter parameters from GET request
+    status_filter = request.GET.get('status', '')
+    search_query = request.GET.get('q', '')
+    
+    # Apply filters
+    if status_filter:
+        loans = loans.filter(status__iexact=status_filter)
+    
+    if search_query:
+        loans = loans.filter(
+            Q(full_name__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(loan_purpose__icontains=search_query) |
+            Q(id__icontains=search_query)
+        )
+    
+    # Get statistics for the dashboard
+    total_loans = Loan.objects.count()
+    pending_loans = Loan.objects.filter(status__iexact='pending').count()
+    approved_loans = Loan.objects.filter(status__iexact='approved').count()
+    rejected_loans = Loan.objects.filter(status__iexact='rejected').count()
+    
+    # Calculate processing fees (5% of loan amount)
+    for loan in loans:
+        if not hasattr(loan, 'processing_fee') or loan.processing_fee is None:
+            loan.processing_fee = loan.loan_amount * 0.05
+    
+    # Handle bulk actions
+    if request.method == 'POST' and 'action' in request.POST:
+        loan_ids = request.POST.getlist('loan_ids')
+        action = request.POST.get('action')
+        
+        if loan_ids and action:
+            loans_to_process = Loan.objects.filter(id__in=loan_ids)
+            
+            if action == 'approve':
+                loans_to_process.update(status='approved')
+                messages.success(request, f'{len(loan_ids)} loan(s) approved successfully.')
+            elif action == 'reject':
+                loans_to_process.update(status='rejected')
+                messages.success(request, f'{len(loan_ids)} loan(s) rejected.')
+            
+            return redirect('manage_loans')
+    
+    context = {
+        'loans': loans,
+        'total_count': total_loans,
+        'pending_count': pending_loans,
+        'approved_count': approved_loans,
+        'rejected_count': rejected_loans,
+        'status_filter': status_filter,
+        'search_query': search_query,
+        'status_choices': ['pending', 'approved', 'rejected'],
+    }
+    
+    return render(request, 'BankApp/manage_loans.html', context)
 
 
 @staff_member_required
 def approve_loan(request, loan_id):
-    loan = Loan.objects.get(id=loan_id)
-    loan.status = 'approved'
-    loan.save()
-
-    # Send approval email
-    send_mail(
-        subject="Loan Approved",
-        message=(
-            f"Hello {loan.full_name},\n\n"
-            f"Good news! Your loan request of ${loan.loan_amount:,.2f} "
-            f"has been approved.\n\n"
-            f"Total Amount Due: ${loan.total_amount_due:,.2f}\n\n"
-            "Please contact support if you have any questions.\n\n"
-            "Thank you,\nSkyBridge Finance"
-        ),
-        from_email="noreply@skybridge-finance.com",
-        recipient_list=[loan.email],
-    )
-
-    messages.success(request, "Loan approved and user notified.")
+    """
+    Approve individual loan and send notification email.
+    """
+    try:
+        loan = get_object_or_404(Loan, id=loan_id)
+        
+        # Check if already approved
+        if loan.status == 'approved':
+            messages.warning(request, f"Loan #{loan.id} is already approved.")
+            return redirect('manage_loans')
+        
+        # Update status
+        loan.status = 'approved'
+        loan.save()
+        
+        # Calculate total amount due (loan amount + 5% processing fee)
+        processing_fee = loan.loan_amount * 0.05
+        total_due = loan.loan_amount + processing_fee
+        
+        # Send approval email
+        try:
+            send_mail(
+                subject="Loan Approved - SkyBridge Finance",
+                message=(
+                    f"Hello {loan.full_name},\n\n"
+                    f"Congratulations! Your loan application (ID: #{loan.id}) has been approved.\n\n"
+                    f"Loan Details:\n"
+                    f"Amount: ${loan.loan_amount:,.2f}\n"
+                    f"Processing Fee (5%): ${processing_fee:,.2f}\n"
+                    f"Total Amount Due: ${total_due:,.2f}\n"
+                    f"Purpose: {loan.loan_purpose}\n\n"
+                    f"Next Steps:\n"
+                    f"1. Please login to your account\n"
+                    f"2. Review the loan terms\n"
+                    f"3. Accept the loan agreement\n\n"
+                    f"You will receive the funds within 2-3 business days.\n\n"
+                    "If you have any questions, please contact our support team.\n\n"
+                    "Best regards,\n"
+                    "SkyBridge Finance Team\n"
+                    "support@skybridgefinance.online"
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[loan.email],
+                fail_silently=False,
+            )
+            email_sent = True
+        except Exception as e:
+            email_sent = False
+            messages.warning(request, f"Loan approved but email failed to send: {str(e)}")
+        
+        # Success message
+        if email_sent:
+            messages.success(request, f"Loan #{loan.id} approved and notification email sent.")
+        else:
+            messages.success(request, f"Loan #{loan.id} approved (email notification failed).")
+            
+    except Loan.DoesNotExist:
+        messages.error(request, "Loan not found.")
+    except Exception as e:
+        messages.error(request, f"Error approving loan: {str(e)}")
+    
     return redirect('manage_loans')
 
 
 @staff_member_required
 def reject_loan(request, loan_id):
-    loan = Loan.objects.get(id=loan_id)
-    loan.status = 'rejected'
-    loan.save()
-
-    # Send rejection email
-    send_mail(
-        subject="Loan Application Update",
-        message=(
-            f"Hello {loan.full_name},\n\n"
-            "We regret to inform you that your recent loan request "
-            f"of ${loan.loan_amount:,.2f} has been rejected.\n\n"
-            "Feel free to contact support for more information.\n\n"
-            "Thank you,\nSkyBridge Finance"
-        ),
-        from_email="noreply@skybridge-finance.com",
-        recipient_list=[loan.email],
-    )
-
-    messages.error(request, "Loan rejected and user notified.")
+    """
+    Reject individual loan and send notification email.
+    """
+    try:
+        loan = get_object_or_404(Loan, id=loan_id)
+        
+        # Check if already rejected
+        if loan.status == 'rejected':
+            messages.warning(request, f"Loan #{loan.id} is already rejected.")
+            return redirect('manage_loans')
+        
+        # Update status
+        loan.status = 'rejected'
+        loan.save()
+        
+        # Get rejection reason from form if available
+        rejection_reason = request.POST.get('rejection_reason', 
+                                          "Your application did not meet our current lending criteria.")
+        
+        # Send rejection email
+        try:
+            send_mail(
+                subject="Loan Application Update - SkyBridge Finance",
+                message=(
+                    f"Hello {loan.full_name},\n\n"
+                    f"We regret to inform you that your loan application (ID: #{loan.id}) "
+                    f"for ${loan.loan_amount:,.2f} has not been approved at this time.\n\n"
+                    f"Reason: {rejection_reason}\n\n"
+                    f"You may reapply in 30 days or contact our support team for more information.\n\n"
+                    f"Application Details:\n"
+                    f"Amount Requested: ${loan.loan_amount:,.2f}\n"
+                    f"Purpose: {loan.loan_purpose}\n\n"
+                    f"Thank you for considering SkyBridge Finance for your lending needs.\n\n"
+                    "Best regards,\n"
+                    "SkyBridge Finance Team\n"
+                    "support@skybridgefinance.online"
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[loan.email],
+                fail_silently=False,
+            )
+            email_sent = True
+        except Exception as e:
+            email_sent = False
+            messages.warning(request, f"Loan rejected but email failed to send: {str(e)}")
+        
+        # Success message
+        if email_sent:
+            messages.error(request, f"Loan #{loan.id} rejected and notification email sent.")
+        else:
+            messages.error(request, f"Loan #{loan.id} rejected (email notification failed).")
+            
+    except Loan.DoesNotExist:
+        messages.error(request, "Loan not found.")
+    except Exception as e:
+        messages.error(request, f"Error rejecting loan: {str(e)}")
+    
     return redirect('manage_loans')
 
 
+@staff_member_required
+def view_loan_details(request, loan_id):
+    """
+    View detailed information about a specific loan.
+    """
+    loan = get_object_or_404(Loan, id=loan_id)
+    
+    # Calculate additional information
+    processing_fee = loan.loan_amount * 0.05
+    total_due = loan.loan_amount + processing_fee
+    
+    context = {
+        'loan': loan,
+        'processing_fee': processing_fee,
+        'total_due': total_due,
+    }
+    
+    return render(request, 'BankApp/loan_details.html', context)
+
+
+@staff_member_required
 def admin_dashboard(request):
+    """
+    Admin dashboard with overview statistics.
+    """
     total_users = UserProfile.objects.count()
     total_loans = Loan.objects.count()
     approved_loans = Loan.objects.filter(status='approved').count()
     pending_loans = Loan.objects.filter(status='pending').count()
-
-    return render(request, 'BankApp/admin_dashboard.html', {
+    rejected_loans = Loan.objects.filter(status='rejected').count()
+    
+    # Calculate total loan amounts
+    total_loan_amount = Loan.objects.aggregate(total=Sum('loan_amount'))['total'] or 0
+    total_approved_amount = Loan.objects.filter(status='approved').aggregate(total=Sum('loan_amount'))['total'] or 0
+    
+    # Recent loans (last 30 days)
+    thirty_days_ago = datetime.datetime.now() - datetime.timedelta(days=30)
+    recent_loans = Loan.objects.filter(created_at__gte=thirty_days_ago).count()
+    
+    context = {
         'total_users': total_users,
         'total_loans': total_loans,
         'approved_loans': approved_loans,
         'pending_loans': pending_loans,
-    })
+        'rejected_loans': rejected_loans,
+        'total_loan_amount': total_loan_amount,
+        'total_approved_amount': total_approved_amount,
+        'recent_loans': recent_loans,
+    }
+    
+    return render(request, 'BankApp/admin_dashboard.html', context)
 
+
+# Add this helper function for debugging
+def check_staff_status(request):
+    """
+    Debug view to check if user has staff permissions.
+    Accessible at /staff/check/
+    """
+    if request.user.is_authenticated:
+        user_info = {
+            'username': request.user.username,
+            'email': request.user.email,
+            'is_staff': request.user.is_staff,
+            'is_superuser': request.user.is_superuser,
+            'is_authenticated': request.user.is_authenticated,
+        }
+        messages.info(request, f"User info: {user_info}")
+    
+    return redirect('manage_loans')
  
 
 def apply_loan(request):
@@ -293,54 +499,6 @@ def loan_pending(request):
 def loan_approved(request, loan_id):
     loan = Loan.objects.get(id=loan_id, user=request.user)
     return render(request, 'loan_approved.html', {'loan': loan})
-
-
-@login_required
-def process_loan(request):
-    if request.method == "POST":
-        full_name = request.POST.get('fullName')
-        email = request.POST.get('email')
-        phone = request.POST.get('phoneNumber')
-        loan_amount = Decimal(request.POST.get('loanAmount'))
-        loan_purpose = request.POST.get('loanPurpose')
-
-        processing_fee = loan_amount * Decimal('0.05')
-        total_due = loan_amount + processing_fee
-
-        loan = Loan.objects.create(
-            user=request.user,
-            full_name=full_name,
-            email=email,
-            phone_number=phone,
-            loan_amount=loan_amount,
-            loan_purpose=loan_purpose,
-            processing_fee=processing_fee,
-            total_amount_due=total_due,
-        )
-
-        # Send email
-        send_mail(
-            subject="Loan Application Received",
-            message=(
-                f"Hello {full_name},\n\n"
-                f"Your loan request of ${loan_amount:,.2f} has been received and is awaiting approval.\n\n"
-                f"Loan Breakdown:\n"
-                f"- Loan Amount: ${loan_amount:,.2f}\n"
-                f"- Processing Fee (5%): ${processing_fee:,.2f}\n"
-                f"- Total Amount Due: ${total_due:,.2f}\n\n"
-                "Our team is reviewing your application.\n"
-                "If you need help, contact support.\n\n"
-                "Thank you,\nSkyBridge Finance"
-            ),
-            from_email="noreply@skybridge-finance.com",
-            recipient_list=[email],
-        )
-
-        messages.success(request, "Your loan request has been submitted successfully!")
-        return redirect('kyc')
-
-    return redirect('loans')
-
 
 
 
