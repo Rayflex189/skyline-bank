@@ -1,3 +1,6 @@
+# At the top of views.py, add this import:
+from datetime import date, datetime
+import datetime as dt  # Alternative if you need both
 # Django Core Imports
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
