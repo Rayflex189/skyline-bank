@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Review Loan Application - PrimeBank</title>
+    <title>Review Loan Application - Skybridge Finance</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -118,7 +119,7 @@
 
         .review-container {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
         }
 
         .review-card {
@@ -171,12 +172,47 @@
             font-size: 16px;
         }
 
+        /* Applicant Info */
+        .applicant-info {
+            background-color: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .applicant-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .applicant-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #e2e8f0;
+        }
+
+        .applicant-label {
+            color: #718096;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .applicant-value {
+            color: #0a192f;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
         /* Loan Details Section */
         .loan-details {
             background-color: #f8fafc;
             border-radius: 12px;
             padding: 30px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .section-title {
@@ -194,14 +230,8 @@
 
         .details-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .details-grid {
-                grid-template-columns: 1fr;
-            }
         }
 
         .detail-item {
@@ -284,6 +314,20 @@
             font-size: 28px;
             color: #3b82f6;
             margin-top: 10px;
+        }
+
+        /* Additional Details */
+        .additional-details {
+            background-color: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .additional-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
         }
 
         /* Terms and Conditions */
@@ -479,41 +523,38 @@
             <div class="logo-icon">
                 <i class="fas fa-university"></i>
             </div>
-            <div class="logo-text">Skybridge<span>Bank</span></div>
+            <div class="logo-text">Skybridge<span>Finance</span></div>
         </div>
         
         <nav class="nav-menu">
-            <a href="#" class="nav-item">Dashboard</a>
+            <a href="/" class="nav-item">Dashboard</a>
             <a href="#" class="nav-item">Accounts</a>
-            <a href="#" class="nav-item active">Loans</a>
-            <a href="#" class="nav-item">Cards</a>
+            <a href="{% url 'apply_loan' %}" class="nav-item active">Loans</a>
             <a href="#" class="nav-item">Support</a>
         </nav>
         
-       <div class="user-info">
-    <div class="user-avatar">
-        {% if user and user.username %}
-            {% with first_char=user.username.0|upper %}
-                {{ first_char }}
-            {% endwith %}
-        {% else %}
-            U
-        {% endif %}
-    </div>
-    <span>
-        {% if user %}
-            {% if user.get_full_name %}
-                {{ user.get_full_name }}
-            {% elif user.username %}
-                {{ user.username }}
-            {% else %}
-                User
-            {% endif %}
-        {% else %}
-            Guest
-        {% endif %}
-    </span>
-</div>
+        <div class="user-info">
+            <div class="user-avatar">
+                {% if user and user.username %}
+                    {{ user.username.0|upper }}
+                {% else %}
+                    U
+                {% endif %}
+            </div>
+            <span>
+                {% if user %}
+                    {% if user.get_full_name %}
+                        {{ user.get_full_name }}
+                    {% elif user.username %}
+                        {{ user.username }}
+                    {% else %}
+                        User
+                    {% endif %}
+                {% else %}
+                    Guest
+                {% endif %}
+            </span>
+        </div>
     </header>
 
     <!-- Main Content -->
@@ -530,6 +571,41 @@
                     </div>
                 </div>
 
+                <!-- Applicant Information -->
+                <div class="applicant-info">
+                    <h3 class="section-title">
+                        <i class="fas fa-user"></i> Applicant Information
+                    </h3>
+                    <div class="applicant-details">
+                        <div class="applicant-item">
+                            <div class="applicant-label">Applicant</div>
+                            <div class="applicant-value">
+                                {% if user.get_full_name %}
+                                    {{ user.get_full_name }}
+                                {% else %}
+                                    {{ user.username }}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="applicant-item">
+                            <div class="applicant-label">Email</div>
+                            <div class="applicant-value">{{ user.email }}</div>
+                        </div>
+                        {% if employment_status %}
+                        <div class="applicant-item">
+                            <div class="applicant-label">Employment Status</div>
+                            <div class="applicant-value">{{ employment_status|title }}</div>
+                        </div>
+                        {% endif %}
+                        {% if annual_income %}
+                        <div class="applicant-item">
+                            <div class="applicant-label">Annual Income</div>
+                            <div class="applicant-value">${{ annual_income|floatformat:2 }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
                 <!-- Loan Details Section -->
                 <div class="loan-details">
                     <h3 class="section-title">
@@ -538,14 +614,21 @@
                     <div class="details-grid">
                         <div class="detail-item">
                             <div class="detail-label">Loan Amount</div>
-                            <div class="detail-value">${{ amount }}</div>
+                            <div class="detail-value">${{ amount|floatformat:2 }}</div>
                             <div class="detail-subtext">Principal amount requested</div>
                         </div>
                         <div class="detail-item">
                             <div class="detail-label">Loan Type</div>
-                            <div class="detail-value">{{ loan_type }}</div>
+                            <div class="detail-value">{{ loan_type|title }}</div>
                             <div class="detail-subtext">Type of loan</div>
                         </div>
+                        {% if purpose %}
+                        <div class="detail-item">
+                            <div class="detail-label">Purpose</div>
+                            <div class="detail-value">{{ purpose|title }}</div>
+                            <div class="detail-subtext">Loan purpose</div>
+                        </div>
+                        {% endif %}
                         <div class="detail-item">
                             <div class="detail-label">Duration</div>
                             <div class="detail-value">{{ duration }} months</div>
@@ -556,8 +639,45 @@
                             <div class="detail-value">{{ interest }}%</div>
                             <div class="detail-subtext">Annual percentage rate</div>
                         </div>
+                        {% if repayment_frequency %}
+                        <div class="detail-item">
+                            <div class="detail-label">Repayment Frequency</div>
+                            <div class="detail-value">{{ repayment_frequency|title }}</div>
+                            <div class="detail-subtext">Payment schedule</div>
+                        </div>
+                        {% endif %}
+                        {% if requested_date_formatted %}
+                        <div class="detail-item">
+                            <div class="detail-label">Requested Date</div>
+                            <div class="detail-value">{{ requested_date_formatted }}</div>
+                            <div class="detail-subtext">Disbursement date</div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
+
+                <!-- Additional Details -->
+                {% if collateral or notes %}
+                <div class="additional-details">
+                    <h3 class="section-title">
+                        <i class="fas fa-clipboard-list"></i> Additional Information
+                    </h3>
+                    <div class="additional-grid">
+                        {% if collateral %}
+                        <div class="applicant-item">
+                            <div class="applicant-label">Collateral</div>
+                            <div class="applicant-value">{{ collateral|truncatechars:100 }}</div>
+                        </div>
+                        {% endif %}
+                        {% if notes %}
+                        <div class="applicant-item">
+                            <div class="applicant-label">Notes</div>
+                            <div class="applicant-value">{{ notes|truncatechars:100 }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
 
                 <!-- Summary Section -->
                 <div class="summary-section">
@@ -566,24 +686,30 @@
                     </h3>
                     <div class="summary-item">
                         <span class="summary-label">Principal Amount</span>
-                        <span class="summary-value">${{ amount }}</span>
+                        <span class="summary-value">${{ amount|floatformat:2 }}</span>
                     </div>
                     <div class="summary-item">
-                        <span class="summary-label">Total Interest</span>
-                        <span class="summary-value">${{ interest|add:"0" }}</span>
+                        <span class="summary-label">Interest ({{ interest }}% APR)</span>
+                        <span class="summary-value">${{ total|floatformat:2|add:"-"|add:amount|floatformat:2 }}</span>
                     </div>
-                  <div class="summary-item">
-    <span class="summary-label">Processing Fee (5%)</span>
-    <span class="summary-value">${{ processing_fee|floatformat:2 }}</span>
-</div>
+                    <div class="summary-item">
+                        <span class="summary-label">Processing Fee (5%)</span>
+                        <span class="summary-value">${{ processing_fee|floatformat:2 }}</span>
+                    </div>
                     <div class="summary-item" style="border-top: 2px solid rgba(255, 255, 255, 0.2); padding-top: 20px;">
                         <span class="summary-label">Total Payable Amount</span>
-                        <span class="summary-value total-payable">${{ total }}</span>
+                        <span class="summary-value total-payable">${{ total|floatformat:2 }}</span>
                     </div>
                     <div class="summary-item">
                         <span class="summary-label">Monthly Installment</span>
-                        <span class="summary-value">${{ total|add:"0"|divisibleby:duration|default:"0" }}</span>
+                        <span class="summary-value">${{ monthly_installment|floatformat:2 }}</span>
                     </div>
+                    {% if loan_to_income_ratio %}
+                    <div class="summary-item">
+                        <span class="summary-label">Loan to Income Ratio</span>
+                        <span class="summary-value">{{ loan_to_income_ratio }}%</span>
+                    </div>
+                    {% endif %}
                 </div>
 
                 <!-- Terms and Conditions -->
@@ -593,7 +719,7 @@
                     </h3>
                     <div class="terms-box">
                         <ul>
-                            <li>By submitting this application, you agree to the terms and conditions of PrimeBank.</li>
+                            <li>By submitting this application, you agree to the terms and conditions of Skybridge Finance.</li>
                             <li>The loan approval is subject to verification of your documents and credit assessment.</li>
                             <li>Interest will be charged from the date of disbursement at the rate mentioned above.</li>
                             <li>Early repayment may be subject to prepayment charges as per the bank's policy.</li>
@@ -614,7 +740,7 @@
                 <form method="POST" id="loan-form">
                     {% csrf_token %}
                     <div class="action-buttons">
-                        <button type="button" class="btn btn-secondary" onclick="window.history.back()">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'apply_loan' %}'">
                             <i class="fas fa-arrow-left"></i> Back to Edit
                         </button>
                         <button type="submit" class="btn btn-primary" id="submit-btn" disabled>
@@ -635,55 +761,57 @@
             <a href="#" class="footer-link">FAQs</a>
         </div>
         <div class="copyright">
-            &copy; 2023 PrimeBank. All rights reserved.
+            &copy; 2024 Skybridge Finance. All rights reserved.
         </div>
     </footer>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Handle user info display
-    const userAvatar = document.querySelector('.user-avatar');
-    const userDisplayName = document.querySelector('.user-info span');
-    
-    // Fix empty avatar
-    if (userAvatar && userAvatar.textContent.trim() === '') {
-        userAvatar.textContent = 'U';
-    }
-    
-    // Fix empty display name
-    if (userDisplayName && userDisplayName.textContent.trim() === '') {
-        userDisplayName.textContent = 'User';
-    }
-    
-    // Loan form handling
-    const agreeCheckbox = document.getElementById('agree-terms');
-    const submitBtn = document.getElementById('submit-btn');
-    const loanForm = document.getElementById('loan-form');
-    
-    if (agreeCheckbox && submitBtn && loanForm) {
-        // Initialize submit button state
-        submitBtn.disabled = !agreeCheckbox.checked;
-        
-        // Enable/disable submit button based on checkbox
-        agreeCheckbox.addEventListener('change', function() {
-            submitBtn.disabled = !this.checked;
-        });
-        
-        // Form submission handler
-        loanForm.addEventListener('submit', function(e) {
-            if (!agreeCheckbox.checked) {
-                e.preventDefault();
-                alert('Please agree to the terms and conditions before submitting.');
-                return false;
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle user info display
+            const userAvatar = document.querySelector('.user-avatar');
+            const userDisplayName = document.querySelector('.user-info span');
+            
+            // Fix empty avatar
+            if (userAvatar && userAvatar.textContent.trim() === '') {
+                userAvatar.textContent = 'U';
             }
             
-            // Show loading state
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-            submitBtn.disabled = true;
+            // Fix empty display name
+            if (userDisplayName && userDisplayName.textContent.trim() === '') {
+                userDisplayName.textContent = 'User';
+            }
             
-            return true;
+            // Loan form handling
+            const agreeCheckbox = document.getElementById('agree-terms');
+            const submitBtn = document.getElementById('submit-btn');
+            const loanForm = document.getElementById('loan-form');
+            
+            if (agreeCheckbox && submitBtn && loanForm) {
+                // Initialize submit button state
+                submitBtn.disabled = !agreeCheckbox.checked;
+                
+                // Enable/disable submit button based on checkbox
+                agreeCheckbox.addEventListener('change', function() {
+                    submitBtn.disabled = !this.checked;
+                });
+                
+                // Form submission handler
+                loanForm.addEventListener('submit', function(e) {
+                    if (!agreeCheckbox.checked) {
+                        e.preventDefault();
+                        alert('Please agree to the terms and conditions before submitting.');
+                        return false;
+                    }
+                    
+                    // Show loading state
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                    submitBtn.disabled = true;
+                    
+                    // Allow form submission
+                    return true;
+                });
+            }
         });
-    }
-});
-</script>
+    </script>
 </body>
 </html>
