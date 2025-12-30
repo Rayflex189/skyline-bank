@@ -602,7 +602,7 @@
         {% if user.is_staff %}
         <div class="nav-section">
             <h5 class="section-title">Admin Tools</h5>
-            <a href="{% url 'manage_loans' %}" class="nav-item admin-item">
+            <a href="{% url 'admin:BankApp_loan_changelist' %}" class="nav-item admin-item">
                 <i class="fas fa-tasks"></i> Manage Loans
             </a>
             <!-- Add other admin links here -->

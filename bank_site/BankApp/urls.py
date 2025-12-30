@@ -2,7 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    
+    path('admin/loans/',views.manage_loans, name='manage_loans'),
+    path('admin/loans/approve/<int:loan_id>/', views.approve_loan, name='approve_loan'),
+    path('admin/loans/reject/<int:loan_id>/', views.reject_loan, name='reject_loan'),
     path('', views.verify, name='verify'),
     path('home/', views.home, name='home'),
     path('about/', views.about, name='about'),
@@ -10,9 +12,6 @@ urlpatterns = [
     path("kyc/email/<int:user_id>/", views.send_kyc_email, name="send_kyc_email"),
     path('verify-email/<signed_value>/', views.verify_email, name='verify_email'),
     path('blog/', views.blog, name='blog'),
-    path('admin/loans/',views.manage_loans, name='manage_loans'),
-    path('admin/loans/approve/<int:loan_id>/', views.approve_loan, name='approve_loan'),
-    path('admin/loans/reject/<int:loan_id>/', views.reject_loan, name='reject_loan'),
     path('apply-loan/', views.apply_loan, name='apply_loan'),
     path('loan-review/', views.loan_review, name='loan_review'),
     path('loan-pending/', views.loan_pending, name='loan_pending'),
