@@ -28,6 +28,11 @@ from .utilis import *  # If still required (consider limiting *)
 from BankApp.decorators import unauthenticated_user
 from BankApp.models import UserProfile
 
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.models import User
+from django.db.models import Count, Q
+import datetime
+
 
 User = get_user_model()
 signer = TimestampSigner()
@@ -117,15 +122,7 @@ def download_kyc_pdf(request, user_id):
         return response
 
 
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from django.core.mail import send_mail
-from django.conf import settings
-from .models import Loan, UserProfile
-from django.contrib.auth.models import User
-from django.db.models import Count, Q
-import datetime
+
 
 @staff_member_required
 def manage_loans(request):

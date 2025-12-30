@@ -15,10 +15,14 @@ class KYCForm(forms.ModelForm):
         fields = ['id_front', 'id_back', 'selfie']
 
 
-class LoanForm(forms.ModelForm):
+
+class LoanApplicationForm(forms.ModelForm):
     class Meta:
         model = Loan
         fields = ['amount', 'loan_type', 'duration']
+        widgets = {
+            'loan_type': forms.Select(attrs={'class': 'form-control'}),
+        }
 
 
 
