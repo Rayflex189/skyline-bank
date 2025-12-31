@@ -5,7 +5,7 @@ import datetime as dt  # Alternative if you need both
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum, Count
+from django.db.models import Count, Sum, Avg, Q
 import re
 from django.contrib.auth import get_user_model
 from django.db import transaction
@@ -450,60 +450,154 @@ def calculate_interest(amount, duration, loan_type=None, annual_income=None):
 @staff_member_required
 def admin_dashboard(request):
     """
-    Admin dashboard with overview statistics.
-    Updated for new Loan model fields.
+    Comprehensive admin dashboard with statistics and analytics
+    Updated for current Loan model structure
     """
     # User statistics
     total_users = UserProfile.objects.count()
+    active_users = UserProfile.objects.filter(user__is_active=True).count()
     
-    # Loan statistics
+    # Loan statistics - using proper status values from your model
     total_loans = Loan.objects.count()
-    approved_loans = Loan.objects.filter(status='Approved').count()  # Note: Case-sensitive
+    
+    # Using exact status values (case-sensitive as stored in database)
     pending_loans = Loan.objects.filter(status='Pending').count()
+    approved_loans = Loan.objects.filter(status='Approved').count()
     rejected_loans = Loan.objects.filter(status='Rejected').count()
     
-    # Calculate total loan amounts (using new field name 'amount' instead of 'loan_amount')
-    total_loan_amount = Loan.objects.aggregate(total=Sum('amount'))['total'] or 0
-    total_approved_amount = Loan.objects.filter(status='Approved').aggregate(total=Sum('amount'))['total'] or 0
+    # Today's loans
+    today = datetime.date.today()
+    today_loans = Loan.objects.filter(submitted_at__date=today).count()
     
-    # Recent loans (last 30 days) - using submitted_at instead of created_at
-    thirty_days_ago = datetime.datetime.now() - datetime.timedelta(days=30)
-    recent_loans = Loan.objects.filter(submitted_at__gte=thirty_days_ago).count()
+    # This week's loans (last 7 days)
+    week_ago = datetime.datetime.now() - datetime.timedelta(days=7)
+    this_week_loans = Loan.objects.filter(submitted_at__gte=week_ago).count()
     
-    # Additional statistics for new fields
-    loan_by_type = Loan.objects.values('loan_type').annotate(
+    # This month's loans (last 30 days)
+    month_ago = datetime.datetime.now() - datetime.timedelta(days=30)
+    this_month_loans = Loan.objects.filter(submitted_at__gte=month_ago).count()
+    
+    # Financial statistics
+    total_loan_amount = Loan.objects.aggregate(total=Sum('amount'))['total'] or Decimal('0')
+    total_pending_amount = Loan.objects.filter(status='Pending').aggregate(total=Sum('amount'))['total'] or Decimal('0')
+    total_approved_amount = Loan.objects.filter(status='Approved').aggregate(total=Sum('amount'))['total'] or Decimal('0')
+    total_rejected_amount = Loan.objects.filter(status='Rejected').aggregate(total=Sum('amount'))['total'] or Decimal('0')
+    
+    # Average loan amount
+    avg_loan_amount = Loan.objects.aggregate(avg=Avg('amount'))['avg'] or Decimal('0')
+    
+    # Loan type distribution
+    loan_type_stats = Loan.objects.values('loan_type').annotate(
         count=Count('id'),
-        total_amount=Sum('amount')
-    )
+        total_amount=Sum('amount'),
+        avg_amount=Avg('amount')
+    ).order_by('-total_amount')
     
-    # Calculate average loan amounts
-    avg_loan_amount = total_loan_amount / total_loans if total_loans > 0 else 0
+    # Status distribution for charts
+    status_distribution = [
+        {'status': 'Pending', 'count': pending_loans, 'color': '#f59e0b'},
+        {'status': 'Approved', 'count': approved_loans, 'color': '#10b981'},
+        {'status': 'Rejected', 'count': rejected_loans, 'color': '#ef4444'},
+    ]
     
-    # Loan status distribution for chart
-    status_distribution = {
-        'Pending': pending_loans,
-        'Approved': approved_loans,
-        'Rejected': rejected_loans
-    }
+    # Duration statistics
+    duration_stats = Loan.objects.values('duration').annotate(
+        count=Count('id'),
+        avg_amount=Avg('amount')
+    ).order_by('duration')
     
-    # Recent loan applications
-    recent_loan_apps = Loan.objects.filter(
-        submitted_at__gte=thirty_days_ago
-    ).select_related('user').order_by('-submitted_at')[:10]
+    # Recent pending loans (for quick action)
+    recent_pending_loans = Loan.objects.filter(
+        status='Pending'
+    ).select_related('user').order_by('-submitted_at')[:5]
+    
+    # Add processing fee calculation for display
+    for loan in recent_pending_loans:
+        try:
+            amount_decimal = Decimal(str(loan.amount))
+            loan.processing_fee = amount_decimal * Decimal('0.05')
+            loan.total_due = amount_decimal + loan.processing_fee
+        except:
+            loan.processing_fee = Decimal('0')
+            loan.total_due = loan.amount
+    
+    # Recent approved loans (for monitoring)
+    recent_approved_loans = Loan.objects.filter(
+        status='Approved'
+    ).select_related('user').order_by('-reviewed_at')[:5]
+    
+    # Loan approval rate
+    total_processed = approved_loans + rejected_loans
+    approval_rate = (approved_loans / total_processed * 100) if total_processed > 0 else 0
+    
+    # Monthly trend data (last 6 months)
+    monthly_trends = []
+    for i in range(6, -1, -1):
+        month_start = datetime.datetime.now().replace(
+            day=1, hour=0, minute=0, second=0, microsecond=0
+        ) - datetime.timedelta(days=30*i)
+        month_end = month_start + datetime.timedelta(days=30)
+        
+        month_loans = Loan.objects.filter(
+            submitted_at__gte=month_start,
+            submitted_at__lt=month_end
+        ).aggregate(
+            count=Count('id'),
+            amount=Sum('amount')
+        )
+        
+        monthly_trends.append({
+            'month': month_start.strftime('%b %Y'),
+            'count': month_loans['count'] or 0,
+            'amount': month_loans['amount'] or Decimal('0'),
+        })
+    
+    # Top 5 loan amounts
+    top_loans = Loan.objects.select_related('user').order_by('-amount')[:5]
+    
+    # Loan purposes frequency
+    purpose_stats = Loan.objects.exclude(purpose__isnull=True).exclude(purpose='').values(
+        'purpose'
+    ).annotate(
+        count=Count('id')
+    ).order_by('-count')[:10]
     
     context = {
+        # User stats
         'total_users': total_users,
+        'active_users': active_users,
+        
+        # Loan count stats
         'total_loans': total_loans,
-        'approved_loans': approved_loans,
         'pending_loans': pending_loans,
+        'approved_loans': approved_loans,
         'rejected_loans': rejected_loans,
+        'today_loans': today_loans,
+        'this_week_loans': this_week_loans,
+        'this_month_loans': this_month_loans,
+        
+        # Financial stats
         'total_loan_amount': total_loan_amount,
+        'total_pending_amount': total_pending_amount,
         'total_approved_amount': total_approved_amount,
-        'recent_loans': recent_loans,
-        'avg_loan_amount': round(avg_loan_amount, 2),
-        'loan_by_type': loan_by_type,
+        'total_rejected_amount': total_rejected_amount,
+        'avg_loan_amount': avg_loan_amount,
+        'approval_rate': round(approval_rate, 1),
+        
+        # Analytics data
+        'loan_type_stats': loan_type_stats,
         'status_distribution': status_distribution,
-        'recent_loan_apps': recent_loan_apps,
+        'duration_stats': duration_stats,
+        'purpose_stats': purpose_stats,
+        'monthly_trends': monthly_trends,
+        
+        # Recent data for quick access
+        'recent_pending_loans': recent_pending_loans,
+        'recent_approved_loans': recent_approved_loans,
+        'top_loans': top_loans,
+        
+        # Formatting helpers
+        'now': datetime.datetime.now(),
     }
     
     return render(request, 'BankApp/admin_dashboard.html', context)
