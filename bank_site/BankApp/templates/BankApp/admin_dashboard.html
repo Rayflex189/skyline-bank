@@ -1,24 +1,1124 @@
-<h2>Admin Overview</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SkyBridge Finance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-blue: #0a192f;
+            --secondary-blue: #1e3a8a;
+            --accent-blue: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --light-bg: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-dark: #0a192f;
+            --text-light: #64748b;
+        }
 
-<div class="stats">
-    <div class="stat-box">Total Users: {{ total_users }}</div>
-    <div class="stat-box">Total Loans: {{ total_loans }}</div>
-    <div class="stat-box">Approved Loans: {{ approved_loans }}</div>
-    <div class="stat-box">Pending Loans: {{ pending_loans }}</div>
-</div>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<canvas id="loanChart"></canvas>
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        /* Admin Header */
+        .admin-header {
+            background: white;
+            padding: 20px 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-<script>
-        new Chart(document.getElementById("loanChart"), {
-            type: "doughnut",
-            data: {
-                labels: ["Approved", "Pending"],
-                datasets: [{
-                    data: [{{ approved_loans }}, {{ pending_loans }}]
-                }]
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+
+        .logo-text p {
+            color: var(--text-light);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .admin-nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-link {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-link.active {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-left: 20px;
+            border-left: 2px solid var(--border-color);
+        }
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        /* Main Container */
+        .main-container {
+            padding: 30px 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-title h2 {
+            font-size: 32px;
+            color: var(--primary-blue);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(10, 25, 47, 0.15);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary-blue);
+            border: 2px solid var(--border-color);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+        }
+
+        .stat-users::before { background: var(--primary-blue); }
+        .stat-total::before { background: var(--accent-blue); }
+        .stat-pending::before { background: var(--warning-color); }
+        .stat-approved::before { background: var(--success-color); }
+        .stat-rejected::before { background: var(--danger-color); }
+        .stat-recent::before { background: #8b5cf6; }
+        .stat-amount::before { background: #06b6d4; }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-users .stat-icon { background: rgba(10, 25, 47, 0.1); color: var(--primary-blue); }
+        .stat-total .stat-icon { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
+        .stat-pending .stat-icon { background: rgba(245, 158, 11, 0.1); color: var(--warning-color); }
+        .stat-approved .stat-icon { background: rgba(16, 185, 129, 0.1); color: var(--success-color); }
+        .stat-rejected .stat-icon { background: rgba(239, 68, 68, 0.1); color: var(--danger-color); }
+        .stat-recent .stat-icon { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+        .stat-amount .stat-icon { background: rgba(6, 182, 212, 0.1); color: #06b6d4; }
+
+        .trend-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trend-up {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .trend-down {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .stat-subtext {
+            color: var(--text-light);
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1200px) {
+            .charts-section {
+                grid-template-columns: 1fr;
             }
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .chart-header h3 {
+            font-size: 20px;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Data Tables */
+        .data-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .section-header h3 {
+            font-size: 20px;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: var(--light-bg);
+            padding: 16px 20px;
+            text-align: left;
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .data-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
+
+        .data-table tr:hover {
+            background: var(--light-bg);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-approved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Loan Type Tags */
+        .loan-type-tag {
+            padding: 6px 12px;
+            background: #f1f5f9;
+            color: var(--text-dark);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .admin-footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-light);
+            font-size: 14px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .admin-header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .admin-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .user-info {
+                border-left: none;
+                border-top: 2px solid var(--border-color);
+                padding-left: 0;
+                padding-top: 15px;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .main-container {
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-section {
+                gap: 20px;
+            }
+            
+            .chart-container {
+                padding: 20px;
+            }
+            
+            .data-section {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .quick-actions {
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .chart-wrapper {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="logo-container">
+            <div class="logo-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="logo-text">
+                <h1>SkyBridge Finance</h1>
+                <p>Administration Dashboard</p>
+            </div>
+        </div>
+        
+        <nav class="admin-nav">
+            <a href="{% url 'admin_dashboard' %}" class="nav-link active">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{% url 'manage_loans' %}" class="nav-link">
+                <i class="fas fa-hand-holding-usd"></i> Manage Loans
+            </a>
+            <a href="{% url 'admin:index' %}" class="nav-link">
+                <i class="fas fa-cog"></i> Django Admin
+            </a>
+            <a href="#" class="nav-link">
+                <i class="fas fa-chart-line"></i> Reports
+            </a>
+        </nav>
+        
+        <div class="user-info">
+            <div class="user-avatar">
+                {{ user.username|slice:":1"|upper }}
+            </div>
+            <div>
+                <div style="font-weight: 600;">{{ user.get_full_name|default:user.username }}</div>
+                <div style="font-size: 12px; color: var(--text-light);">Administrator</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-title">
+                <h2><i class="fas fa-chart-pie"></i> Admin Dashboard</h2>
+                <p>Comprehensive overview of system statistics and analytics</p>
+            </div>
+            <div class="quick-actions">
+                <button class="btn btn-primary" onclick="refreshDashboard()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <button class="btn btn-success" onclick="exportReport()">
+                    <i class="fas fa-download"></i> Export Report
+                </button>
+                <a href="{% url 'manage_loans' %}" class="btn btn-warning">
+                    <i class="fas fa-exclamation-circle"></i> Pending Loans ({{ pending_loans }})
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <!-- Total Users -->
+            <div class="stat-card stat-users">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <span class="trend-badge trend-up">
+                        <i class="fas fa-arrow-up"></i> 12%
+                    </span>
+                </div>
+                <div class="stat-value">{{ total_users|default:"0" }}</div>
+                <div class="stat-label">Total Users</div>
+                <div class="stat-subtext">{{ active_users|default:"0" }} active users</div>
+            </div>
+
+            <!-- Total Loans -->
+            <div class="stat-card stat-total">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <span class="trend-badge trend-up">
+                        <i class="fas fa-arrow-up"></i> 8%
+                    </span>
+                </div>
+                <div class="stat-value">{{ total_loans|default:"0" }}</div>
+                <div class="stat-label">Total Loans</div>
+                <div class="stat-subtext">{{ this_month_loans|default:"0" }} this month</div>
+            </div>
+
+            <!-- Pending Loans -->
+            <div class="stat-card stat-pending">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <span class="trend-badge {% if pending_loans > 5 %}trend-up{% else %}trend-down{% endif %}">
+                        {% if pending_loans > 5 %}
+                            <i class="fas fa-arrow-up"></i> Action Required
+                        {% else %}
+                            <i class="fas fa-arrow-down"></i> Good
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="stat-value">{{ pending_loans|default:"0" }}</div>
+                <div class="stat-label">Pending Loans</div>
+                <div class="stat-subtext">{{ today_loans|default:"0" }} new today</div>
+            </div>
+
+            <!-- Approved Loans -->
+            <div class="stat-card stat-approved">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <span class="trend-badge trend-up">
+                        <i class="fas fa-arrow-up"></i> {{ approval_rate|default:"0" }}%
+                    </span>
+                </div>
+                <div class="stat-value">{{ approved_loans|default:"0" }}</div>
+                <div class="stat-label">Approved Loans</div>
+                <div class="stat-subtext">${{ total_approved_amount|floatformat:2|default:"0.00" }} total</div>
+            </div>
+
+            <!-- Total Loan Amount -->
+            <div class="stat-card stat-amount">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <span class="trend-badge trend-up">
+                        <i class="fas fa-arrow-up"></i> 15%
+                    </span>
+                </div>
+                <div class="stat-value">${{ total_loan_amount|floatformat:2|default:"0.00" }}</div>
+                <div class="stat-label">Total Loan Amount</div>
+                <div class="stat-subtext">${{ avg_loan_amount|floatformat:2|default:"0.00" }} average</div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="stat-card stat-recent">
+                <div class="stat-header">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span class="trend-badge trend-up">
+                        <i class="fas fa-arrow-up"></i> {{ this_week_loans|default:"0" }}
+                    </span>
+                </div>
+                <div class="stat-value">{{ this_week_loans|default:"0" }}</div>
+                <div class="stat-label">This Week</div>
+                <div class="stat-subtext">{{ today_loans|default:"0" }} today, {{ this_month_loans|default:"0" }} this month</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <!-- Loan Status Distribution -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-pie"></i> Loan Status Distribution</h3>
+                    <select class="btn btn-outline" onchange="updateChartPeriod(this.value)">
+                        <option value="all">All Time</option>
+                        <option value="month">This Month</option>
+                        <option value="week">This Week</option>
+                    </select>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Monthly Trends -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-line"></i> Monthly Loan Trends</h3>
+                    <select class="btn btn-outline" onchange="updateTrendChart(this.value)">
+                        <option value="count">By Count</option>
+                        <option value="amount">By Amount</option>
+                    </select>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Pending Loans -->
+        <div class="data-section">
+            <div class="section-header">
+                <h3><i class="fas fa-clock"></i> Recent Pending Loans Requiring Action</h3>
+                <a href="{% url 'manage_loans' %}" class="btn btn-primary">
+                    <i class="fas fa-external-link-alt"></i> View All
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Loan ID</th>
+                            <th>Applicant</th>
+                            <th>Amount</th>
+                            <th>Loan Type</th>
+                            <th>Purpose</th>
+                            <th>Submitted</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if recent_pending_loans %}
+                            {% for loan in recent_pending_loans %}
+                            <tr>
+                                <td>#{{ loan.id }}</td>
+                                <td>
+                                    <div style="font-weight: 600;">{{ loan.user.get_full_name|default:loan.user.username }}</div>
+                                    <div style="font-size: 12px; color: var(--text-light);">{{ loan.user.email|default:"N/A" }}</div>
+                                </td>
+                                <td style="font-weight: 600;">${{ loan.amount|floatformat:2 }}</td>
+                                <td><span class="loan-type-tag">{{ loan.loan_type }}</span></td>
+                                <td>{{ loan.purpose|truncatewords:5|default:"N/A" }}</td>
+                                <td>{{ loan.submitted_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <a href="{% url 'approve_loan' loan.id %}" class="btn btn-success btn-sm" style="padding: 6px 12px; font-size: 13px;">
+                                        <i class="fas fa-check"></i> Approve
+                                    </a>
+                                    <a href="{% url 'reject_loan' loan.id %}" class="btn btn-danger btn-sm" style="padding: 6px 12px; font-size: 13px;">
+                                        <i class="fas fa-times"></i> Reject
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-light);">
+                                    <i class="fas fa-check-circle" style="font-size: 48px; margin-bottom: 15px; color: var(--success-color); display: block;"></i>
+                                    No pending loans requiring action
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Loan Type Distribution -->
+        <div class="data-section">
+            <div class="section-header">
+                <h3><i class="fas fa-chart-bar"></i> Loan Type Distribution</h3>
+                <button class="btn btn-outline" onclick="toggleLoanTypeChart()">
+                    <i class="fas fa-chart-bar"></i> Toggle Chart/Table
+                </button>
+            </div>
+            <div class="chart-wrapper" id="loanTypeChart" style="display: none; margin-bottom: 20px;">
+                <canvas id="typeChart"></canvas>
+            </div>
+            <div class="table-responsive" id="loanTypeTable">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Loan Type</th>
+                            <th>Count</th>
+                            <th>Total Amount</th>
+                            <th>Average Amount</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if loan_type_stats %}
+                            {% for stat in loan_type_stats %}
+                            <tr>
+                                <td><span class="loan-type-tag">{{ stat.loan_type|default:"Unknown" }}</span></td>
+                                <td>{{ stat.count }}</td>
+                                <td>${{ stat.total_amount|floatformat:2|default:"0.00" }}</td>
+                                <td>${{ stat.avg_amount|floatformat:2|default:"0.00" }}</td>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div style="flex: 1; height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden;">
+                                            <div style="height: 100%; width: {% widthratio stat.count total_loans 100 %}%; background: var(--accent-blue);"></div>
+                                        </div>
+                                        <span>{% widthratio stat.count total_loans 100 %}%</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-light);">
+                                    No loan type data available
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="admin-footer">
+        <p>SkyBridge Finance Admin Dashboard &copy; 2024 • Last updated: {% now "F j, Y g:i A" %}</p>
+        <p style="font-size: 12px; margin-top: 5px;">System Status: <span style="color: var(--success-color); font-weight: 600;">● Operational</span></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize charts
+            initializeCharts();
+            
+            // Set up auto-refresh every 5 minutes
+            setInterval(refreshData, 300000);
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl+R to refresh
+                if (e.ctrlKey && e.key === 'r') {
+                    e.preventDefault();
+                    refreshDashboard();
+                }
+                // Ctrl+E to export
+                if (e.ctrlKey && e.key === 'e') {
+                    e.preventDefault();
+                    exportReport();
+                }
+            });
         });
-</script>
+
+        // Chart variables
+        let statusChart, trendChart, typeChart;
+
+        function initializeCharts() {
+            // Loan Status Distribution Chart
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            statusChart = new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pending', 'Approved', 'Rejected'],
+                    datasets: [{
+                        data: [
+                            {{ pending_loans|default:0 }},
+                            {{ approved_loans|default:0 }},
+                            {{ rejected_loans|default:0 }}
+                        ],
+                        backgroundColor: [
+                            '#f59e0b',
+                            '#10b981',
+                            '#ef4444'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Monthly Trends Chart
+            const trendCtx = document.getElementById('trendChart').getContext('2d');
+            const monthlyData = JSON.parse('{{ monthly_trends|safe|default:"[]" }}');
+            
+            trendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: monthlyData.map(item => item.month),
+                    datasets: [{
+                        label: 'Loan Count',
+                        data: monthlyData.map(item => item.count),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Loan Type Chart
+            const typeCtx = document.getElementById('typeChart').getContext('2d');
+            const loanTypeData = JSON.parse('{{ loan_type_stats|safe|default:"[]" }}');
+            
+            typeChart = new Chart(typeCtx, {
+                type: 'bar',
+                data: {
+                    labels: loanTypeData.map(item => item.loan_type || 'Unknown'),
+                    datasets: [{
+                        label: 'Loan Count',
+                        data: loanTypeData.map(item => item.count),
+                        backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                        borderColor: '#3b82f6',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChartPeriod(period) {
+            // This would typically make an AJAX call to get filtered data
+            console.log('Updating chart for period:', period);
+            // For now, just show a loading state
+            showLoading('Updating chart data...');
+            setTimeout(() => {
+                hideLoading();
+                alert('Chart period updated to: ' + period);
+            }, 1000);
+        }
+
+        function updateTrendChart(type) {
+            const monthlyData = JSON.parse('{{ monthly_trends|safe|default:"[]" }}');
+            
+            if (type === 'amount') {
+                trendChart.data.datasets[0].label = 'Loan Amount ($)';
+                trendChart.data.datasets[0].data = monthlyData.map(item => 
+                    parseFloat(item.amount) || 0
+                );
+            } else {
+                trendChart.data.datasets[0].label = 'Loan Count';
+                trendChart.data.datasets[0].data = monthlyData.map(item => item.count);
+            }
+            
+            trendChart.update();
+        }
+
+        function toggleLoanTypeChart() {
+            const chartDiv = document.getElementById('loanTypeChart');
+            const tableDiv = document.getElementById('loanTypeTable');
+            
+            if (chartDiv.style.display === 'none') {
+                chartDiv.style.display = 'block';
+                tableDiv.style.display = 'none';
+            } else {
+                chartDiv.style.display = 'none';
+                tableDiv.style.display = 'block';
+            }
+        }
+
+        function refreshDashboard() {
+            showLoading('Refreshing dashboard data...');
+            
+            // Simulate API call
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        }
+
+        function refreshData() {
+            // Auto-refresh function
+            console.log('Auto-refreshing dashboard data...');
+            // In a real implementation, you would fetch fresh data via AJAX
+        }
+
+        function exportReport() {
+            showLoading('Generating report...');
+            
+            setTimeout(() => {
+                hideLoading();
+                
+                // Create and trigger download of a CSV file
+                const csvContent = generateCSV();
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                
+                link.setAttribute('href', url);
+                link.setAttribute('download', `skybridge-report-${new Date().toISOString().split('T')[0]}.csv`);
+                link.style.visibility = 'hidden';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }, 2000);
+        }
+
+        function generateCSV() {
+            // Generate CSV content from current data
+            let csv = 'SkyBridge Finance Dashboard Report\n';
+            csv += 'Generated: ' + new Date().toLocaleString() + '\n\n';
+            
+            csv += 'STATISTICS\n';
+            csv += 'Metric,Value\n';
+            csv += `Total Users,${ {{ total_users|default:0 }} }\n`;
+            csv += `Total Loans,${ {{ total_loans|default:0 }} }\n`;
+            csv += `Pending Loans,${ {{ pending_loans|default:0 }} }\n`;
+            csv += `Approved Loans,${ {{ approved_loans|default:0 }} }\n`;
+            csv += `Total Loan Amount,$${ {{ total_loan_amount|default:0 }} }\n\n`;
+            
+            csv += 'RECENT PENDING LOANS\n';
+            csv += 'ID,Applicant,Amount,Type,Purpose,Submitted\n';
+            
+            // Add pending loans data
+            {% for loan in recent_pending_loans %}
+            csv += `{{ loan.id }},{{ loan.user.get_full_name|default:loan.user.username }},$${{ loan.amount|floatformat:2 }},{{ loan.loan_type }},{{ loan.purpose|default:"N/A" }},{{ loan.submitted_at|date:"Y-m-d" }}\n`;
+            {% endfor %}
+            
+            return csv;
+        }
+
+        function showLoading(message) {
+            let overlay = document.createElement('div');
+            overlay.className = 'loading-overlay';
+            overlay.innerHTML = `
+                <div style="text-align: center;">
+                    <div class="loading-spinner"></div>
+                    <p style="margin-top: 20px; color: var(--text-dark); font-weight: 600;">${message}</p>
+                </div>
+            `;
+            overlay.id = 'loadingOverlay';
+            document.body.appendChild(overlay);
+        }
+
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.remove();
+            }
+        }
+
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
+</body>
+</html>

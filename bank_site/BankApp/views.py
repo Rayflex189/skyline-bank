@@ -857,63 +857,7 @@ def loan_success(request, loan_id):
         'loan': loan
     })
 
-# Admin view to approve/reject loans
-@staff_member_required
-def review_loan(request, loan_id):
-    """
-    Admin view to review and approve/reject a specific loan.
-    """
-    loan = get_object_or_404(Loan, id=loan_id)
     
-    if request.method == "POST":
-        action = request.POST.get('action')
-        admin_notes = request.POST.get('admin_notes', '')
-        
-        if action in ['approve', 'reject']:
-            loan.status = 'Approved' if action == 'approve' else 'Rejected'
-            loan.reviewed_at = datetime.datetime.now()
-            
-            if admin_notes:
-                # Store admin notes (you might want to add a field for this)
-                if hasattr(loan, 'notes'):
-                    current_notes = loan.notes or ''
-                    loan.notes = f"[Admin Review] {admin_notes}\n\n{current_notes}"
-            
-            loan.save()
-            
-            # Send notification email to user
-            try:
-                status = "approved" if action == 'approve' else "rejected"
-                send_mail(
-                    subject=f"Loan Application {status.capitalize()}",
-                    message=f"Your loan application for ${loan.amount} has been {status}.\n\nApplication ID: {loan.id}",
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[loan.user.email],
-                    fail_silently=True,
-                )
-            except Exception as e:
-                print(f"Email sending failed: {e}")
-            
-            messages.success(request, f"Loan application has been {action}d.")
-            return redirect('manage_loans')
-    
-    # Calculate metrics for decision making
-    try:
-        user_profile = UserProfile.objects.get(user=loan.user)
-        user_annual_income = user_profile.annual_income if hasattr(user_profile, 'annual_income') else 0
-    except UserProfile.DoesNotExist:
-        user_annual_income = 0
-    
-    loan_to_income_ratio = (float(loan.amount) / float(user_annual_income)) * 100 if user_annual_income > 0 else 0
-    
-    context = {
-        'loan': loan,
-        'user_profile': user_profile if 'user_profile' in locals() else None,
-        'loan_to_income_ratio': round(loan_to_income_ratio, 1),
-        'monthly_payment': loan.monthly_payment() if hasattr(loan, 'monthly_payment') else 0,
-    }
-    
-    return render(request, 'BankApp/review_loan.html', context)
 
 
 @login_required
