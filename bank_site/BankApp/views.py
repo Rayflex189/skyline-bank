@@ -18,6 +18,9 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
 from django.core.mail import send_mail
 from django.urls import reverse
+from django.db.models import Q
+import datetime
+from decimal import Decimal
 
 # Utility Imports
 from datetime import timedelta, datetime
@@ -38,14 +41,15 @@ from django.contrib.auth.models import User
 from django.db.models import Count, Q
 import datetime
 
-
-User = get_user_model()
-signer = TimestampSigner()
-
 from django.contrib.admin.views.decorators import staff_member_required
 
 from django.http import HttpResponse
 from docx import Document
+
+
+User = get_user_model()
+signer = TimestampSigner()
+
 
 def submit_loan(request):
     if request.method == "POST":
@@ -127,14 +131,6 @@ def download_kyc_pdf(request, user_id):
         return response
 
 
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from django.core.mail import send_mail
-from django.conf import settings
-from .models import Loan, UserProfile
-from django.db.models import Q
-import datetime
 
 @staff_member_required
 def manage_loans(request):
@@ -170,11 +166,27 @@ def manage_loans(request):
     
     # Add calculated fields to each loan for the template
     for loan in loans:
-        # Calculate processing fee (5% of loan amount)
-        loan.processing_fee = loan.amount * 0.05
-        
-        # Calculate total amount due (principal + processing fee)
-        loan.total_amount_due = loan.amount + loan.processing_fee
+        # Calculate processing fee (5% of loan amount) - convert to Decimal first
+        try:
+            # Convert amount to Decimal if it isn't already
+            amount_decimal = Decimal(str(loan.amount))
+            loan.processing_fee = amount_decimal * Decimal('0.05')
+            
+            # Calculate total amount due (principal + processing fee)
+            loan.total_amount_due = amount_decimal + loan.processing_fee
+            
+            # Format the values for display
+            loan.processing_fee_display = f"${loan.processing_fee:,.2f}"
+            loan.total_amount_due_display = f"${loan.total_amount_due:,.2f}"
+            loan.amount_display = f"${loan.amount:,.2f}"
+            
+        except Exception as e:
+            # Fallback values if calculation fails
+            loan.processing_fee = Decimal('0.00')
+            loan.total_amount_due = loan.amount
+            loan.processing_fee_display = "$0.00"
+            loan.total_amount_due_display = f"${loan.amount:,.2f}"
+            loan.amount_display = f"${loan.amount:,.2f}"
         
         # Format user full name if available
         if loan.user:
@@ -187,7 +199,7 @@ def manage_loans(request):
             loan.email = "N/A"
         
         # For loan purpose display
-        loan.loan_purpose = loan.purpose
+        loan.loan_purpose = loan.purpose if loan.purpose else loan.loan_type
     
     # Handle bulk actions
     if request.method == 'POST' and 'action' in request.POST:
@@ -238,9 +250,10 @@ def approve_loan(request, loan_id):
         loan.reviewed_at = datetime.datetime.now()
         loan.save()
         
-        # Calculate amounts - using loan.amount NOT loan.loan_amount
-        processing_fee = loan.amount * 0.05
-        total_due = loan.amount + processing_fee
+        # Calculate amounts - using Decimal for proper calculation
+        amount_decimal = Decimal(str(loan.amount))
+        processing_fee = amount_decimal * Decimal('0.05')
+        total_due = amount_decimal + processing_fee
         
         # Get user email
         user_email = loan.user.email if loan.user else None
@@ -260,7 +273,7 @@ def approve_loan(request, loan_id):
                         f"Interest Rate: {loan.interest}%\n"
                         f"Processing Fee (5%): ${processing_fee:,.2f}\n"
                         f"Total Amount Due: ${total_due:,.2f}\n"
-                        f"Purpose: {loan.purpose}\n\n"
+                        f"Purpose: {loan.purpose if loan.purpose else loan.loan_type}\n\n"
                         f"Next Steps:\n"
                         f"1. Please login to your account\n"
                         f"2. Review the loan terms\n"
@@ -336,7 +349,7 @@ def reject_loan(request, loan_id):
                         f"Application Details:\n"
                         f"Amount Requested: ${loan.amount:,.2f}\n"
                         f"Loan Type: {loan.loan_type}\n"
-                        f"Purpose: {loan.purpose}\n\n"
+                        f"Purpose: {loan.purpose if loan.purpose else loan.loan_type}\n\n"
                         f"Thank you for considering SkyBridge Finance for your lending needs.\n\n"
                         "Best regards,\n"
                         "SkyBridge Finance Team\n"
