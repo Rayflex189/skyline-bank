@@ -878,19 +878,22 @@ def register(request):
 
             # Ensure user profile exists
             profile, created = UserProfile.objects.get_or_create(user=user)
-            profile.is_email_verified = False
-            profile.save()
 
-            # Generate signed token with timestamp
-            signed_value = signer.sign(user.pk)
+            # Only send verification email if not verified
+            if not profile.is_email_verified:
+                profile.is_email_verified = False
+                profile.save()
 
-            # Build verification link
-            verification_link = request.build_absolute_uri(
-                reverse('verify_email', args=[signed_value])
-            )
+                # Generate signed token
+                signed_value = signer.sign(user.pk)
 
-            # Email content
-            email_body = f"""
+                # Verification link
+                verification_link = request.build_absolute_uri(
+                    reverse('verify_email', args=[signed_value])
+                )
+
+                # Email content
+                email_body = f"""
 Hi {user.email},
 
 Your Skybridge Bank account has been successfully created.
@@ -905,20 +908,21 @@ If you did not create this account, simply ignore this message.
 Skybridge Bank Security Team
 """
 
-            # Send email
-            send_mail(
-                subject="🎉 Welcome to Skybridge Bank – Verify Your Email",
-                message=email_body,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[user.email],
-                fail_silently=False,
-            )
+                send_mail(
+                    subject="🎉 Welcome to Skybridge Bank – Verify Your Email",
+                    message=email_body,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[user.email],
+                    fail_silently=False,
+                )
 
-            # Success message
-            messages.success(
-                request,
-                "Registration successful! A verification link has been sent to your email."
-            )
+                messages.success(
+                    request,
+                    "Registration successful! A verification link has been sent to your email."
+                )
+            else:
+                messages.info(request, "Your email is already verified.")
+
             return redirect('user_login')
 
     else:
@@ -1193,12 +1197,22 @@ def user_login(request):
 
         if user is not None:
             login(request, user)
-            return redirect('reset_profile')
+
+            profile = user.userprofile
+
+            if profile.is_email_verified:
+                # Verified user goes straight to dashboard
+                return redirect('dashboard')
+            else:
+                # Unverified user goes to reset_profile (or email verification flow)
+                messages.warning(request, "Please verify your email before proceeding.")
+                return redirect('reset_profile')
 
         else:
             messages.error(request, 'Email or Password is incorrect.')
 
     return render(request, 'BankApp/login.html')
+
 
 @login_required(login_url='user_login')
 def crypto(request):
