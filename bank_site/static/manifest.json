@@ -1,0 +1,22 @@
+{
+  "name": "SkyBridge Bank",
+  "short_name": "SkyBridge",
+  "start_url": "https://skybridgefinance.online/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d6efd",
+  "icons": [
+    {
+      "src": "/static/img/logo-180x180.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/img/splash-512x512.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
