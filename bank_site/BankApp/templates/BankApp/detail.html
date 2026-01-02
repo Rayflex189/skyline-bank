@@ -11,7 +11,7 @@
 
     <!-- Favicon -->
     <link href="{% static 'img/favicon.ico' %}" rel="icon">
-
+    <link rel="manifest" href="{% static 'manifest.json' %}">
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -479,7 +479,12 @@ window.smartsupp||(function(d) {
     <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
     <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
     <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
-
+    <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register("{% static 'sw.js' %}")
+      .then(() => console.log('Service Worker Registered'));
+    }
+    </script>
     <!-- Template Javascript -->
     <script src="{% static 'js/mains.js' %}"></script>
 </body>

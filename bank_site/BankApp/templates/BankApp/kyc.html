@@ -17,7 +17,7 @@ window.smartsupp||(function(d) {
 })(document);
 </script>
 <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
-
+<link rel="manifest" href="{% static 'manifest.json' %}">
   <meta name="description" content="KYC Verification for loan application">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -880,6 +880,12 @@ window.smartsupp||(function(d) {
                 });
             }, 2000);
         });
+    </script>
+        <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register("{% static 'sw.js' %}")
+      .then(() => console.log('Service Worker Registered'));
+    }
     </script>
 </body>
 </html>

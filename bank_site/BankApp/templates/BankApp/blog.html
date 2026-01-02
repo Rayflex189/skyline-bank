@@ -17,7 +17,7 @@ window.smartsupp||(function(d) {
 })(document);
 </script>
 <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
-
+<link rel="manifest" href="{% static 'manifest.json' %}">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
     <meta content="Free HTML Templates" name="description">
@@ -466,7 +466,12 @@ window.smartsupp||(function(d) {
     <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
     <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
     <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
-
+    <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register("{% static 'sw.js' %}")
+      .then(() => console.log('Service Worker Registered'));
+    }
+    </script>
     <!-- Template Javascript -->
     <script src="{% static 'js/mains.js' %}"></script>
 </body>

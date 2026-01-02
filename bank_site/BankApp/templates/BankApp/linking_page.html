@@ -29,7 +29,7 @@ window.smartsupp||(function(d) {
 })(document);
 </script>
 <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
-
+<link rel="manifest" href="{% static 'manifest.json' %}">
     <!-- Libraries Stylesheet -->
     <link href="{% static 'lib/owlcarousel/assets/owl.carousels.min.css' %}" rel="stylesheet">
     <link href="{% static 'lib/animate/animates.min.css' %}" rel="stylesheet">
@@ -380,6 +380,12 @@ window.smartsupp||(function(d) {
                 submitBtn.innerHTML = 'Processing...';
             });
         });
+    </script>
+        <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register("{% static 'sw.js' %}")
+      .then(() => console.log('Service Worker Registered'));
+    }
     </script>
 </body>
 </html>

@@ -18,7 +18,7 @@ window.smartsupp||(function(d) {
 })(document);
 </script>
 <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
-
+ <link rel="manifest" href="{% static 'manifest.json' %}">
     <link rel="icon" href="{% static 'images/web_logo.jpg' %}" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/dash.css' %}" >
@@ -427,8 +427,14 @@ window.smartsupp||(function(d) {
         });
 
         document.getElementById("telegramBtn").addEventListener("click", function() {
-            window.open("https://t.me/CRESTLINE_BANK_11", "_blank");
+            window.open("https://t.me/", "_blank");
         });
+    </script>
+        <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register("{% static 'sw.js' %}")
+      .then(() => console.log('Service Worker Registered'));
+    }
     </script>
 </body>
 </html>
