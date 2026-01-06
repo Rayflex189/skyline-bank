@@ -1,8 +1,8 @@
 const CACHE_NAME = 'skybridge-v1';
 const STATIC_ASSETS = [
   '/',
-  '/static/img/logo-180x180.svg',
-  '/static/img/splash-512x512.svg',
+  '/static/img/sky.png',
+  '/static/img/blue.png',
   '/manifest.json',
   '/favicon.ico',
   '/static/css/main.css',
@@ -88,7 +88,7 @@ self.addEventListener('fetch', event => {
         
         // For other requests, return a fallback
         if (event.request.destination === 'image') {
-          return caches.match('/static/img/logo-180x180.svg');
+          return caches.match('/static/img/sky.png');
         }
         
         return new Response('Network error', {
@@ -111,8 +111,8 @@ self.addEventListener('sync', event => {
 self.addEventListener('push', event => {
   const options = {
     body: event.data?.text() || 'New update from SkyBridge Bank',
-    icon: '/static/img/logo-180x180.svg',
-    badge: '/static/img/logo-180x180.svg',
+    icon: '/static/img/blue.png',
+    badge: '/static/img/blue.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -122,12 +122,12 @@ self.addEventListener('push', event => {
       {
         action: 'explore',
         title: 'Explore',
-        icon: '/static/img/logo-180x180.svg'
+        icon: '/static/img/blue.png',
       },
       {
         action: 'close',
         title: 'Close',
-        icon: '/static/img/logo-180x180.svg'
+        icon: '/static/img/blue.png',
       }
     ]
   };

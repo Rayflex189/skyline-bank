@@ -7,15 +7,15 @@
   "theme_color": "#0d6efd",
   "icons": [
     {
-      "src": "/static/img/logo-180x180.svg",
+      "src": "/static/img/sky.png",
       "sizes": "any",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/static/img/splash-512x512.svg",
+      "src": "/static/img/blue.png",
       "sizes": "any",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ]

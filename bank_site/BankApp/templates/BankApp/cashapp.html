@@ -1,0 +1,815 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skybridge Finance - Crypto Transfer</title>
+    <link rel="icon" href="{% static 'images/IMG-20250820-WA0109.jpg' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/dash.css' %}" >
+<!-- Smartsupp Live Chat script -->
+<script type="text/javascript">
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = '899676932fa37897c72547bb5f98cdccfbedf278';
+window.smartsupp||(function(d) {
+  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+  c.type='text/javascript';c.charset='utf-8';c.async=true;
+  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+</script>
+<noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
+<link rel="manifest" href="{% static 'manifest.json' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --light-blue: #E8F4F8;
+            --primary-blue: #2A6EBB;
+            --dark-blue: #1A4A7A;
+            --accent-blue: #4A90E2;
+            --soft-gray: #F5F7FA;
+            --medium-gray: #E1E8ED;
+            --text-dark: #2C3E50;
+            --text-light: #7F8C8D;
+            --success: #27AE60;
+            --warning: #E67E22;
+            --error: #E74C3C;
+            --crypto-green: #0FAE96;
+            --crypto-orange: #F7931A;
+            --crypto-purple: #627EEA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--soft-gray) 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header Styling */
+        .bank-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--medium-gray);
+            box-shadow: 0 2px 15px rgba(42, 110, 187, 0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .bank-header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin: 0;
+            letter-spacing: 0.3px;
+        }
+
+        .bank-header h1::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--primary-blue);
+            margin-top: 8px;
+            border-radius: 2px;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 20px;
+        }
+
+        .notification-bell, .open-sidebar-btn {
+            cursor: pointer;
+            color: var(--dark-blue);
+            font-size: 1.4rem;
+            transition: all 0.3s ease;
+            padding: 10px;
+            border-radius: 50%;
+            background: rgba(42, 110, 187, 0.08);
+        }
+
+        .notification-bell:hover, .open-sidebar-btn:hover {
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+            background: rgba(42, 110, 187, 0.15);
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--dark-blue) 0%, var(--primary-blue) 100%);
+            position: fixed;
+            right: -300px;
+            top: 0;
+            transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            color: white;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-header {
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .sidebar-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .sidebar-header button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .sidebar-header button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .user-details {
+            padding: 20px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-details p {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .user-details strong {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar ul li {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar ul li a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            display: block;
+            padding: 18px 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .sidebar ul li a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            padding-left: 30px;
+            color: white;
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            padding: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .transfer-header {
+            background: linear-gradient(135deg, var(--crypto-green) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 22px 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 600;
+            text-align: center;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 10px 25px rgba(15, 174, 150, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .transfer-header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+        }
+
+        /* Form Container Styling */
+        .form-container, input {
+            max-width: 600px;
+            width: 90%;
+            margin: 0 auto;
+            padding: 40px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(42, 110, 187, 0.15);
+            color: var(--text-dark);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+            border: 1px solid var(--medium-gray);
+        }
+
+        .form-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--crypto-green) 0%, var(--primary-blue) 100%);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-container h1 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--dark-blue);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 2.1rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .form-container h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-blue);
+            border-radius: 2px;
+        }
+
+        .animated-balance {
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--dark-blue);
+            padding: 15px;
+            background: rgba(42, 110, 187, 0.08);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-blue);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(42, 110, 187, 0.3);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(42, 110, 187, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(42, 110, 187, 0);
+            }
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            color: var(--dark-blue);
+            font-size: 1rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            margin: 8px 0 20px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(42, 110, 187, 0.15);
+            background: white;
+        }
+
+        .form-input-group {
+            position: relative;
+        }
+
+        .form-input-group .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1.2rem;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--crypto-green) 0%, var(--primary-blue) 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(15, 174, 150, 0.25);
+            margin-top: 10px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(15, 174, 150, 0.35);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Error Styling */
+        .errors {
+            color: var(--error);
+            padding: 12px;
+            font-weight: 600;
+            background: rgba(231, 76, 60, 0.08);
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid var(--error);
+            animation: vibrate 0.5s ease-in-out;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+
+        @keyframes vibrate {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        /* Marquee Styling */
+        .marquee {
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            color: white;
+            font-weight: 600;
+            padding: 12px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: scrollLeft 25s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes scrollLeft {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Account Status */
+        .account-status {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .text-success {
+            background: rgba(39, 174, 96, 0.08);
+            color: var(--success);
+            border-left: 4px solid var(--success);
+        }
+
+        .text-danger {
+            background: rgba(231, 76, 60, 0.08);
+            color: var(--error);
+            border-left: 4px solid var(--error);
+        }
+
+        /* Crypto Icons */
+        .crypto-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .btc-icon {
+            background: var(--crypto-orange);
+        }
+
+        .eth-icon {
+            background: var(--crypto-purple);
+        }
+
+        .usdt-icon {
+            background: var(--crypto-green);
+        }
+
+        /* Network Fee Info */
+        .network-fee {
+            background: rgba(15, 174, 150, 0.08);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--crypto-green);
+            font-size: 0.9rem;
+        }
+
+        .network-fee i {
+            color: var(--crypto-green);
+            margin-right: 8px;
+        }
+
+        /* Telegram Icon */
+        .telegram-icon {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #0088cc 0%, #005999 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            animation: bounce 2s infinite;
+            transition: all 0.3s ease;
+            z-index: 99;
+            color: white;
+            font-size: 1.8rem;
+            text-decoration: none;
+        }
+
+        .telegram-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .bank-header {
+                padding: 15px 20px;
+            }
+
+            .bank-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-container {
+                padding: 30px 20px;
+                width: 95%;
+            }
+
+            .transfer-header {
+                font-size: 1.5rem;
+                padding: 18px 20px;
+            }
+
+            .telegram-icon {
+                bottom: 15px;
+                left: 15px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+        }
+        /* Add to your existing CSS */
+.cashapp-note {
+    background: rgba(0, 210, 144, 0.1);
+    border-left: 4px solid #00D290;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+}
+
+.cashapp-note i {
+    color: #00D290;
+    margin-right: 8px;
+}
+    </style>
+</head>
+<body>
+    <!-- Bank Header -->
+    <header class="bank-header">
+        <h1>Crypto Transfer</h1>
+        <div class="header-controls">
+            <div class="notification-bell" onclick="toggleSidebar()">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="open-sidebar-btn" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Account Menu</h2>
+            <button onclick="toggleSidebar()">Close</button>
+        </div>
+        <div class="user-details">
+            <p>Username: <strong>{{ request.user }}</strong></p>
+            <p>Email: <strong>{{ user_profile.email }}</strong></p>
+        </div>
+        <ul>
+            <li><a href="{% url 'profile' %}">Profile</a></li>
+            <li><a href="{% url 'reset_profile' %}">Settings</a></li>
+            <li><a href="{% url 'LogOut' %}">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Marquee for Crypto Market -->
+    <div class="marquee">
+        <div class="marquee-content" id="cryptoMarquee">
+            Loading cryptocurrency data...
+        </div>
+    </div>
+
+  <!-- Main Content -->
+<div class="main-content">
+    <div class="transfer-header"> Payment</div>
+
+    <div class="form-container">
+        <h1>Skybridge Finance</h1>
+
+        <!-- Animated Balance -->
+        <div class="animated-balance" id="animatedBalance">
+            Loading available balance...
+        </div>
+
+        <!-- Network Fee Info -->
+        <div class="network-fee">
+            <i class="fas fa-info-circle"></i>
+            Network fees apply. Transactions typically confirm within 10-30 minutes.
+        </div>
+
+        <!-- Crypto Transfer Form -->
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Transfer Type Selection -->
+            <div class="mb-3">
+                <label for="transferType" class="form-label">Transfer Type</label>
+                <select class="form-control" id="transferType" name="transfer_type" required onchange="toggleTransferFields()">
+                    <option value="wallet">Wallet Transfer</option>
+                    <option value="cashapp">CashApp Transfer</option>
+                </select>
+            </div>
+
+            <!-- Wallet Address Field (Initially Visible) -->
+            <div class="mb-3" id="walletField">
+                <label for="walletAddress" class="form-label">Wallet Address</label>
+                <div class="form-input-group">
+                    <input type="text" class="form-control" id="walletAddress" name="wallet_address" placeholder="Enter recipient wallet address">
+                    <i class="fas fa-wallet input-icon"></i>
+                </div>
+            </div>
+
+                        <!-- Add this inside the form, below the CashApp field -->
+<div class="cashapp-note" id="cashappNote" style="display: none;">
+    <i class="fas fa-info-circle"></i>
+    CashApp transfers are instant. Recipient will receive funds directly in their CashApp balance.
+</div>
+
+            <!-- CashApp Tag Field (Initially Hidden) -->
+            <div class="mb-3" id="cashappField" style="display: none;">
+                <label for="cashappTag" class="form-label">CashApp Tag</label>
+                <div class="form-input-group">
+                    <input type="text" class="form-control" id="cashappTag" name="cashapp_tag" placeholder="Enter CashApp $tag (e.g., $JohnDoe)">
+                    <i class="fas fa-user-tag input-icon"></i>
+                </div>
+                <small class="text-muted">Enter the CashApp $tag without spaces (e.g., $JohnDoe)</small>
+            </div>
+
+            <!-- Cryptocurrency -->
+            <div class="mb-3">
+                <label for="cryptoType" class="form-label">Cryptocurrency</label>
+                <select class="form-control" id="cryptoType" name="crypto_type" required>
+                    <option value="BTC">
+                        <span class="crypto-icon btc-icon">B</span>
+                        Bitcoin (BTC)
+                    </option>
+                    <option value="ETH">
+                        <span class="crypto-icon eth-icon">E</span>
+                        Ethereum (ETH)
+                    </option>
+                    <option value="USDT">
+                        <span class="crypto-icon usdt-icon">U</span>
+                        Tether (USDT)
+                    </option>
+                </select>
+            </div>
+
+            <!-- Amount (Using Django form field) -->
+            <div class="mb-3">
+                <label for="amount" class="form-label">Amount</label>
+                <div class="form-input-group">
+                    {{ form.amount }}
+                    <i class="fas fa-coins input-icon"></i>
+                </div>
+                {% if form.amount.errors %}
+                    <div class="errors">
+                        {% for error in form.amount.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Transaction Note -->
+            <div class="mb-3">
+                <label for="note" class="form-label">Transaction Note</label>
+                <div class="form-input-group">
+                    <input type="text" class="form-control" id="note" name="note" placeholder="Enter transaction description">
+                    <i class="fas fa-sticky-note input-icon"></i>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane" style="margin-right: 8px;"></i>
+                Send Payment
+            </button>
+
+            <div class="errors">{{form.errors}}</div>
+        </form>
+
+        <!-- Account Status -->
+        <div class="account-status">
+            {% if user_profile.is_linked %}
+                <p class="text-success">Your account is activated. You can proceed with transactions.</p>
+            {% else %}
+                <p class="text-danger">Your account is not activated. Please purchase an activation pin.</p>
+                <a href="{% url 'linking_view' %}" class="btn btn-primary mt-2">Activate Account</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+    <script>
+      // Toggle between Wallet and CashApp fields
+function toggleTransferFields() {
+    const transferType = document.getElementById('transferType').value;
+    const walletField = document.getElementById('walletField');
+    const cashappField = document.getElementById('cashappField');
+    const walletInput = document.getElementById('walletAddress');
+    const cashappInput = document.getElementById('cashappTag');
+
+    if (transferType === 'cashapp') {
+        walletField.style.display = 'none';
+        cashappField.style.display = 'block';
+        walletInput.required = false;
+        cashappInput.required = true;
+        
+        // Update form validation and UI
+        document.querySelector('button[type="submit"]').innerHTML = 
+            '<i class="fas fa-money-bill-wave" style="margin-right: 8px;"></i>Send via CashApp';
+        document.querySelector('.transfer-header').textContent = 'CashApp Payment';
+    } else {
+        walletField.style.display = 'block';
+        cashappField.style.display = 'none';
+        walletInput.required = true;
+        cashappInput.required = false;
+        
+        // Reset form validation and UI
+        document.querySelector('button[type="submit"]').innerHTML = 
+            '<i class="fas fa-paper-plane" style="margin-right: 8px;"></i>Send Crypto';
+        document.querySelector('.transfer-header').textContent = 'Blockchain Payment';
+    }
+}
+
+// Add validation for CashApp tag format
+document.addEventListener("DOMContentLoaded", () => {
+    const cashappInput = document.getElementById('cashappTag');
+    
+    if (cashappInput) {
+        cashappInput.addEventListener('input', function(e) {
+            // Remove any spaces
+            this.value = this.value.replace(/\s/g, '');
+            
+            // Ensure it starts with $
+            if (this.value && !this.value.startsWith('$')) {
+                this.value = '$' + this.value;
+            }
+            
+            // Remove extra $ symbols
+            this.value = this.value.replace(/\$+/g, '$');
+        });
+    }
+    
+    // Initialize fields
+    toggleTransferFields();
+});
+// Update toggleTransferFields function
+if (transferType === 'cashapp') {
+    // ... existing code ...
+    document.getElementById('cashappNote').style.display = 'block';
+    document.querySelector('.network-fee').innerHTML = 
+        '<i class="fas fa-bolt" style="color: #00D290;"></i> CashApp transfers are instant with no network fees.';
+} else {
+    // ... existing code ...
+    document.getElementById('cashappNote').style.display = 'none';
+    document.querySelector('.network-fee').innerHTML = 
+        '<i class="fas fa-info-circle"></i> Network fees apply. Transactions typically confirm within 10-30 minutes.';
+}
+    </script>
+        <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register("{% static 'sw.js' %}")
+      .then(() => console.log('Service Worker Registered'));
+    }
+    </script>
+</body>
+</html>

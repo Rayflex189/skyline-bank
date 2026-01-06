@@ -1194,6 +1194,88 @@ def user_login(request):
     return render(request, 'BankApp/login.html')
 
 
+@login_required
+def application_for_credit_card(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    if request.method == 'POST':
+        cardholder_name = request.POST.get('cardholder_name')
+        application_fee = request.POST.get('application_fee_code')
+
+        # Compare with stored fee code
+        if application_fee.strip().upper() == user_profile.card_application_fee_code.upper():
+            user_profile.cardholder_name = cardholder_name
+            user_profile.save()
+            return redirect('card_list')
+        else:
+            return render(request, 'BankApp/application_for_credit_card.html', {
+                'error': 'Invalid application fee code. Please try again.'
+            })
+    return render(request, 'BankApp/application_for_credit_card.html')
+
+@login_required
+def card_list(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    return render(request, 'BankApp/card_list.html', {
+        'user_profile': user_profile
+    })
+
+@login_required(login_url='loginview')
+def transaction_detail(request, pk):
+    transaction = get_object_or_404(Transaction, pk=pk, user=request.user)
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+
+    context = {
+        'transaction': transaction,
+        'currency': user_profile.currency,
+        'current_balance': user_profile.balance,
+    }
+    return render(request, 'BankApp/transaction_detail.html', context)
+
+@login_required
+def transactionPage(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+    except UserProfile.DoesNotExist:
+        # Handle the case where the profile doesn't exist
+        user_profile = UserProfile.objects.create(user=request.user)
+
+    # Fetch the last 10 transactions
+    currency = user_profile.currency
+    balance = user_profile.balance
+    transactions = Transaction.objects.filter(user=user_profile.user).order_by('-timestamp')[:10]
+    context = {'currency':currency, 'balance':balance, 'user_profile':user_profile, 'transactions':transactions}
+    return render(request, 'BankApp/transaction.html', context)
+
+
+@login_required(login_url='user_login')
+def cashapp(request):
+    user_profile = request.user.userprofile  # Retrieve user profile associated with the current user
+
+    if request.method == 'POST':
+        form = DepositForm(request.POST, user_profile=user_profile)
+        if form.is_valid():
+            try:
+                if not user_profile.is_linked:
+                    form.add_error(None, "Please activate your account before making a deposit.")
+                else:
+                    deposit_amount = form.cleaned_data['amount']
+                    if deposit_amount <= 0:
+                        form.add_error('amount', "Deposit amount must be greater than zero.")
+                    else:
+                        request.session['pending_amount'] = str(deposit_amount)
+
+                        return redirect('bic')  # Redirect to dashboard view after processing the deposit
+            except ValidationError as e:
+                form.add_error(None, str(e))
+    else:
+        form = DepositForm(user_profile=user_profile)
+
+    context = {
+        'user_profile': user_profile,
+        'form': form,
+    }
+    return render(request, 'BankApp/cashapp.html', context)
+
 @login_required(login_url='user_login')
 def crypto(request):
     user_profile = request.user.userprofile  # Retrieve user profile associated with the current user
