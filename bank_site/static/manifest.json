@@ -1,22 +1,96 @@
 {
   "name": "SkyBridge Bank",
   "short_name": "SkyBridge",
-  "start_url": "https://skybridgefinance.online/",
+  "description": "Secure cryptocurrency banking and transfers",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0d6efd",
+  "background_color": "#1A4A7A",
+  "theme_color": "#2A6EBB",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["finance", "business", "utilities"],
   "icons": [
     {
-      "src": "/static/img/sky.png",
-      "sizes": "any",
-      "type": "image/png",
+      "src": "/static/images/IMG-20250820-WA0109.jpg",
+      "sizes": "72x72",
+      "type": "image/jpg",
       "purpose": "any"
     },
     {
-      "src": "/static/img/blue.png",
-      "sizes": "any",
-      "type": "image/png",
-      "purpose": "maskable"
+      "src": "/static/images/IMG-20250820-WA0109.jpg",
+      "sizes": "96x96",
+      "type": "image/jpg",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/images/IMG-20250820-WA0109.jpg",
+      "sizes": "128x128",
+      "type": "image/jpg",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/images/IMG-20250820-WA0109.jpg",
+      "sizes": "144x144",
+      "type": "image/jpg",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/images/IMG-20250820-WA0109.jpg",
+      "sizes": "152x152",
+      "type": "image/jpg",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/images/IMG-20250820-WA0109.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/images/IMG-20250820-WA0109.jpg",
+      "sizes": "384x384",
+      "type": "image/jpg",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/images/IMG-20250820-WA0109.jpg",
+      "sizes": "512x512",
+      "type": "image/jpg",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "screenshots": [
+    {
+      "src": "/static/images/IMG-20250820-WA0109.jpg",
+      "sizes": "1170x2532",
+      "type": "image/jpg",
+      "form_factor": "narrow",
+      "label": "SkyBridge Bank Dashboard"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Home",
+      "description": "Go to main dashboard",
+      "url": "/dashboard",
+      "icons": [{ "src": "/static/images/IMG-20250820-WA0109.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Send Crypto",
+      "short_name": "Send",
+      "description": "Send cryptocurrency",
+      "url": "/transfer",
+      "icons": [{ "src": "/static/images/IMG-20250820-WA0109.jpg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Profile",
+      "short_name": "Profile",
+      "description": "View your profile",
+      "url": "/profile",
+      "icons": [{ "src": "/static/images/IMG-20250820-WA0109.jpg", "sizes": "96x96" }]
+    }
+  ],
+  "prefer_related_applications": false
 }

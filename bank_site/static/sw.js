@@ -1,137 +1,311 @@
-const CACHE_NAME = 'skybridge-v1';
+const CACHE_NAME = 'skybridge-v2.0.1';
 const STATIC_ASSETS = [
   '/',
-  '/static/img/sky.png',
-  '/static/img/blue.png',
-  '/manifest.json',
-  '/favicon.ico',
-  '/static/css/main.css',
-  '/static/js/main.js'
+  '/static/images/IMG-20250820-WA0109.jpg',
+  '/static/css/dash.css',
+  '/static/js/main.js',
+  '/static/manifest.json',
+  '/offline/'
 ];
 
+// Cache strategies
+const STRATEGIES = {
+  STATIC: 'static',
+  DYNAMIC: 'dynamic',
+  NETWORK_FIRST: 'network-first'
+};
+
+// URL patterns and their caching strategies
+const ROUTE_PATTERNS = {
+  '/static/': STRATEGIES.STATIC,
+  '/media/': STRATEGIES.DYNAMIC,
+  '/api/': STRATEGIES.NETWORK_FIRST,
+  '/dashboard': STRATEGIES.NETWORK_FIRST,
+  '/transfer': STRATEGIES.NETWORK_FIRST,
+  '/profile': STRATEGIES.NETWORK_FIRST
+};
+
 self.addEventListener('install', event => {
+  console.log('[Service Worker] Installing...');
+  
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      console.log('Caching static assets:', STATIC_ASSETS);
-      return cache.addAll(STATIC_ASSETS).catch(error => {
-        console.warn('Failed to cache some assets:', error);
-      });
-    })
+    Promise.all([
+      // Pre-cache critical assets
+      caches.open(CACHE_NAME).then(cache => {
+        console.log('[Service Worker] Caching static assets');
+        return cache.addAll(STATIC_ASSETS).catch(error => {
+          console.warn('[Service Worker] Failed to cache some assets:', error);
+        });
+      }),
+      
+      // Create offline page cache
+      caches.open(`${CACHE_NAME}-offline`).then(cache => {
+        return cache.add('/offline/').catch(() => {
+          console.log('[Service Worker] No offline page available');
+        });
+      })
+    ])
   );
-  // Skip waiting to activate immediately
+  
+  // Force activation
   self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
-  // Clean up old caches
+  console.log('[Service Worker] Activating...');
+  
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    Promise.all([
+      // Clean up old caches
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            if (![CACHE_NAME, `${CACHE_NAME}-offline`].includes(cacheName)) {
+              console.log('[Service Worker] Deleting old cache:', cacheName);
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      }),
+      
+      // Claim all clients immediatelyg
+      self.clients.claim()
+    ])
   );
-  // Take control of all clients
-  self.clients.claim();
 });
+
+// Determine caching strategy for a request
+function getCacheStrategy(request) {
+  const url = new URL(request.url);
+  const path = url.pathname;
+  
+  // Check if it's a static file
+  if (path.startsWith('/static/') || 
+      path.match(/\.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot)$/i)) {
+    return STRATEGIES.STATIC;
+  }
+  
+  // Check if it's an API call
+  if (path.startsWith('/api/')) {
+    return STRATEGIES.NETWORK_FIRST;
+  }
+  
+  // Default to network-first for HTML pages
+  if (request.headers.get('accept')?.includes('text/html')) {
+    return STRATEGIES.NETWORK_FIRST;
+  }
+  
+  return STRATEGIES.DYNAMIC;
+}
+
+// Cache-first strategy for static assets
+async function cacheFirst(request) {
+  const cachedResponse = await caches.match(request);
+  if (cachedResponse) {
+    console.log('[Service Worker] Serving from cache:', request.url);
+    return cachedResponse;
+  }
+  
+  try {
+    const networkResponse = await fetch(request);
+    
+    if (networkResponse.status === 200) {
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(request, networkResponse.clone()).catch(error => {
+        console.warn('[Service Worker] Failed to cache response:', error);
+      });
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    console.warn('[Service Worker] Network failed, no cache available:', request.url);
+    
+    // Return appropriate fallback
+    if (request.destination === 'image') {
+      return caches.match('/static/images/IMG-20250820-WA0109.jpg');
+    }
+    
+    if (request.headers.get('accept')?.includes('text/html')) {
+      return caches.match('/offline/');
+    }
+    
+    return new Response('Offline', {
+      status: 503,
+      headers: { 'Content-Type': 'text/plain' }
+    });
+  }
+}
+
+// Network-first strategy for dynamic content
+async function networkFirst(request) {
+  try {
+    const networkResponse = await fetch(request);
+    
+    if (networkResponse.status === 200) {
+      // Cache successful responses
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(request, networkResponse.clone()).catch(error => {
+        console.warn('[Service Worker] Failed to cache response:', error);
+      });
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    console.log('[Service Worker] Network failed, trying cache:', request.url);
+    
+    const cachedResponse = await caches.match(request);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+    
+    // For navigation requests, return offline page
+    if (request.mode === 'navigate') {
+      const offlinePage = await caches.match('/offline/');
+      if (offlinePage) {
+        return offlinePage;
+      }
+      
+      return new Response(
+        '<h1>Offline</h1><p>Please check your internet connection.</p>',
+        {
+          status: 503,
+          statusText: 'Service Unavailable',
+          headers: { 'Content-Type': 'text/html' }
+        }
+      );
+    }
+    
+    return new Response('Network error', {
+      status: 408,
+      headers: { 'Content-Type': 'text/plain' }
+    });
+  }
+}
+
+// Dynamic caching strategy
+async function dynamicCache(request) {
+  try {
+    const networkResponse = await fetch(request);
+    
+    if (networkResponse.status === 200) {
+      const cache = await caches.open(`${CACHE_NAME}-dynamic`);
+      cache.put(request, networkResponse.clone()).catch(error => {
+        console.warn('[Service Worker] Failed to cache dynamic response:', error);
+      });
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    const cachedResponse = await caches.match(request);
+    return cachedResponse || networkResponse;
+  }
+}
 
 self.addEventListener('fetch', event => {
-  // Skip non-GET requests and browser extensions
-  if (event.request.method !== 'GET' || 
-      event.request.url.startsWith('chrome-extension://') ||
-      event.request.url.includes('browser-sync')) {
+  const { request } = event;
+  
+  // Skip non-GET requests and certain URLs
+  if (request.method !== 'GET' ||
+      request.url.startsWith('chrome-extension://') ||
+      request.url.includes('browser-sync') ||
+      request.url.includes('hot-update')) {
     return;
   }
-
-  event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      // Return cached response if available
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-
-      // Otherwise fetch from network
-      return fetch(event.request).then(networkResponse => {
-        // Don't cache non-successful responses or opaque responses
-        if (!networkResponse || networkResponse.status !== 200 || 
-            networkResponse.type === 'opaque') {
-          return networkResponse;
-        }
-
-        // Clone response to cache and return
-        const responseToCache = networkResponse.clone();
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(event.request, responseToCache).catch(error => {
-            console.warn('Failed to cache:', event.request.url, error);
-          });
-        });
-
-        return networkResponse;
-      }).catch(error => {
-        console.warn('Network fetch failed:', event.request.url, error);
-        
-        // For navigation requests, return the cached homepage
-        if (event.request.mode === 'navigate') {
-          return caches.match('/').then(homepageResponse => {
-            return homepageResponse || new Response('Offline', {
-              status: 503,
-              statusText: 'Service Unavailable',
-              headers: new Headers({ 'Content-Type': 'text/html' })
-            });
-          });
-        }
-        
-        // For other requests, return a fallback
-        if (event.request.destination === 'image') {
-          return caches.match('/static/img/sky.png');
-        }
-        
-        return new Response('Network error', {
-          status: 408,
-          statusText: 'Network request failed'
-        });
-      });
-    })
-  );
-});
-
-// Handle background sync (optional)
-self.addEventListener('sync', event => {
-  if (event.tag === 'sync-data') {
-    event.waitUntil(syncData());
+  
+  // Skip Django admin and debug toolbar
+  if (request.url.includes('/admin/') || 
+      request.url.includes('/__debug__/')) {
+    return;
+  }
+  
+  const strategy = getCacheStrategy(request);
+  
+  switch (strategy) {
+    case STRATEGIES.STATIC:
+      event.respondWith(cacheFirst(request));
+      break;
+      
+    case STRATEGIES.NETWORK_FIRST:
+      event.respondWith(networkFirst(request));
+      break;
+      
+    case STRATEGIES.DYNAMIC:
+      event.respondWith(dynamicCache(request));
+      break;
+      
+    default:
+      event.respondWith(fetch(request));
   }
 });
 
-// Handle push notifications (optional)
+// Periodic cache cleanup
+async function cleanupOldCacheEntries() {
+  const cache = await caches.open(`${CACHE_NAME}-dynamic`);
+  const keys = await cache.keys();
+  const weekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+  
+  for (const request of keys) {
+    const response = await cache.match(request);
+    if (response) {
+      const dateHeader = response.headers.get('date');
+      if (dateHeader) {
+        const date = new Date(dateHeader).getTime();
+        if (date < weekAgo) {
+          await cache.delete(request);
+        }
+      }
+    }
+  }
+}
+
+// Periodic sync (every 24 hours)
+self.addEventListener('periodicsync', event => {
+  if (event.tag === 'cleanup-cache') {
+    event.waitUntil(cleanupOldCacheEntries());
+  }
+});
+
+// Background sync for failed requests
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-failed-requests') {
+    console.log('[Service Worker] Background sync triggered');
+    event.waitUntil(syncFailedRequests());
+  }
+});
+
+async function syncFailedRequests() {
+  // Implement failed request retry logic here
+  // This could queue failed API calls and retry them
+}
+
+// Push notifications
 self.addEventListener('push', event => {
+  const data = event.data ? event.data.json() : {};
+  
   const options = {
-    body: event.data?.text() || 'New update from SkyBridge Bank',
-    icon: '/static/img/blue.png',
-    badge: '/static/img/blue.png',
-    vibrate: [100, 50, 100],
+    body: data.body || 'New update from SkyBridge Bank',
+    icon: '/static/images/IMG-20250820-WA0109.jpg',
+    badge: '/static/images/IMG-20250820-WA0109.jpg',
+    image: '/static/images/IMG-20250820-WA0109.jpg',
+    vibrate: [200, 100, 200],
     data: {
-      dateOfArrival: Date.now(),
-      primaryKey: '1'
+      url: data.url || '/',
+      timestamp: Date.now()
     },
     actions: [
       {
-        action: 'explore',
-        title: 'Explore',
-        icon: '/static/img/blue.png',
+        action: 'open',
+        title: 'Open App',
+        icon: '/static/images/IMG-20250820-WA0109.jpg'
       },
       {
-        action: 'close',
-        title: 'Close',
-        icon: '/static/img/blue.png',
+        action: 'dismiss',
+        title: 'Dismiss',
+        icon: '/static/images/IMG-20250820-WA0109.jpg'
       }
     ]
   };
-
+  
   event.waitUntil(
     self.registration.showNotification('SkyBridge Bank', options)
   );
@@ -140,19 +314,33 @@ self.addEventListener('push', event => {
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   
-  if (event.action === 'explore') {
+  if (event.action === 'open') {
     event.waitUntil(
-      clients.openWindow('https://skybridgefinance.online/')
-    );
-  } else {
-    event.waitUntil(
-      clients.openWindow('https://skybridgefinance.online/')
+      clients.matchAll({ type: 'window' }).then(windowClients => {
+        // Check if there's already a window/tab open
+        for (const client of windowClients) {
+          if (client.url.includes('skybridgefinance.online') && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        
+        // If not, open a new window
+        if (clients.openWindow) {
+          return clients.openWindow(event.notification.data.url || '/');
+        }
+      })
     );
   }
 });
 
-// Helper function for background sync
-async function syncData() {
-  // Implement your data synchronization logic here
-  console.log('Background sync triggered');
-}
+// Handle messages from the client
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+  
+  if (event.data && event.data.type === 'CLEAR_CACHE') {
+    caches.delete(CACHE_NAME);
+    caches.delete(`${CACHE_NAME}-dynamic`);
+  }
+});
