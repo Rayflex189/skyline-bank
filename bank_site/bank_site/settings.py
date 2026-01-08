@@ -71,6 +71,8 @@ CSRF_COOKIE_SECURE = True
 INSTALLED_APPS = [
     'jazzmin',
     'django.contrib.admin',
+    'cloudinary',
+    'cloudinary_storage',  
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
