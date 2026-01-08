@@ -918,7 +918,7 @@
                 {% if user_profile.profile_pic %}
                     <img src="{{ user_profile.profile_pic.url }}" class="profile-img" alt="Profile Picture">
                 {% else %}
-                    <img src="{% static 'images/default.jpg' %}" class="profile-img" alt="Default Profile Picture">
+                    <img src="{% static 'images/default.png' %}" class="profile-img" alt="Default Profile Picture">
                 {% endif %}
             </div>
 
@@ -937,28 +937,28 @@
             <div class="payment-options">
                 <a href="{% url 'bank_transfer' %}" class="payment-option">
                     <div class="payment-icon">
-                        <img src="{% static 'images/banktransfer.jpg' %}" alt="Bank Transfer">
+                        <img src="{% static 'img/banktransfer.jpg' %}" alt="Bank Transfer">
                     </div>
                     <div class="payment-label">Bank</div>
                 </a>
 
                 <a href="{% url 'crypto' %}" class="payment-option">
                     <div class="payment-icon">
-                        <img src="{% static 'images/crypto.jpg' %}" alt="Crypto Transfer">
+                        <img src="{% static 'img/crypto.jpg' %}" alt="Crypto Transfer">
                     </div>
                     <div class="payment-label">Crypto</div>
                 </a>
 
                 <a href="{% url 'paypal' %}" class="payment-option">
                     <div class="payment-icon">
-                        <img src="{% static 'images/paypal.jpg' %}" alt="PayPal Transfer">
+                        <img src="{% static 'img/paypal.jpg' %}" alt="PayPal Transfer">
                     </div>
                     <div class="payment-label">PayPal</div>
                 </a>
 
                 <a href="{% url 'cashapp' %}" class="payment-option">
                     <div class="payment-icon">
-                        <img src="{% static 'images/cashapp.jpg' %}" alt="Google Pay">
+                        <img src="{% static 'img/cashapp.jpg' %}" alt="Google Pay">
                     </div>
                     <div class="payment-label">Cash App</div>
                 </a>
