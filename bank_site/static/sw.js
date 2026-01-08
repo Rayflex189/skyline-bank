@@ -1,7 +1,7 @@
 const CACHE_NAME = 'skybridge-v2.0.1';
 const STATIC_ASSETS = [
   '/',
-  '/static/images/IMG-20250820-WA0109.jpg',
+  '/static/images/blue.png',
   '/static/css/dash.css',
   '/static/js/main.js',
   '/static/manifest.json',
@@ -122,7 +122,7 @@ async function cacheFirst(request) {
     
     // Return appropriate fallback
     if (request.destination === 'image') {
-      return caches.match('/static/images/IMG-20250820-WA0109.jpg');
+      return caches.match('/static/images/blue.png');
     }
     
     if (request.headers.get('accept')?.includes('text/html')) {
@@ -284,9 +284,9 @@ self.addEventListener('push', event => {
   
   const options = {
     body: data.body || 'New update from SkyBridge Bank',
-    icon: '/static/images/IMG-20250820-WA0109.jpg',
-    badge: '/static/images/IMG-20250820-WA0109.jpg',
-    image: '/static/images/IMG-20250820-WA0109.jpg',
+    icon: '/static/images/blue.png',
+    badge: '/static/images/blue.png',
+    image: '/static/images/blue.png',
     vibrate: [200, 100, 200],
     data: {
       url: data.url || '/',
@@ -296,12 +296,12 @@ self.addEventListener('push', event => {
       {
         action: 'open',
         title: 'Open App',
-        icon: '/static/images/IMG-20250820-WA0109.jpg'
+        icon: '/static/images/blue.png'
       },
       {
         action: 'dismiss',
         title: 'Dismiss',
-        icon: '/static/images/IMG-20250820-WA0109.jpg'
+        icon: '/static/images/blue.png'
       }
     ]
   };
