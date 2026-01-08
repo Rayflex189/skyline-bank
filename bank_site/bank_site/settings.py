@@ -26,17 +26,17 @@ cloudinary.config(
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres.isvwctlcidbqfnftkjyr',
         'PASSWORD': 'UAEPMEQtBCXdbyns',
-        'HOST': 'db.isvwctlcidbqfnftkjyr.supabase.co',
+        'HOST': 'aws-1-eu-west-1.pooler.supabase.com',
         'PORT': '5432',
         'OPTIONS': {
             'sslmode': 'require',
-            'connect_timeout': 10,
         },
     }
 }
