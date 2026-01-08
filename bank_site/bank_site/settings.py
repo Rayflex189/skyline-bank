@@ -18,34 +18,28 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
+
+
+## Change this:
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# To either:
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# OR keep as string but use os.path.join:
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
 cloudinary.config(
     cloud_name="dlzn0moho",
     api_key="563396395915366",
     api_secret="pCSSrLNvxfFSEzY4ZnaOiF5u93o"
 )
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# ALTERNATIVELY - Use environment variables for security:
-import os
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'postgres'),
-        'USER': os.environ.get('DB_USER', 'postgres.qrcpbwlscndulbuigtmz'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'Z29GzMh871ypY876'),
-        'HOST': os.environ.get('DB_HOST', 'aws-1-us-west-1.pooler.supabase.com'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
-        'CONN_MAX_AGE': 300,
-    }
-}
-
-
 
 
 
