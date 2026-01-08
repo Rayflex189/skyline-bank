@@ -32,14 +32,15 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres.isvwctlcidbqfnftkjyr',
         'PASSWORD': 'UAEPMEQtBCXdbyns',
-        'HOST': '18.202.64.2',  # Supabase session pooler IPv4
-        'PORT': '5432',          # Session pooler port
+        'HOST': 'db.isvwctlcidbqfnftkjyr.supabase.co',
+        'PORT': '5432',
         'OPTIONS': {
-            'sslmode': 'require',   # mandatory for Supabase
-            'connect_timeout': 10,  # optional but helps avoid hangs
+            'sslmode': 'require',
+            'connect_timeout': 10,
         },
     }
 }
+
 
 
 
