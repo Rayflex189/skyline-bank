@@ -27,7 +27,7 @@ import cloudinary.api
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # OR keep as string but use os.path.join:
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -153,18 +153,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-LOGIN_URL = 'login'
-
-
+# URL to use when referring to static files
 STATIC_URL = 'static/'
 
-# Define STATIC_ROOT to collect static files for production and staging
+# Directory where collectstatic will collect static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-if not DEBUG:
-    # Use WhiteNoise storage for production
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Optional: additional directories to look for static files
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
+if not DEBUG:
+    # Production: use WhiteNoise for serving static files
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+else:
+    # Development: use default storage (or Cloudinary if desired)
+    STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+    pass
 
 # Additional locations of static files
 STATICFILES_DIRS = [
@@ -183,7 +187,6 @@ STATICFILES_DIRS = [
     # Add more directories if needed
 ]
 
-import os
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
