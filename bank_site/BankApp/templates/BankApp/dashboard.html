@@ -8,7 +8,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skybridge Bank - Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="//code.jivosite.com/widget/U73k9r5PsR" async></script>
+  <!-- Smartsupp Live Chat script -->
+<script type="text/javascript">
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = '899676932fa37897c72547bb5f98cdccfbedf278';
+window.smartsupp||(function(d) {
+  var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+  s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+  c.type='text/javascript';c.charset='utf-8';c.async=true;
+  c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+</script>
+<noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
   <meta name="description" content="Dashboard for managing account and transactions.">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -839,6 +850,40 @@
             font-size: 1.3rem;
         }
     }
+    /* Add to your CSS file */
+.staff-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid #2A6EBB;
+}
+
+.staff-header {
+    color: #2A6EBB;
+    font-weight: bold;
+    padding: 10px 15px;
+    background: rgba(42, 110, 187, 0.1);
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.staff-option a {
+    background: rgba(42, 110, 187, 0.05);
+    border-left: 3px solid #2A6EBB;
+}
+
+.staff-option a:hover {
+    background: rgba(42, 110, 187, 0.1);
+}
+
+.staff-badge {
+    background: #2A6EBB;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    display: inline-block;
+    margin-top: 5px;
+}
   </style>
 </head>
 <body>
@@ -866,53 +911,76 @@
         </div>
     </header>
 
-    <!-- Navigation Sidebar -->
-    <div class="nav-sidebar" id="navSidebar">
-        <div class="sidebar-header">
-            <h2>Account Menu</h2>
-            <button class="sidebar-close" onclick="toggleSidebar()">
-                <i class="fas fa-times"></i> Close
-            </button>
-        </div>
-
-        <div class="user-details">
-            <p>Username: <strong>{{ request.user }}</strong></p>
-            <p>Email: <strong>{{ user_profile.email }}</strong></p>
-        </div>
-
-        <ul class="nav-menu">
-            <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
-            <li><a href="{% url 'transaction' %}"><i class="fas fa-exchange-alt"></i> Transactions</a></li>
-            <li><a href="{% url 'reset_profile' %}"><i class="fas fa-cog"></i> Settings</a></li>
-
-            {% if user_profile.cardholder_name %}
-                <li><a href="{% url 'card_list' %}"><i class="fas fa-credit-card"></i> Cards</a></li>
-            {% endif %}
-
-            <li><a href="{% url 'application_for_credit_card' %}"><i class="fas fa-credit-card"></i> Apply For Card</a></li>
-
-            <li>
-                <a href="{% url 'create_investment' %}" >
-                  <i class="fas fa-chart-line"></i>Investment plan
-                </a>
-           </li>
-
-           <li>
-               <a href="{% url 'apply_loan' %}">
-                 <i class="fas fa-hand-holding-dollar"></i>  Apply for a Loan
-               </a>
-           </li>
-
-          <li>
-              <a href="{% url 'investment_dashboard' %}">
-           <i class="fas fa-money-bill-transfer"></i> Current investments
-              </a>
-          </li>
-
-            <li><a href="{% url 'LogOut' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-        </ul>
+<!-- In your sidebar/navigation template -->
+<div class="nav-sidebar" id="navSidebar">
+    <div class="sidebar-header">
+        <h2>Account Menu</h2>
+        <button class="sidebar-close" onclick="toggleSidebar()">
+            <i class="fas fa-times"></i> Close
+        </button>
     </div>
+
+    <div class="user-details">
+        <p>Username: <strong>{{ request.user }}</strong></p>
+        <p>Email: <strong>{{ user_profile.email }}</strong></p>
+        {% if request.user.is_staff %}
+            <p class="staff-badge"><i class="fas fa-shield-alt"></i> Staff Member</p>
+        {% endif %}
+    </div>
+
+    <ul class="nav-menu">
+        <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+        <li><a href="{% url 'transaction' %}"><i class="fas fa-exchange-alt"></i> Transactions</a></li>
+        <li><a href="{% url 'reset_profile' %}"><i class="fas fa-cog"></i> Settings</a></li>
+
+        {% if user_profile.cardholder_name %}
+            <li><a href="{% url 'card_list' %}"><i class="fas fa-credit-card"></i> Cards</a></li>
+        {% endif %}
+
+        <li><a href="{% url 'application_for_credit_card' %}"><i class="fas fa-credit-card"></i> Apply For Card</a></li>
+
+        <li>
+            <a href="{% url 'create_investment' %}" >
+              <i class="fas fa-chart-line"></i>Investment plan
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'apply_loan' %}">
+              <i class="fas fa-hand-holding-dollar"></i>  Apply for a Loan
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'investment_dashboard' %}">
+              <i class="fas fa-chart-line nav-icon"></i> Current investments
+            </a>
+        </li>
+
+        <!-- STAFF ONLY SECTION -->
+        {% if request.user.is_staff %}
+            <li class="staff-section">
+                <div class="staff-header">
+                    <i class="fas fa-shield-alt"></i> Staff Panel
+                </div>
+            </li>
+            <li class="staff-option">
+                <a href="{% url 'manage_loans' %}">
+                    <i class="fas fa-file-invoice-dollar"></i> Manage Loans
+                </a>
+            </li>
+            <li class="staff-option">
+                <a href="/admin/" target="_blank">
+                    <i class="fas fa-cogs"></i> Django Admin
+                </a>
+            </li>
+        {% endif %}
+        <!-- END STAFF SECTION -->
+
+        <li><a href="{% url 'LogOut' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+</div>
 
     <!-- Overlay for sidebar -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
