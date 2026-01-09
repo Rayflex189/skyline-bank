@@ -39,8 +39,29 @@ class InvestmentTransactionAdmin(admin.ModelAdmin):
     
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['user', 'account_number', 'otp_code', 'imf_code', 'aml_code', 'tac_code', 'vat_code', 'linking_code', 'balance']  # Include balance in the admin list
+    list_display = ['get_user_display', 'account_number', 'otp_code', 'imf_code', 'aml_code', 'tac_code', 'vat_code', 'linking_code', 'get_balance_safe']  # Use safe method
     search_fields = ['user__username']  # Search by username
+
+    def get_user_display(self, obj):
+        return obj.user.username if obj.user else "No User"
+    get_user_display.short_description = 'Username'
+    
+    def get_balance_safe(self, obj):
+        try:
+            # Try to handle the balance safely
+            if obj.balance is None:
+                return "0.00"
+            # If it's a string that can be converted
+            if isinstance(obj.balance, str):
+                try:
+                    from decimal import Decimal
+                    return Decimal(obj.balance)
+                except:
+                    return "Invalid"
+            return obj.balance
+        except (TypeError, ValueError, AttributeError) as e:
+            return f"Error: {str(e)}"
+    get_balance_safe.short_description = 'Balance'
 
     def save_model(self, request, obj, form, change):
         if change:  # Check if the model instance is being updated, not created
@@ -66,12 +87,6 @@ class UserProfileAdmin(admin.ModelAdmin):
                 pass
         super().save_model(request, obj, form, change)
 
-
-from django import forms
-from django.contrib import admin
-from django.utils import timezone
-from datetime import timedelta
-from .models import Transaction
 
 # ---- Simple Form Without Custom Widget ----
 class TransactionForm(forms.ModelForm):
