@@ -728,7 +728,8 @@ class UserProfile(models.Model):
     account_type = models.CharField(max_length=50, choices=account_choices, blank=True)
     profile_pic = CloudinaryField('profile_pic', null=True, blank=True)
     account_number = models.CharField(max_length=11, default=generate_account_number)
-    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, null=True)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'), null=True)
+    savings = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'), editable=True, null=True)
     linking_code = models.CharField(max_length=11, default=generate_code)
     otp_code = models.CharField(max_length=11, default=generate_otp)
     imf_code = models.CharField(max_length=11, default=generate_imf)
@@ -738,7 +739,6 @@ class UserProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     is_linked = models.BooleanField(default=False)
     is_upgraded = models.BooleanField(default=False)
-    savings = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, editable=True, null=True)
     last_increment = models.DateTimeField(default=timezone.now)
     is_email_verified = models.BooleanField(default=False)
 
