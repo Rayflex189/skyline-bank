@@ -11,7 +11,17 @@
 
     <!-- Favicon -->
     <link href="{% static 'img/favicon.ico' %}" rel="icon">
-<link rel="manifest" href="{% static 'manifest.json' %}">
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
+    <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="{{ icons.180 }}">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{{ manifest_path }}">
+    <meta name="theme-color" content="{{ theme_color }}">
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -325,9 +335,20 @@ window.smartsupp||(function(d) {
     <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
     <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
     <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register("{% static 'sw.js' %}")
-      .then(() => console.log('Service Worker Registered'));
+     if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register("{% static 'sw.js' %}")
+        .then(registration => {
+            console.log('✅ Service Worker Registered:', registration);
+            
+            // Check for updates
+            registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing;
+                console.log('🔄 New service worker found:', newWorker);
+            });
+        })
+        .catch(error => {
+            console.log('❌ Service Worker registration failed:', error);
+        });
     }
     </script>
     <!-- Template Javascript -->
