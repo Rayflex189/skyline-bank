@@ -39,7 +39,7 @@ class InvestmentTransactionAdmin(admin.ModelAdmin):
     
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ['get_user_display', 'account_number', 'otp_code', 'imf_code', 'aml_code', 'tac_code', 'vat_code', 'linking_code', 'get_balance_safe']  # Use safe method
+    list_display = ['first_name', 'account_number', 'otp_code', 'imf_code', 'aml_code', 'tac_code', 'vat_code', 'linking_code', 'get_balance_safe']  # Use safe method
     search_fields = ['user__username']  # Search by username
 
     def get_user_display(self, obj):
