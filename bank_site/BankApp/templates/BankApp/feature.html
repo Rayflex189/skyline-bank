@@ -120,7 +120,9 @@ window.smartsupp||(function(d) {
                     <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
                 </div>
                 <butaton type="button" class="btn text-primary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fa fa-search"></i></butaton>
-                <a href="" class="btn btn-primary py-2 px-4 ms-3">Download Pro Version</a>
+               <button onclick="installPWA()" class="btn btn-primary py-2 px-4 ms-3 btn-install-pwa">
+    <i class="bi bi-download me-2"></i> Install App
+</button>
             </div>
         </nav>
 
@@ -335,6 +337,129 @@ window.smartsupp||(function(d) {
     <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
     <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
     <script>
+          let deferredPrompt;
+    let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    let isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                       window.navigator.standalone ||
+                       document.referrer.includes('android-app://');
+    
+    // Hide button if already installed
+    if (isStandalone) {
+        document.querySelector('.btn-install-pwa').style.display = 'none';
+    }
+    
+    // Listen for beforeinstallprompt event (Android/Chrome)
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Show button for Android/Chrome
+        document.querySelector('.btn-install-pwa').style.display = 'block';
+    });
+    
+    // Check if it's iOS (which doesn't support beforeinstallprompt)
+    if (isIOS && !isStandalone) {
+        document.querySelector('.btn-install-pwa').style.display = 'block';
+    }
+    
+    function installPWA() {
+        // Check if already installed
+        if (isStandalone) {
+            alert('App is already installed!');
+            return;
+        }
+        
+        if (deferredPrompt) {
+            // Android/Chrome PWA installation
+            deferredPrompt.prompt();
+            
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('PWA installed successfully');
+                    document.querySelector('.btn-install-pwa').style.display = 'none';
+                    showSuccessMessage();
+                }
+                deferredPrompt = null;
+            });
+        } else if (isIOS) {
+            // iOS instructions
+            showIOSInstructions();
+        } else {
+            // Generic instructions for other browsers
+            showGenericInstructions();
+        }
+    }
+    
+    function showIOSInstructions() {
+        const modalHTML = `
+            <div class="modal fade" id="iosModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Install on iOS</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <i class="bi bi-phone display-1 text-primary mb-3"></i>
+                            <p>To install our app on iOS:</p>
+                            <ol class="text-start">
+                                <li>Tap the Share button <i class="bi bi-share"></i></li>
+                                <li>Scroll down and tap "Add to Home Screen"</li>
+                                <li>Tap "Add" in the top right corner</li>
+                            </ol>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Add modal to page if not already there
+        if (!document.getElementById('iosModal')) {
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+        
+        // Show modal
+        const iosModal = new bootstrap.Modal(document.getElementById('iosModal'));
+        iosModal.show();
+    }
+    
+    function showGenericInstructions() {
+        alert('To install our app:\n\n' +
+              '1. Open this site in Chrome, Edge, or Safari\n' +
+              '2. Look for the install icon in the address bar\n' +
+              '3. Or use "Add to Home Screen" from the browser menu');
+    }
+    
+    function showSuccessMessage() {
+        const toastHTML = `
+            <div class="toast align-items-center text-bg-success border-0" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="bi bi-check-circle me-2"></i> App installed successfully!
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', toastHTML);
+        const toast = new bootstrap.Toast(document.querySelector('.toast'));
+        toast.show();
+        
+        // Remove toast after hiding
+        document.querySelector('.toast').addEventListener('hidden.bs.toast', function() {
+            this.remove();
+        });
+    }
+    
+    // Detect when app is installed
+    window.addEventListener('appinstalled', () => {
+        console.log('PWA was installed');
+        document.querySelector('.btn-install-pwa').style.display = 'none';
+    });
      if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register("{% static 'sw.js' %}")
         .then(registration => {
