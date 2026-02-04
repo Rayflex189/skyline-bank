@@ -960,6 +960,15 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Profit/Loss styling */
+        .profit-positive {
+            color: var(--accent);
+        }
+
+        .profit-negative {
+            color: var(--danger);
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .main-content {
@@ -1135,133 +1144,122 @@
             <h1>Investment Dashboard</h1>
             <p>Track your investments, monitor performance, and manage your portfolio in real-time</p>
         </div>
-<!-- Update the stats grid section -->
-<div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-header">
-            <div class="stat-name">Total Invested</div>
-            <div class="stat-icon">
-                <i class="fas fa-wallet"></i>
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-name">Total Invested</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                </div>
+                <div class="stat-value">${{ total_invested|intcomma|default:"0" }}</div>
+                <div class="stat-subtitle">Across all active investments</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-name">Current Value</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+                <div class="stat-value">${{ total_current_value|floatformat:2|intcomma|default:"0" }}</div>
+                <div class="stat-subtitle">Based on current progress</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-name">Current Profit</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                </div>
+                <div class="stat-value {% if total_current_profit >= 0 %}profit-positive{% else %}profit-negative{% endif %}">
+                    ${{ total_current_profit|floatformat:2|intcomma|default:"0" }}
+                </div>
+                <div class="stat-subtitle">From active investments</div>
             </div>
         </div>
-        <div class="stat-value">${{ total_invested|intcomma|default:"0" }}</div>
-        <div class="stat-subtitle">Across all active investments</div>
-    </div>
-    
-    <div class="stat-card">
-        <div class="stat-header">
-            <div class="stat-name">Current Value</div>
-            <div class="stat-icon">
-                <i class="fas fa-chart-line"></i>
-            </div>
-        </div>
-        <div class="stat-value">${{ total_current_value|floatformat:2|intcomma|default:"0" }}</div>
-        <div class="stat-subtitle">Based on current progress</div>
-    </div>
-    
-    <div class="stat-card">
-        <div class="stat-header">
-            <div class="stat-name">Current Profit</div>
-            <div class="stat-icon">
-                <i class="fas fa-briefcase"></i>
-            </div>
-        </div>
-        <div class="stat-value {% if total_current_profit >= 0 %}profit-positive{% else %}profit-negative{% endif %}">
-            ${{ total_current_profit|floatformat:2|intcomma|default:"0" }}
-        </div>
-        <div class="stat-subtitle">From active investments</div>
-    </div>
-</div>
 
-<!-- Update active investments table -->
-{% for investment_data in active_investments_data %}
-<tr>
-    <td>
-        <a href="#" class="investment-link" onclick="viewInvestmentDetails('{{ investment_data.investment.id }}')">
-            <i class="fas fa-chart-pie"></i>
-            {{ investment_data.investment.investment_plan.name }}
-        </a>
-    </td>
-    <td><strong>${{ investment_data.investment.amount_invested|intcomma }}</strong></td>
-    <td>
-        <div style="color: var(--accent); font-weight: 700;">
-            ${{ investment_data.current_value|floatformat:2|intcomma }}
-        </div>
-        <div style="font-size: 0.85rem; color: var(--text-light);">
-            Expected: {{ investment_data.expected_return_range }}
-        </div>
-    </td>
-    <td>
-        {{ investment_data.investment.investment_plan.duration_display }}
-    </td>
-    <td>
-        <span class="status-badge status-active">
-            <i class="fas fa-circle" style="font-size: 0.7rem;"></i>
-            Active
-        </span>
-    </td>
-    <td>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
-                <div style="height: 100%; background: var(--accent); width: {{ investment_data.progress_percentage }}%; border-radius: 3px;"></div>
+        <!-- Active Investments -->
+        <div class="investments-section">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-line"></i> Active Investments</h2>
+                {% if active_investments_data %}
+                <div class="investment-count">
+                    <span class="status-badge status-active">{{ active_investments_count }} Active</span>
+                </div>
+                {% endif %}
             </div>
-            <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-light);">
-                {{ investment_data.progress_percentage }}%
-            </span>
-        </div>
-    </td>
-    <td class="action-column">
-        <div class="action-buttons">
-            <a href="#" class="btn-view" onclick="viewInvestmentDetails('{{ investment_data.investment.id }}')">
-                <i class="fas fa-eye"></i> View
-            </a>
-        </div>
-    </td>
-</tr>
-{% endfor %}
 
-<!-- Update completed investments table -->
-{% for investment_data in completed_investments_data %}
-<tr>
-    <td>
-        <a href="#" class="investment-link" onclick="viewInvestmentDetails('{{ investment_data.investment.id }}')">
-            <i class="fas fa-chart-line"></i>
-            {{ investment_data.investment.investment_plan.name }}
-        </a>
-    </td>
-    <td><strong>${{ investment_data.investment.amount_invested|intcomma }}</strong></td>
-    <td>
-        <div style="color: var(--accent); font-weight: 700;">
-            ${{ investment_data.investment.actual_return|intcomma|default:"0.00" }}
-        </div>
-    </td>
-    <td>
-        <div style="color: var(--accent); font-weight: 700;">
-            {{ investment_data.profit_display }}
-        </div>
-        <div style="font-size: 0.85rem; color: var(--text-light);">
-            {{ investment_data.roi_display }}
-        </div>
-    </td>
-    <td>
-        {{ investment_data.investment.start_date|date:"M d" }} - {{ investment_data.investment.end_date|date:"M d, Y" }}
-    </td>
-    <td>
-        <span class="status-badge status-completed">
-            <i class="fas fa-check-circle" style="font-size: 0.7rem;"></i>
-            Completed
-        </span>
-    </td>
-    <td class="action-column">
-        <div class="action-buttons">
-            <a href="#" class="btn-view" onclick="viewInvestmentDetails('{{ investment_data.investment.id }}')">
-                <i class="fas fa-file-alt"></i> Details
-            </a>
-        </div>
-    </td>
-</tr>
-{% endfor %}
-</tbody>
+            {% if active_investments_data %}
+            <div class="card-container">
+                <div class="card-header">
+                    <h2>Active Investment Portfolio</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="investments-table">
+                            <thead>
+                                <tr>
+                                    <th>Investment Plan</th>
+                                    <th>Amount Invested</th>
+                                    <th>Current Value</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                    <th>Progress</th>
+                                    <th class="action-column">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for investment_data in active_investments_data %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'investment_detail' investment_data.investment.id %}" class="investment-link">
+                                            <i class="fas fa-chart-pie"></i>
+                                            {{ investment_data.investment.investment_plan.name }}
+                                        </a>
+                                    </td>
+                                    <td><strong>${{ investment_data.investment.amount_invested|intcomma }}</strong></td>
+                                    <td>
+                                        <div style="color: var(--accent); font-weight: 700;">
+                                            ${{ investment_data.current_value|floatformat:2|intcomma }}
+                                        </div>
+                                        <div style="font-size: 0.85rem; color: var(--text-light);">
+                                            Expected: ${{ investment_data.investment.max_expected_return|floatformat:2|intcomma }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {{ investment_data.investment.investment_plan.duration_display }}
+                                    </td>
+                                    <td>
+                                        <span class="status-badge status-active">
+                                            <i class="fas fa-circle" style="font-size: 0.7rem;"></i>
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div style="flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
+                                                <div style="height: 100%; background: var(--accent); width: {{ investment_data.progress_percentage }}%; border-radius: 3px;"></div>
+                                            </div>
+                                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-light);">
+                                                {{ investment_data.progress_percentage|floatformat:1 }}%
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td class="action-column">
+                                        <div class="action-buttons">
+                                            <a href="{% url 'investment_detail' investment_data.investment.id %}" class="btn-view">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -1283,12 +1281,12 @@
         </div>
 
         <!-- Completed Investments -->
-        {% if completed_investments %}
+        {% if completed_investments_data %}
         <div class="investments-section">
             <div class="section-header">
                 <h2><i class="fas fa-check-circle"></i> Completed Investments</h2>
                 <div class="investment-count">
-                    <span class="status-badge status-completed">{{ completed_investments.count }} Completed</span>
+                    <span class="status-badge status-completed">{{ completed_investments_count }} Completed</span>
                 </div>
             </div>
 
@@ -1311,38 +1309,30 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for investment in completed_investments %}
+                                {% for investment_data in completed_investments_data %}
                                 <tr>
                                     <td>
-                                        <a href="#" class="investment-link" onclick="viewInvestmentDetails('{{ investment.id }}')">
+                                        <a href="{% url 'investment_detail' investment_data.investment.id %}" class="investment-link">
                                             <i class="fas fa-chart-line"></i>
-                                            {{ investment.investment_plan.name }}
+                                            {{ investment_data.investment.investment_plan.name }}
                                         </a>
                                     </td>
-                                    <td><strong>${{ investment.amount_invested|intcomma }}</strong></td>
+                                    <td><strong>${{ investment_data.investment.amount_invested|intcomma }}</strong></td>
                                     <td>
                                         <div style="color: var(--accent); font-weight: 700;">
-                                            ${{ investment.actual_return|intcomma|default:"0.00" }}
+                                            ${{ investment_data.actual_return|floatformat:2|intcomma|default:"0.00" }}
                                         </div>
                                     </td>
                                     <td>
-                                        {% if investment.actual_return %}
-                                            {% with profit=investment.actual_return|floatformat:2 investment_amount=investment.amount_invested|floatformat:2 %}
-                                            {% with profit_amount=investment.actual_return|floatformat:2|add:"-"|add:investment.amount_invested|floatformat:2 %}
-                                            <div style="color: var(--accent); font-weight: 700;">
-                                                +${{ profit_amount }}
-                                            </div>
-                                            <div style="font-size: 0.85rem; color: var(--text-light);">
-                                                {{ profit_amount|floatformat:2|div:investment.amount_invested|floatformat:2|mul:100|floatformat:2 }}% ROI
-                                            </div>
-                                            {% endwith %}
-                                            {% endwith %}
-                                        {% else %}
-                                            <div style="color: var(--text-light);">Calculating...</div>
-                                        {% endif %}
+                                        <div style="color: var(--accent); font-weight: 700;">
+                                            ${{ investment_data.current_profit|floatformat:2|intcomma }}
+                                        </div>
+                                        <div style="font-size: 0.85rem; color: var(--text-light);">
+                                            {{ investment_data.roi_percentage|floatformat:2 }}% ROI
+                                        </div>
                                     </td>
                                     <td>
-                                        {{ investment.start_date|date:"M d" }} - {{ investment.end_date|date:"M d, Y" }}
+                                        {{ investment_data.investment.start_date|date:"M d" }} - {{ investment_data.investment.end_date|date:"M d, Y" }}
                                     </td>
                                     <td>
                                         <span class="status-badge status-completed">
@@ -1352,7 +1342,7 @@
                                     </td>
                                     <td class="action-column">
                                         <div class="action-buttons">
-                                            <a href="#" class="btn-view" onclick="viewInvestmentDetails('{{ investment.id }}')">
+                                            <a href="{% url 'investment_detail' investment_data.investment.id %}" class="btn-view">
                                                 <i class="fas fa-file-alt"></i> Details
                                             </a>
                                         </div>
@@ -1462,12 +1452,6 @@
                 stock.price = Math.max(1, stock.price + change);
                 stock.change = change;
             });
-        }
-
-        // Investment details modal/view function
-        function viewInvestmentDetails(investmentId) {
-            // In a real app, this would open a modal or redirect to investment detail page
-            window.location.href = `/investment/${investmentId}/`;
         }
 
         // Auto-hide messages after 5 seconds
