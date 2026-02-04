@@ -1096,6 +1096,10 @@ from django.utils import timezone
 from datetime import timedelta
 from decimal import Decimal
 
+from django.utils import timezone
+from datetime import timedelta
+from decimal import Decimal
+
 @login_required
 def create_investment(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
@@ -1120,7 +1124,6 @@ def create_investment(request):
                     plan = form.cleaned_data['investment_plan']
                     amount = form.cleaned_data['amount_invested']
                     
-                    # Debug: Print form data
                     print(f"Creating investment - Plan: {plan.name}, Amount: ${amount}")
                     
                     # Validate amount is within plan limits
@@ -1156,40 +1159,80 @@ def create_investment(request):
                     user_profile.balance -= amount
                     user_profile.save()
 
-                    # Create transaction record if InvestmentTransaction model exists
+                    # Create transaction record - FIXED: Check if status field exists
                     try:
                         from .models import InvestmentTransaction
-                        InvestmentTransaction.objects.create(
-                            user=request.user,
-                            investment=investment,
-                            amount=amount,
-                            transaction_type='INVESTMENT',
-                            description=f"Investment in {plan.name} (Profit Range: {plan.min_profit_percentage}%-{plan.max_profit_percentage}%)",
-                            status='COMPLETED'
-                        )
+                        
+                        # Check what fields InvestmentTransaction model has
+                        transaction_fields = [f.name for f in InvestmentTransaction._meta.fields]
+                        print(f"InvestmentTransaction fields: {transaction_fields}")
+                        
+                        # Prepare transaction data
+                        transaction_data = {
+                            'user': request.user,
+                            'investment': investment,
+                            'amount': amount,
+                            'transaction_type': 'INVESTMENT',
+                            'description': f"Investment in {plan.name} (Profit Range: {plan.min_profit_percentage}%-{plan.max_profit_percentage}%)"
+                        }
+                        
+                        # Only add status if the model has it
+                        if 'status' in transaction_fields:
+                            transaction_data['status'] = 'COMPLETED'
+                        
+                        # Create transaction
+                        InvestmentTransaction.objects.create(**transaction_data)
+                        
                     except ImportError:
                         # If InvestmentTransaction model doesn't exist, just skip it
                         pass
+                    except Exception as e:
+                        # Log transaction creation error but don't fail the investment
+                        print(f"Transaction creation error (non-critical): {e}")
 
                     # Calculate profit range for success message
                     min_profit = amount * (plan.min_profit_percentage / 100)
                     max_profit = amount * (plan.max_profit_percentage / 100)
+                    avg_profit = (min_profit + max_profit) / 2
+                    
+                    # Calculate estimated completion date
+                    if plan.investment_type == 'SHORT_TERM' and plan.interval_hours:
+                        duration_text = f"{plan.interval_hours} hours"
+                    else:
+                        months = plan.duration_days // 30
+                        days = plan.duration_days % 30
+                        duration_text = f"{plan.duration_days} days"
+                        if months > 0:
+                            duration_text += f" ({months} month{'s' if months > 1 else ''}"
+                            if days > 0:
+                                duration_text += f" {days} day{'s' if days > 1 else ''}"
+                            duration_text += ")"
                     
                     messages.success(
                         request,
-                        f"✅ Successfully invested ${amount:,.2f} in {plan.name}!<br>"
-                        f"<strong>Investment Details:</strong><br>"
-                        f"• Amount: ${amount:,.2f}<br>"
-                        f"• Profit Range: ${min_profit:,.2f} - ${max_profit:,.2f}<br>"
-                        f"• Total Return Range: ${amount + min_profit:,.2f} - ${amount + max_profit:,.2f}<br>"
-                        f"• Duration: {plan.duration_display}<br>"
-                        f"• Status: Active<br>"
-                        f"• Investment will complete on: {end_date.strftime('%B %d, %Y %I:%M %p')}"
+                        f"🎉 <strong>Investment Successful!</strong><br><br>"
+                        f"✅ <strong>Investment Details:</strong><br>"
+                        f"• <strong>Plan:</strong> {plan.name}<br>"
+                        f"• <strong>Amount Invested:</strong> ${amount:,.2f}<br>"
+                        f"• <strong>Profit Range:</strong> ${min_profit:,.2f} - ${max_profit:,.2f}<br>"
+                        f"• <strong>Expected Return Range:</strong> ${amount + min_profit:,.2f} - ${amount + max_profit:,.2f}<br>"
+                        f"• <strong>Average Expected Profit:</strong> ${avg_profit:,.2f}<br>"
+                        f"• <strong>Duration:</strong> {duration_text}<br>"
+                        f"• <strong>Status:</strong> Active<br>"
+                        f"• <strong>Investment ID:</strong> #{investment.id}<br>"
+                        f"• <strong>Start Date:</strong> {timezone.now().strftime('%B %d, %Y %I:%M %p')}<br>"
+                        f"• <strong>Estimated Completion:</strong> {end_date.strftime('%B %d, %Y %I:%M %p')}<br><br>"
+                        f"💡 <em>Your investment is now active and earning profits!</em>"
                     )
+                    
+                    # Add success message to session for display on next page
+                    request.session['investment_success'] = True
+                    request.session['investment_id'] = investment.id
+                    
                     return redirect('investment_dashboard')
 
             except Exception as e:
-                messages.error(request, f"Error creating investment: {str(e)}")
+                messages.error(request, f"❌ Error creating investment: {str(e)}")
                 # Log the error for debugging
                 import traceback
                 print(f"Investment creation error: {traceback.format_exc()}")
@@ -1197,35 +1240,67 @@ def create_investment(request):
             # Display form errors
             for field, errors in form.errors.items():
                 for error in errors:
-                    messages.error(request, f"{field}: {error}")
+                    messages.error(request, f"⚠️ {field}: {error}")
     else:
         form = InvestmentForm(user=request.user, initial=initial_data)
 
     context = {
         'form': form,
         'user_profile': user_profile,
+        'plan_id': plan_id,
     }
     return render(request, 'BankApp/investment_create.html', context)
 
 
 @login_required
 def investment_dashboard(request):
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    
+    # Check for investment success message from session
+    investment_success = request.session.pop('investment_success', False)
+    investment_id = request.session.pop('investment_id', None)
+    
+    if investment_success and investment_id:
+        try:
+            investment = UserInvestment.objects.get(id=investment_id, user=request.user)
+            messages.success(
+                request,
+                f"🎉 Investment #{investment.id} created successfully! "
+                f"Check your active investments below."
+            )
+        except UserInvestment.DoesNotExist:
+            pass
+    
+    # Get user's active investments
     active_investments = UserInvestment.objects.filter(
         user=request.user,
         status='ACTIVE'
-    )
+    ).order_by('-created_at')
+    
+    # Get completed investments
     completed_investments = UserInvestment.objects.filter(
         user=request.user,
         status='COMPLETED'
-    )
-    total_invested = sum(inv.amount_invested for inv in active_investments)
-    total_expected = sum(inv.expected_return for inv in active_investments)
-
+    ).order_by('-completed_at')
+    
+    # Calculate total statistics
+    total_invested = active_investments.aggregate(
+        total=Sum('amount_invested')
+    )['total'] or 0
+    
+    total_expected_return = active_investments.aggregate(
+        total=Sum('max_expected_return')
+    )['total'] or 0
+    
+    total_profit = total_expected_return - total_invested
+    
     context = {
+        'user_profile': user_profile,
         'active_investments': active_investments,
         'completed_investments': completed_investments,
         'total_invested': total_invested,
-        'total_expected': total_expected,
+        'total_expected_return': total_expected_return,
+        'total_profit': total_profit,
     }
     return render(request, 'BankApp/investment_dashboard.html', context)
 
