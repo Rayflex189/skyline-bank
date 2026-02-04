@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from your_app.models import InvestmentPlan
+from BankApp.models import InvestmentPlan
 from decimal import Decimal
 
 class Command(BaseCommand):
