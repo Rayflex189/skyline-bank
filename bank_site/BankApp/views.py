@@ -1116,15 +1116,25 @@ def create_investment(request):
                     plan = form.cleaned_data['plan']
                     amount = form.cleaned_data['amount']
                     
+                    # Calculate expected return based on profit percentage range
+                    # Using average profit percentage for calculation
+                    avg_profit_percentage = (plan.min_profit_percentage + plan.max_profit_percentage) / 2
+                    
                     # Create investment
                     investment = form.save(commit=False)
                     investment.user = request.user
                     investment.amount_invested = amount
                     
-                    # Calculate expected return
-                    daily_interest_rate = plan.interest_rate / 365 / 100
-                    investment_days = plan.duration_days
-                    investment.expected_return = amount * (1 + daily_interest_rate * investment_days)
+                    # Calculate expected return based on investment type
+                    if plan.investment_type == 'SHORT_TERM' and plan.interval_hours:
+                        # For short-term investments (hours)
+                        hourly_profit_rate = avg_profit_percentage / 100
+                        investment.expected_return = amount * (1 + hourly_profit_rate)
+                    else:
+                        # For long-term investments (days)
+                        daily_profit_rate = avg_profit_percentage / 365 / 100
+                        investment_days = plan.duration_days
+                        investment.expected_return = amount * (1 + daily_profit_rate * investment_days)
                     
                     investment.save()
 
@@ -1138,23 +1148,32 @@ def create_investment(request):
                         investment=investment,
                         amount=amount,
                         transaction_type='INVESTMENT',
-                        description=f"Investment in {plan.name}",
+                        description=f"Investment in {plan.name} (Profit Range: {plan.min_profit_percentage}%-{plan.max_profit_percentage}%)",
                         status='COMPLETED'
                     )
 
+                    # Calculate min and max returns for the success message
+                    min_profit = amount * (plan.min_profit_percentage / 100)
+                    max_profit = amount * (plan.max_profit_percentage / 100)
+                    
                     messages.success(
                         request,
-                        f"Successfully invested ${amount:,.2f} in {plan.name}!"
+                        f"Successfully invested ${amount:,.2f} in {plan.name}! "
+                        f"Expected profit range: ${min_profit:,.2f} - ${max_profit:,.2f} "
+                        f"(Return range: ${amount + min_profit:,.2f} - ${amount + max_profit:,.2f})"
                     )
                     return redirect('investment_dashboard')
 
             except Exception as e:
                 messages.error(request, f"Error creating investment: {str(e)}")
+                # Log the error for debugging
+                import traceback
+                print(f"Investment creation error: {traceback.format_exc()}")
         else:
             # Display form errors
             for field, errors in form.errors.items():
                 for error in errors:
-                    messages.error(request, f"{error}")
+                    messages.error(request, f"{field.label if hasattr(field, 'label') else field}: {error}")
     else:
         form = InvestmentForm(user=request.user, initial=initial_data)
 
