@@ -172,8 +172,17 @@ class InvestmentPlan(models.Model):
     investment_type = models.CharField(max_length=20, choices=INVESTMENT_TYPES, default='SHORT_TERM')
     min_amount = models.DecimalField(max_digits=15, decimal_places=2, default=100.00)
     max_amount = models.DecimalField(max_digits=15, decimal_places=2, default=10000.00)
-    min_profit_percentage = models.DecimalField(max_digits=5, decimal_places=2)  # Minimum profit %
-    max_profit_percentage = models.DecimalField(max_digits=5, decimal_places=2)  # Maximum profit %
+    # Add new fields with defaults
+    min_profit_percentage = models.DecimalField(
+        max_digits=5, 
+        decimal_places=2, 
+        default=5.00  # Add default
+    )
+    max_profit_percentage = models.DecimalField(
+        max_digits=5, 
+        decimal_places=2, 
+        default=10.00  # Add default
+    )
     duration_days = models.IntegerField()  # Investment duration in days
     interval_hours = models.IntegerField(null=True, blank=True)  # For short-term investments
     description = models.TextField()

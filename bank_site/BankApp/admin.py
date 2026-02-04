@@ -189,7 +189,7 @@ class UserProfileAdmin(admin.ModelAdmin):
         'is_email_verified'
     ]
     search_fields = ['user__email', 'user__username', 'first_name', 'last_name', 'account_number']
-    list_filter = ['country', 'is_upgraded', 'is_email_verified', 'gender']
+    list_filter = ['country', 'is_upgraded', 'is_email_verified', 'Gender']
     readonly_fields = ['account_number', 'linking_code', 'otp_code', 'imf_code', 'aml_code', 'tac_code', 'vat_code', 'created_at']
     
     fieldsets = (
@@ -200,7 +200,7 @@ class UserProfileAdmin(admin.ModelAdmin):
             'fields': ('account_number', 'balance', 'savings', 'account_type', 'is_upgraded')
         }),
         ('Personal Details', {
-            'fields': ('date_of_birth', 'gender', 'occupation', 'status', 'address', 'zip_code', 'country', 'currency')
+            'fields': ('date_of_birth', 'Gender', 'occupation', 'status', 'address', 'zip_code', 'country', 'currency')
         }),
         ('Security', {
             'fields': ('two_factor_auth', 'four_digit_auth_key', 'is_email_verified')
