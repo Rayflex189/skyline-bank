@@ -157,27 +157,58 @@ class Loan(models.Model):
 
 class InvestmentPlan(models.Model):
     PLAN_TYPES = [
-        ('BASIC', 'Basic Plan'),
-        ('STANDARD', 'Standard Plan'),
-        ('PREMIUM', 'Premium Plan'),
-        ('VIP', 'VIP Plan'),
+        ('STARTER', 'Starter Plan'),
+        ('PRO', 'Pro Plan'),
+        ('ELITE', 'Elite Plan'),
+    ]
+    
+    INVESTMENT_TYPES = [
+        ('SHORT_TERM', 'Short Term Trading'),
+        ('LONG_TERM', 'Long Term Investment'),
     ]
 
     name = models.CharField(max_length=100)
     plan_type = models.CharField(max_length=20, choices=PLAN_TYPES)
+    investment_type = models.CharField(max_length=20, choices=INVESTMENT_TYPES, default='SHORT_TERM')
     min_amount = models.DecimalField(max_digits=15, decimal_places=2, default=100.00)
     max_amount = models.DecimalField(max_digits=15, decimal_places=2, default=10000.00)
-    interest_rate = models.DecimalField(max_digits=5, decimal_places=2)  # Annual percentage
+    min_profit_percentage = models.DecimalField(max_digits=5, decimal_places=2)  # Minimum profit %
+    max_profit_percentage = models.DecimalField(max_digits=5, decimal_places=2)  # Maximum profit %
     duration_days = models.IntegerField()  # Investment duration in days
+    interval_hours = models.IntegerField(null=True, blank=True)  # For short-term investments
     description = models.TextField()
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.name} - {self.interest_rate}%"
+        return f"{self.name} - {self.get_investment_type_display()}"
+    
+    @property
+    def duration_display(self):
+        """Display duration in appropriate format"""
+        if self.investment_type == 'SHORT_TERM':
+            return f"{self.interval_hours} hours" if self.interval_hours else "Short-term"
+        else:
+            return f"{self.duration_days} days"
+    
+    @property
+    def profit_range_display(self):
+        """Display profit range"""
+        return f"{self.min_profit_percentage}% - {self.max_profit_percentage}%"
+
+    def get_profit_range(self, amount):
+        """Calculate profit range for a given amount"""
+        min_profit = amount * (self.min_profit_percentage / 100)
+        max_profit = amount * (self.max_profit_percentage / 100)
+        return {
+            'min_profit': min_profit,
+            'max_profit': max_profit,
+            'profit_range': f"${min_profit:.2f} - ${max_profit:.2f}"
+        }
 
 class UserInvestment(models.Model):
     STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
         ('ACTIVE', 'Active'),
         ('COMPLETED', 'Completed'),
         ('CANCELLED', 'Cancelled'),
@@ -186,28 +217,115 @@ class UserInvestment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     investment_plan = models.ForeignKey('InvestmentPlan', on_delete=models.CASCADE)
     amount_invested = models.DecimalField(max_digits=15, decimal_places=2)
-    expected_return = models.DecimalField(max_digits=15, decimal_places=2)
+    min_expected_return = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
+    max_expected_return = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ACTIVE')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    # Track actual returns if investment is completed
+    actual_return = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
 
     def calculate_expected_return(self):
-        daily_rate = self.investment_plan.interest_rate / 365 / 100
-        days = self.investment_plan.duration_days
-        return self.amount_invested * (1 + daily_rate * days)
+        """Calculate expected return based on investment plan"""
+        plan = self.investment_plan
+        
+        # Calculate profit range based on amount invested
+        min_profit = self.amount_invested * (plan.min_profit_percentage / 100)
+        max_profit = self.amount_invested * (plan.max_profit_percentage / 100)
+        
+        # Calculate total return (principal + profit)
+        min_total = self.amount_invested + min_profit
+        max_total = self.amount_invested + max_profit
+        
+        return {
+            'min_profit': min_profit,
+            'max_profit': max_profit,
+            'min_total': min_total,
+            'max_total': max_total,
+            'profit_percentage_range': f"{plan.min_profit_percentage}% - {plan.max_profit_percentage}%",
+            'profit_range': f"${min_profit:.2f} - ${max_profit:.2f}",
+            'total_range': f"${min_total:.2f} - ${max_total:.2f}"
+        }
+
+    def validate_investment_amount(self):
+        """Validate that investment amount is within plan limits"""
+        plan = self.investment_plan
+        
+        if self.amount_invested < plan.min_amount:
+            return False, f"Minimum investment for this plan is ${plan.min_amount}"
+        elif self.amount_invested > plan.max_amount:
+            return False, f"Maximum investment for this plan is ${plan.max_amount}"
+        
+        return True, "Investment amount is valid"
+
+    def get_investment_details(self):
+        """Get complete investment details"""
+        is_valid, message = self.validate_investment_amount()
+        
+        if not is_valid:
+            return {
+                'valid': False,
+                'message': message,
+                'amount_invested': self.amount_invested,
+                'plan_name': self.investment_plan.name,
+                'investment_type': self.investment_plan.get_investment_type_display()
+            }
+        
+        returns = self.calculate_expected_return()
+        
+        return {
+            'valid': True,
+            'plan_name': self.investment_plan.name,
+            'investment_type': self.investment_plan.get_investment_type_display(),
+            'amount_invested': self.amount_invested,
+            'min_profit': returns['min_profit'],
+            'max_profit': returns['max_profit'],
+            'min_total_return': returns['min_total'],
+            'max_total_return': returns['max_total'],
+            'profit_percentage_range': returns['profit_percentage_range'],
+            'profit_range': returns['profit_range'],
+            'total_range': returns['total_range'],
+            'duration': self.investment_plan.duration_display,
+            'interval': f"{self.investment_plan.interval_hours} hours" if self.investment_plan.interval_hours else "N/A",
+            'start_date': self.start_date,
+            'end_date': self.end_date,
+            'status': self.get_status_display()
+        }
 
     def save(self, *args, **kwargs):
-        if not self.expected_return:
-            self.expected_return = self.calculate_expected_return()
+        # Calculate expected returns if not already set
+        if not self.min_expected_return or not self.max_expected_return:
+            returns = self.calculate_expected_return()
+            self.min_expected_return = returns['min_total']
+            self.max_expected_return = returns['max_total']
+        
+        # Set end date based on plan duration
         if not self.end_date:
-            from django.utils import timezone
-            from datetime import timedelta
-            self.end_date = timezone.now() + timedelta(days=self.investment_plan.duration_days)
+            if self.investment_plan.investment_type == 'SHORT_TERM':
+                # For short-term, add hours
+                self.end_date = timezone.now() + timedelta(hours=self.investment_plan.interval_hours)
+            else:
+                # For long-term, add days
+                self.end_date = timezone.now() + timedelta(days=self.investment_plan.duration_days)
+        
+        # Auto-complete if past end date
+        if self.end_date and timezone.now() > self.end_date and self.status == 'ACTIVE':
+            self.status = 'COMPLETED'
+            self.completed_at = timezone.now()
+            # Set actual return (you can randomize between min and max)
+            import random
+            min_return = float(self.min_expected_return)
+            max_return = float(self.max_expected_return)
+            self.actual_return = Decimal(str(random.uniform(min_return, max_return)))
+        
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.user.username} - {self.investment_plan.name} - ${self.amount_invested}"
+        return f"{self.user.username} - {self.investment_plan.name} - ${self.amount_invested} - {self.get_status_display()}"
+
 
 class InvestmentTransaction(models.Model):
     TRANSACTION_TYPES = [
