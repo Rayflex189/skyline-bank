@@ -6,11 +6,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ investment.investment_plan.name }} - Investment Details | Skyline Bank</title>
+    <title>{{ investment.investment_plan.name }} - Investment Details | Skybridge Finance</title>
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="Track your {{ investment.investment_plan.name }} investment performance with detailed analytics and transaction history.">
-    <meta name="keywords" content="investment, portfolio, {{ investment.investment_plan.name }}, finance, Skyline Bank">
+    <meta name="keywords" content="investment, portfolio, {{ investment.investment_plan.name }}, finance, Skybridge Finance">
     <meta property="og:title" content="{{ investment.investment_plan.name }} - Investment Details">
     <meta property="og:description" content="View detailed analytics of your {{ investment.investment_plan.name }} investment.">
     
@@ -825,12 +825,21 @@
                 border: 1px solid #ddd;
             }
         }
+
+        /* Custom classes for profit/loss */
+        .profit-positive {
+            color: var(--accent);
+        }
+        
+        .profit-negative {
+            color: var(--danger);
+        }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header class="bank-header">
-        <h1>Skyline Bank</h1>
+        <h1>Skybridge Finance</h1>
         <div class="header-actions">
             <div class="notification-bell" onclick="toggleNotifications()">
                 <i class="fas fa-bell"></i>
@@ -861,12 +870,12 @@
         
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="{% url 'dashboard' %}" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
                 <li><a href="{% url 'investment_plans' %}"><i class="fas fa-chart-line"></i> Investment Plans</a></li>
                 <li><a href="{% url 'investment_dashboard' %}"><i class="fas fa-wallet"></i> My Investments</a></li>
-                <li><a href=""><i class="fas fa-exchange-alt"></i> Transactions</a></li>
+                <li><a href="{% url 'bank_transfer' %}"><i class="fas fa-exchange-alt"></i> Transactions</a></li>
                 <li><a href="{% url 'profile' %}"><i class="fas fa-user-cog"></i> Profile Settings</a></li>
-                <li><a href=""><i class="fas fa-headset"></i> Customer Support</a></li>
+                <li><a href="{% url 'support' %}"><i class="fas fa-headset"></i> Customer Support</a></li>
             </ul>
         </nav>
         
@@ -880,7 +889,7 @@
         <a href="https://t.me/#" class="floating-btn floating-telegram" target="_blank" data-tooltip="Join Telegram">
             <i class="fab fa-telegram-plane"></i>
         </a>
-        <a href="mailto:support@skylinebank.com" class="floating-btn floating-email" data-tooltip="Email Support">
+        <a href="mailto:support@skybridgefinance.com" class="floating-btn floating-email" data-tooltip="Email Support">
             <i class="fas fa-envelope"></i>
         </a>
     </div>
@@ -911,7 +920,15 @@
                 <div class="stat-value">{{ user_profile.currency }}{{ current_value|intcomma }}</div>
                 <div class="stat-change {% if profit_loss >= 0 %}positive{% else %}negative{% endif %}">
                     <i class="fas fa-arrow-{% if profit_loss >= 0 %}up{% else %}down{% endif %}"></i>
-                    {{ profit_loss|intcomma|abs }} ({{ profit_loss_percentage|floatformat:2 }}%)
+                    <!-- Fixed: Removed abs filter and use if statement instead -->
+                    {% if profit_loss >= 0 %}
+                        +{{ user_profile.currency }}{{ profit_loss|intcomma }}
+                    {% else %}
+                        -{{ user_profile.currency }}{{ profit_loss|cut:"-"|intcomma }}
+                    {% endif %}
+                    {% if roi_percentage %}
+                        ({{ roi_percentage|floatformat:2 }}%)
+                    {% endif %}
                 </div>
             </div>
             
@@ -930,7 +947,7 @@
                 <div class="stat-label">
                     <i class="fas fa-bullseye"></i> Expected Return
                 </div>
-                <div class="stat-value">{{ user_profile.currency }}{{ expected_return|intcomma }}</div>
+                <div class="stat-value">{{ user_profile.currency }}{{ max_expected_return|intcomma }}</div>
                 <div class="stat-change positive">
                     <i class="fas fa-percentage"></i>
                     {{ investment.investment_plan.interest_rate }}% interest
@@ -998,7 +1015,7 @@
                 <div class="progress-section">
                     <div class="progress-header">
                         <h3>Investment Progress</h3>
-                        <span class="progress-percentage">{{ progress_percentage }}%</span>
+                        <span class="progress-percentage">{{ progress_percentage|floatformat:1 }}%</span>
                     </div>
                     <div class="progress-bar-container">
                         <div class="progress-fill" style="width: {{ progress_percentage }}%"></div>
@@ -1007,6 +1024,17 @@
                         <span>Started: {{ investment.start_date|date:"M d" }}</span>
                         <span>Today: {% now "M d" %}</span>
                         <span>Ends: {{ investment.end_date|date:"M d" }}</span>
+                    </div>
+                </div>
+
+                <!-- Profit Range Information -->
+                <div class="detail-item" style="grid-column: 1 / -1; margin-top: 20px;">
+                    <div class="detail-label">Profit Range</div>
+                    <div class="detail-value">
+                        {{ user_profile.currency }}{{ min_expected_return|intcomma }} - {{ user_profile.currency }}{{ max_expected_return|intcomma }}
+                        <div style="font-size: 1rem; color: var(--text-light); margin-top: 5px;">
+                            ({{ investment.investment_plan.min_profit_percentage }}% - {{ investment.investment_plan.max_profit_percentage }}%)
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1075,13 +1103,13 @@
             <i class="fas fa-home nav-icon"></i>
             <span class="nav-label">Home</span>
         </a>
-        <a href="{% url 'investment_plans' %}" class="nav-item">
+        <a href="{% url 'investment_dashboard' %}" class="nav-item active">
             <i class="fas fa-chart-line nav-icon"></i>
-            <span class="nav-label">Invest</span>
+            <span class="nav-label">Investments</span>
         </a>
-        <a href="{% url 'transactions' %}" class="nav-item active">
+        <a href="{% url 'bank_transfer' %}" class="nav-item">
             <i class="fas fa-exchange-alt nav-icon"></i>
-            <span class="nav-label">Transactions</span>
+            <span class="nav-label">Transfer</span>
         </a>
         <a href="{% url 'profile' %}" class="nav-item">
             <i class="fas fa-user nav-icon"></i>
@@ -1184,7 +1212,8 @@
         // Update active nav item
         document.addEventListener('DOMContentLoaded', () => {
             const currentPath = window.location.pathname;
-            document.querySelectorAll('.nav-item').forEach(item => {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
                 if (item.getAttribute('href') === currentPath) {
                     item.classList.add('active');
                 } else {
@@ -1222,4 +1251,4 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-</html>
+</html>git
