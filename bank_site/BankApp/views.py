@@ -1092,6 +1092,10 @@ def investment_plans(request):
     }
     return render(request, 'BankApp/investment_plan.html', context)
 
+from django.utils import timezone
+from datetime import timedelta
+from decimal import Decimal
+
 @login_required
 def create_investment(request):
     user_profile = get_object_or_404(UserProfile, user=request.user)
@@ -1101,9 +1105,9 @@ def create_investment(request):
     if plan_id:
         try:
             plan = InvestmentPlan.objects.get(id=plan_id, is_active=True)
-            initial_data['plan'] = plan
+            initial_data['investment_plan'] = plan
             # Pre-fill amount with minimum investment
-            initial_data['amount'] = plan.min_amount
+            initial_data['amount_invested'] = plan.min_amount
         except InvestmentPlan.DoesNotExist:
             messages.error(request, "Selected investment plan is not available")
             return redirect('investment_plans')
@@ -1113,54 +1117,74 @@ def create_investment(request):
         if form.is_valid():
             try:
                 with transaction.atomic():
-                    plan = form.cleaned_data['plan']
-                    amount = form.cleaned_data['amount']
+                    plan = form.cleaned_data['investment_plan']
+                    amount = form.cleaned_data['amount_invested']
                     
-                    # Calculate expected return based on profit percentage range
-                    # Using average profit percentage for calculation
-                    avg_profit_percentage = (plan.min_profit_percentage + plan.max_profit_percentage) / 2
+                    # Debug: Print form data
+                    print(f"Creating investment - Plan: {plan.name}, Amount: ${amount}")
                     
-                    # Create investment
+                    # Validate amount is within plan limits
+                    if amount < plan.min_amount:
+                        messages.error(request, f"Minimum investment for {plan.name} is ${plan.min_amount}")
+                        return redirect('create_investment')
+                    
+                    if amount > plan.max_amount:
+                        messages.error(request, f"Maximum investment for {plan.name} is ${plan.max_amount}")
+                        return redirect('create_investment')
+                    
+                    # Validate user has sufficient balance
+                    if amount > user_profile.balance:
+                        messages.error(request, f"Insufficient balance. Your available balance is ${user_profile.balance}")
+                        return redirect('create_investment')
+                    
+                    # Calculate end date based on plan type
+                    if plan.investment_type == 'SHORT_TERM' and plan.interval_hours:
+                        end_date = timezone.now() + timedelta(hours=plan.interval_hours)
+                    else:
+                        end_date = timezone.now() + timedelta(days=plan.duration_days)
+                    
+                    # Create investment using the form's save method
                     investment = form.save(commit=False)
                     investment.user = request.user
-                    investment.amount_invested = amount
+                    investment.end_date = end_date
+                    investment.status = 'ACTIVE'  # Set to active immediately
                     
-                    # Calculate expected return based on investment type
-                    if plan.investment_type == 'SHORT_TERM' and plan.interval_hours:
-                        # For short-term investments (hours)
-                        hourly_profit_rate = avg_profit_percentage / 100
-                        investment.expected_return = amount * (1 + hourly_profit_rate)
-                    else:
-                        # For long-term investments (days)
-                        daily_profit_rate = avg_profit_percentage / 365 / 100
-                        investment_days = plan.duration_days
-                        investment.expected_return = amount * (1 + daily_profit_rate * investment_days)
-                    
+                    # Save the investment (this will trigger the save method which calculates returns)
                     investment.save()
-
+                    
                     # Deduct from user balance
                     user_profile.balance -= amount
                     user_profile.save()
 
-                    # Create transaction record
-                    InvestmentTransaction.objects.create(
-                        user=request.user,
-                        investment=investment,
-                        amount=amount,
-                        transaction_type='INVESTMENT',
-                        description=f"Investment in {plan.name} (Profit Range: {plan.min_profit_percentage}%-{plan.max_profit_percentage}%)",
-                        status='COMPLETED'
-                    )
+                    # Create transaction record if InvestmentTransaction model exists
+                    try:
+                        from .models import InvestmentTransaction
+                        InvestmentTransaction.objects.create(
+                            user=request.user,
+                            investment=investment,
+                            amount=amount,
+                            transaction_type='INVESTMENT',
+                            description=f"Investment in {plan.name} (Profit Range: {plan.min_profit_percentage}%-{plan.max_profit_percentage}%)",
+                            status='COMPLETED'
+                        )
+                    except ImportError:
+                        # If InvestmentTransaction model doesn't exist, just skip it
+                        pass
 
-                    # Calculate min and max returns for the success message
+                    # Calculate profit range for success message
                     min_profit = amount * (plan.min_profit_percentage / 100)
                     max_profit = amount * (plan.max_profit_percentage / 100)
                     
                     messages.success(
                         request,
-                        f"Successfully invested ${amount:,.2f} in {plan.name}! "
-                        f"Expected profit range: ${min_profit:,.2f} - ${max_profit:,.2f} "
-                        f"(Return range: ${amount + min_profit:,.2f} - ${amount + max_profit:,.2f})"
+                        f"✅ Successfully invested ${amount:,.2f} in {plan.name}!<br>"
+                        f"<strong>Investment Details:</strong><br>"
+                        f"• Amount: ${amount:,.2f}<br>"
+                        f"• Profit Range: ${min_profit:,.2f} - ${max_profit:,.2f}<br>"
+                        f"• Total Return Range: ${amount + min_profit:,.2f} - ${amount + max_profit:,.2f}<br>"
+                        f"• Duration: {plan.duration_display}<br>"
+                        f"• Status: Active<br>"
+                        f"• Investment will complete on: {end_date.strftime('%B %d, %Y %I:%M %p')}"
                     )
                     return redirect('investment_dashboard')
 
@@ -1173,7 +1197,7 @@ def create_investment(request):
             # Display form errors
             for field, errors in form.errors.items():
                 for error in errors:
-                    messages.error(request, f"{field.label if hasattr(field, 'label') else field}: {error}")
+                    messages.error(request, f"{field}: {error}")
     else:
         form = InvestmentForm(user=request.user, initial=initial_data)
 

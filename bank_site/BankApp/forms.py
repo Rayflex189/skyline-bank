@@ -105,14 +105,13 @@ class KYCForm(forms.ModelForm):
 
 
 
-
 class InvestmentForm(forms.ModelForm):
-    plan = forms.ModelChoiceField(
+    investment_plan = forms.ModelChoiceField(
         queryset=InvestmentPlan.objects.filter(is_active=True),
         empty_label="Select Investment Plan",
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-    amount = forms.DecimalField(
+    amount_invested = forms.DecimalField(
         max_digits=15,
         decimal_places=2,
         min_value=100.00,
@@ -124,16 +123,16 @@ class InvestmentForm(forms.ModelForm):
 
     class Meta:
         model = UserInvestment
-        fields = ['plan', 'amount']
+        fields = ['investment_plan', 'amount_invested']
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        self.fields['plan'].queryset = InvestmentPlan.objects.filter(is_active=True)
+        self.fields['investment_plan'].queryset = InvestmentPlan.objects.filter(is_active=True)
 
-    def clean_amount(self):
-        amount = self.cleaned_data['amount']
-        plan = self.cleaned_data.get('plan')
+    def clean_amount_invested(self):
+        amount = self.cleaned_data['amount_invested']
+        plan = self.cleaned_data.get('investment_plan')
 
         if plan:
             if amount < plan.min_amount:
@@ -153,7 +152,7 @@ class InvestmentForm(forms.ModelForm):
                 )
 
         return amount
-
+        
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
 

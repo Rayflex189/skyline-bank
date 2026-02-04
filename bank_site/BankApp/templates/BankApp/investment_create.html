@@ -592,22 +592,23 @@
                 <form method="post" action="{% url 'create_investment' %}" id="investmentForm">
                     {% csrf_token %}
 
-                    <div class="form-group">
-                        <label for="{{ form.plan.id_for_label }}" class="form-label required">Investment Plan</label>
-                        {{ form.plan }}
-                        <small class="form-text text-muted">
-                            Select an investment plan from available options
-                        </small>
-                    </div>
+                   <!-- In your investment/create.html template -->
 
-                    <div class="form-group">
-                        <label for="{{ form.amount.id_for_label }}" class="form-label required">Investment Amount ($)</label>
-                        {{ form.amount }}
-                        <small class="form-text text-muted">
-                            Minimum investment: $100.00
-                        </small>
-                    </div>
+<div class="form-group">
+    <label for="{{ form.investment_plan.id_for_label }}" class="form-label required">Investment Plan</label>
+    {{ form.investment_plan }}
+    <small class="form-text text-muted">
+        Select an investment plan from available options
+    </small>
+</div>
 
+<div class="form-group">
+    <label for="{{ form.amount_invested.id_for_label }}" class="form-label required">Investment Amount ($)</label>
+    {{ form.amount_invested }}
+    <small class="form-text text-muted">
+        Minimum investment: $100.00
+    </small>
+</div>
                     <!-- Plan Details Card -->
                     <div class="plan-details-card" id="plan-details" style="display: none;">
                         <h5 id="plan-title">Plan Details</h5>
@@ -680,8 +681,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        const planSelect = document.getElementById('id_plan');
-        const amountInput = document.getElementById('id_amount');
+        // In your JavaScript, update these lines:
+        const planSelect = document.getElementById('id_investment_plan');  // Changed from 'id_plan'
+        const amountInput = document.getElementById('id_amount_invested'); // Changed from 'id_amount'
         const planDetails = document.getElementById('plan-details');
         const planTitle = document.getElementById('plan-title');
         const submitBtn = document.getElementById('submitBtn');
