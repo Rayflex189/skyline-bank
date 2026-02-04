@@ -6,17 +6,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investment Dashboard - Skyline Bank</title>
-<!-- Begin of Chaport Live Chat code -->
-<script type="text/javascript">
-(function(w,d,v3){
-w.chaportConfig = {
-  appId : '698184ca2764117339b24bdd',
-};
+    <title>Investment Dashboard - Skybridge Finance</title>
+    
+    <!-- Begin of Chaport Live Chat code -->
+    <script type="text/javascript">
+    (function(w,d,v3){
+    w.chaportConfig = {
+      appId : '698184ca2764117339b24bdd',
+    };
 
-if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
-</script>
-<!-- End of Chaport Live Chat code -->
+    if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
+    </script>
+    <!-- End of Chaport Live Chat code -->
+    
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
@@ -38,6 +40,10 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             --secondary: #6C757D;
             --accent: #4CAF50;
             --accent-light: #E8F5E9;
+            --warning: #FF9800;
+            --warning-light: #FFF3E0;
+            --danger: #F44336;
+            --danger-light: #FFEBEE;
             --light-bg: #F8FAFC;
             --card-bg: #FFFFFF;
             --text-dark: #2D3748;
@@ -45,6 +51,8 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             --border: #E2E8F0;
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.08);
+            --gradient-primary: linear-gradient(135deg, #2A5CAA 0%, #3A6BB2 100%);
+            --gradient-accent: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
         }
 
         * {
@@ -55,7 +63,7 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
 
         body, html {
             font-family: 'Inter', sans-serif;
-            background-color: var(--light-bg);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
             color: var(--text-dark);
             height: 100%;
             overflow-x: hidden;
@@ -63,128 +71,178 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         }
 
         .bank-header {
-            background: linear-gradient(135deg, var(--primary) 0%, #3A6BB2 100%);
+            background: var(--gradient-primary);
             color: white;
-            padding: 16px 24px;
+            padding: 18px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: var(--shadow);
-            position: relative;
-            z-index: 100;
+            box-shadow: 0 4px 20px rgba(42, 92, 170, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
         }
 
         .bank-header h1 {
-            font-size: 1.6rem;
-            font-weight: 600;
+            font-size: 1.7rem;
+            font-weight: 700;
             margin: 0;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            letter-spacing: 0.5px;
         }
 
         .bank-header h1:before {
             content: "";
             display: inline-block;
-            width: 32px;
-            height: 32px;
-            background-color: white;
-            border-radius: 6px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%232A5CAA"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>');
-            background-size: 18px;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>');
+            background-size: 20px;
             background-repeat: no-repeat;
             background-position: center;
         }
 
         .header-actions {
             display: flex;
-            gap: 16px;
+            gap: 20px;
             align-items: center;
         }
 
         .notification-bell, .open-sidebar-btn {
             cursor: pointer;
             color: white;
-            font-size: 1.3rem;
-            width: 40px;
-            height: 40px;
+            font-size: 1.4rem;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.2s;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .notification-bell:hover, .open-sidebar-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .notification-bell::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
         }
 
         .sidebar {
-            width: 280px;
+            width: 320px;
             height: 100vh;
-            background-color: var(--card-bg);
+            background: linear-gradient(180deg, #1a2c4e 0%, #0f1a30 100%);
             position: fixed;
-            right: -280px;
+            right: -320px;
             top: 0;
-            transition: right 0.4s ease;
-            color: var(--text-dark);
-            box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            color: white;
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
         .sidebar.open { right: 0; }
 
         .sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border);
+            padding: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: var(--primary);
-            color: white;
+            background: rgba(0, 0, 0, 0.2);
         }
 
         .sidebar-header h2 {
-            font-size: 1.3rem;
-            font-weight: 600;
+            font-size: 1.5rem;
+            font-weight: 700;
             margin: 0;
+            color: #4dabf7;
         }
 
         .sidebar-header button {
-            background: none;
+            background: rgba(220, 53, 69, 0.8);
             border: none;
             color: white;
-            font-size: 1.2rem;
+            font-size: 1rem;
             cursor: pointer;
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.2s;
+            transition: all 0.3s ease;
         }
 
         .sidebar-header button:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background: #dc3545;
+            transform: rotate(90deg);
         }
 
         .user-details {
-            padding: 20px;
-            border-bottom: 1px solid var(--border);
-            background-color: var(--primary-light);
+            padding: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .user-details p {
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .user-details strong {
-            color: var(--primary);
-            font-weight: 500;
+            color: #4dabf7;
+            font-weight: 600;
+        }
+
+        .user-details i {
+            color: #6c757d;
+            width: 18px;
+        }
+
+        .balance-overview {
+            padding: 20px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .balance-overview .balance-label {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+
+        .balance-overview .balance-amount {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
         }
 
         .sidebar ul {
@@ -192,118 +250,204 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             padding: 0;
             margin: 0;
             flex-grow: 1;
-            padding: 10px 0;
+            padding: 15px 0;
         }
 
         .sidebar ul li {
             padding: 0;
             margin: 4px 16px;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar ul li:hover {
+            background: rgba(77, 171, 247, 0.1);
+            transform: translateX(-5px);
         }
 
         .sidebar ul li a {
-            color: var(--text-dark);
+            color: white;
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
+            gap: 15px;
+            padding: 16px 20px;
             font-weight: 500;
-            transition: all 0.2s;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
         }
 
         .sidebar ul li a:hover {
-            background-color: var(--primary-light);
-            color: var(--primary);
+            padding-left: 25px;
         }
 
         .sidebar ul li a i {
-            width: 20px;
+            width: 22px;
             text-align: center;
+            font-size: 1.2rem;
+            color: #4dabf7;
+        }
+
+        .sidebar ul li.active {
+            background: rgba(77, 171, 247, 0.2);
+            border-left: 4px solid #4dabf7;
         }
 
         .main-content {
-            padding: 30px 20px;
-            max-width: 1200px;
+            padding: 40px 24px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
         .page-header {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             text-align: center;
+            position: relative;
         }
 
         .page-header h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
+            font-size: 2.5rem;
+            font-weight: 800;
             color: var(--text-dark);
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--primary), #4dabf7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
         }
 
         .page-header p {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--text-light);
-            max-width: 600px;
-            margin: 0 auto;
+            max-width: 700px;
+            margin: 0 auto 25px;
+            line-height: 1.7;
         }
 
-        .plans-grid {
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-bottom: 40px;
+            gap: 30px;
+            margin-bottom: 50px;
         }
 
-        .plan-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
             box-shadow: var(--shadow);
-            padding: 24px;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.4s ease;
             border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
         }
 
-        .plan-card:hover {
-            transform: translateY(-5px);
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
             box-shadow: var(--shadow-hover);
         }
 
-        .plan-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
+        .stat-card:nth-child(2)::before {
+            background: var(--gradient-accent);
         }
 
-        .plan-name {
-            font-size: 1rem;
+        .stat-card:nth-child(3)::before {
+            background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .stat-name {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stat-card:nth-child(1) .stat-icon {
+            background: var(--gradient-primary);
+        }
+
+        .stat-card:nth-child(2) .stat-icon {
+            background: var(--gradient-accent);
+        }
+
+        .stat-card:nth-child(3) .stat-icon {
+            background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
+        }
+
+        .stat-value {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .stat-subtitle {
+            font-size: 0.95rem;
             color: var(--text-light);
             font-weight: 500;
         }
 
-        .interest-rate {
+        .investments-section {
+            margin-bottom: 50px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
             font-size: 1.8rem;
             font-weight: 700;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-header h2 i {
             color: var(--primary);
         }
 
-        .plan-card:nth-child(2) .interest-rate {
-            color: var(--accent);
-        }
-
-        .plan-card:nth-child(3) .interest-rate {
-            color: #9C27B0;
-        }
-
         .card-container {
-            background-color: var(--card-bg);
-            border-radius: 12px;
+            background: var(--card-bg);
+            border-radius: 20px;
             box-shadow: var(--shadow);
             overflow: hidden;
             margin-bottom: 30px;
             border: 1px solid var(--border);
-            transition: box-shadow 0.3s;
+            transition: all 0.4s ease;
         }
 
         .card-container:hover {
@@ -311,49 +455,80 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         }
 
         .card-header {
-            background: linear-gradient(135deg, var(--primary) 0%, #3A6BB2 100%);
+            background: var(--gradient-primary);
             color: white;
-            padding: 20px 24px;
+            padding: 25px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
         .card-header h2 {
             margin: 0;
-            font-size: 1.4rem;
-            font-weight: 600;
+            font-size: 1.6rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
         }
 
         .card-body {
-            padding: 24px;
+            padding: 30px;
         }
 
         .table-container {
             overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
         }
 
         .investments-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
         }
 
         .investments-table th {
             text-align: left;
-            padding: 12px 16px;
-            font-weight: 600;
+            padding: 20px 24px;
+            font-weight: 700;
             color: var(--text-light);
-            border-bottom: 1px solid var(--border);
-            font-size: 0.9rem;
+            background-color: var(--light-bg);
+            border-bottom: 2px solid var(--border);
+            font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
         }
 
         .investments-table td {
-            padding: 16px;
+            padding: 20px 24px;
             border-bottom: 1px solid var(--border);
             font-weight: 500;
+            vertical-align: middle;
         }
 
         .investments-table tr:last-child td {
             border-bottom: none;
+        }
+
+        .investments-table tr {
+            transition: all 0.3s ease;
         }
 
         .investments-table tr:hover {
@@ -361,21 +536,38 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         }
 
         .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .status-active {
-            background-color: var(--accent-light);
+            background-color: rgba(76, 175, 80, 0.1);
             color: var(--accent);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .status-pending {
+            background-color: rgba(255, 152, 0, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(255, 152, 0, 0.3);
         }
 
         .status-completed {
-            background-color: #E8EAF6;
+            background-color: rgba(63, 81, 181, 0.1);
             color: #3F51B5;
+            border: 1px solid rgba(63, 81, 181, 0.3);
+        }
+
+        .status-cancelled {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(244, 67, 54, 0.3);
         }
 
         .investment-link {
@@ -384,75 +576,93 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 6px;
-            transition: color 0.2s;
+            gap: 8px;
+            transition: all 0.3s ease;
         }
 
         .investment-link:hover {
             color: #1a4a8a;
-            text-decoration: underline;
+            transform: translateX(5px);
         }
 
         .action-column {
-            width: 100px;
-            text-align: center;
+            width: 120px;
         }
 
-        .view-btn {
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-view {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 8px 12px;
+            padding: 10px 16px;
             background-color: var(--primary-light);
             color: var(--primary);
-            border-radius: 6px;
+            border-radius: 8px;
             text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.2s;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
         }
 
-        .view-btn:hover {
+        .btn-view:hover {
             background-color: var(--primary);
             color: white;
-            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(42, 92, 170, 0.3);
         }
 
-        .text-center {
+        .empty-state {
             text-align: center;
+            padding: 60px 40px;
+            color: var(--text-light);
         }
 
-        .text-center h3 {
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--border);
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 12px;
             color: var(--text-dark);
         }
 
-        .text-center p {
-            color: var(--text-light);
-            margin-bottom: 20px;
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .btn-submit {
-            display: inline-block;
-            padding: 12px 28px;
-            border: none;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--primary) 0%, #3A6BB2 100%);
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: var(--gradient-primary);
             color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1rem;
             text-decoration: none;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(42, 92, 170, 0.2);
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(42, 92, 170, 0.3);
         }
 
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(42, 92, 170, 0.3);
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(42, 92, 170, 0.4);
             color: white;
             text-decoration: none;
         }
@@ -461,14 +671,15 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             position: fixed;
             bottom: 0;
             width: 100%;
-            background-color: var(--card-bg);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             color: var(--text-dark);
             display: flex;
             justify-content: space-around;
-            padding: 12px 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-            z-index: 90;
-            border-top: 1px solid var(--border);
+            padding: 16px 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
         }
 
         .nav-item {
@@ -477,97 +688,40 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             align-items: center;
             text-decoration: none;
             color: var(--text-light);
-            transition: color 0.2s;
-            padding: 4px 12px;
-            border-radius: 8px;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 12px;
+            flex: 1;
+            max-width: 120px;
         }
 
         .nav-item.active, .nav-item:hover {
             color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-5px);
         }
 
         .nav-icon {
-            font-size: 1.2rem;
-            margin-bottom: 4px;
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active .nav-icon, .nav-item:hover .nav-icon {
+            transform: scale(1.2);
         }
 
         .nav-label {
-            font-size: 0.75rem;
-            font-weight: 500;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
         }
 
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .marquee {
-            background-color: var(--primary);
-            color: white;
-            font-weight: 500;
-            padding: 12px 0;
-            white-space: nowrap;
-            overflow: hidden;
-            font-size: 0.9rem;
-        }
-
-        .marquee-content {
-            display: inline-block;
-            animation: scrollLeft 20s linear infinite;
-            padding-left: 100%;
-        }
-
-        @keyframes scrollLeft {
-            from { transform: translateX(0); }
-            to { transform: translateX(-100%); }
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 20px 16px;
-            }
-
-            .plans-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .page-header h1 {
-                font-size: 1.8rem;
-            }
-
-            .bank-header h1 {
-                font-size: 1.4rem;
-            }
-
-            .card-body {
-                padding: 20px 16px;
-            }
-
-            .investments-table {
-                font-size: 0.9rem;
-            }
-
-            .investments-table th,
-            .investments-table td {
-                padding: 12px 8px;
-            }
-
-            .action-column {
-                width: 70px;
-            }
-
-            .view-btn {
-                padding: 6px 10px;
-                font-size: 0.8rem;
-            }
-        }
-                .telegram-float {
+        .telegram-float {
             position: fixed;
-            left: 20px;
-            bottom: 20px;
-            z-index: 1000;
+            left: 30px;
+            bottom: 100px;
+            z-index: 2000;
             animation: float 3s ease-in-out infinite;
         }
 
@@ -575,89 +729,360 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 60px;
-            height: 60px;
-            background: #0088cc;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #0088cc 0%, #006699 100%);
             border-radius: 50%;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 136, 204, 0.4);
+            transition: all 0.4s ease;
             text-decoration: none;
+            position: relative;
+            overflow: hidden;
         }
 
         .telegram-link:hover {
-            background: #0077b5;
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, #0077b5 0%, #005580 100%);
+            transform: scale(1.15) rotate(15deg);
+            box-shadow: 0 12px 30px rgba(0, 136, 204, 0.6);
         }
 
         .telegram-icon {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             filter: brightness(0) invert(1);
+            position: relative;
+            z-index: 1;
         }
 
         .telegram-tooltip {
             position: absolute;
-            left: 70px;
-            background: rgba(0, 0, 0, 0.8);
+            left: 85px;
+            background: rgba(0, 0, 0, 0.9);
             color: white;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 14px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
             white-space: nowrap;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.3s ease;
             pointer-events: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(-10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .telegram-tooltip::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent rgba(0, 0, 0, 0.9) transparent transparent;
         }
 
         .telegram-link:hover .telegram-tooltip {
             opacity: 1;
+            transform: translateX(0);
         }
 
         @keyframes float {
-            0% {
-                transform: translateY(0);
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            33% { transform: translateY(-12px) rotate(5deg); }
+            66% { transform: translateY(5px) rotate(-5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        .marquee {
+            background: linear-gradient(90deg, #000000 0%, #1a1a1a 100%);
+            color: white;
+            font-weight: 600;
+            padding: 14px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: scrollLeft 30s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes scrollLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .stock-item {
+            display: inline-block;
+            margin: 0 25px;
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .stock-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .stock-symbol {
+            font-weight: 800;
+            color: #4dabf7;
+            margin-right: 10px;
+        }
+
+        .stock-price {
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .stock-change {
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .stock-up {
+            background: rgba(76, 175, 80, 0.2);
+            color: var(--accent);
+        }
+
+        .stock-down {
+            background: rgba(244, 67, 54, 0.2);
+            color: var(--danger);
+        }
+
+        /* Messages Styling */
+        .messages-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 3000;
+            max-width: 400px;
+        }
+
+        .alert-message {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            border-left: 5px solid var(--primary);
+            animation: slideInRight 0.5s ease, fadeOut 0.5s ease 4.5s forwards;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .alert-success {
+            border-left-color: var(--accent);
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        }
+
+        .alert-error {
+            border-left-color: var(--danger);
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+        }
+
+        .alert-info {
+            border-left-color: var(--primary);
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .alert-success .alert-icon {
+            color: var(--accent);
+        }
+
+        .alert-error .alert-icon {
+            color: var(--danger);
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+
+        .alert-message p {
+            margin: 0;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
             }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0);
+            to {
+                transform: translateX(0);
+                opacity: 1;
             }
         }
 
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
 
+        /* Loading animations */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(42, 92, 170, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
 
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive adjustments */
         @media (max-width: 768px) {
+            .main-content {
+                padding: 30px 16px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .bank-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .card-body {
+                padding: 20px 16px;
+            }
+
+            .investments-table th,
+            .investments-table td {
+                padding: 15px 12px;
+                font-size: 0.9rem;
+            }
+
+            .action-column {
+                width: 100px;
+            }
+
+            .btn-view {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+
             .telegram-float {
-                left: 10px;
-                bottom: 10px;
+                left: 15px;
+                bottom: 90px;
             }
 
             .telegram-link {
-                width: 50px;
-                height: 50px;
+                width: 60px;
+                height: 60px;
             }
 
             .telegram-icon {
-                width: 25px;
-                height: 25px;
+                width: 28px;
+                height: 28px;
+            }
+
+            .nav-item {
+                padding: 6px 12px;
+            }
+
+            .nav-icon {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .stat-value {
+                font-size: 2.2rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .btn-view {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
- <!-- Telegram Floating Icon -->
+    <!-- Telegram Floating Icon -->
     <div class="telegram-float">
-        <a href="https://" class="telegram-link" target="_blank">
+        <a href="https://t.me/" class="telegram-link" target="_blank">
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="telegram-icon">
             <span class="telegram-tooltip">Join our Telegram group</span>
         </a>
     </div>
+
+    <!-- Messages Container -->
+    <div class="messages-container" id="messagesContainer">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert-message alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}">
+                    <div class="alert-icon">
+                        <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-title">
+                            {% if message.tags == 'success' %}
+                                Success!
+                            {% elif message.tags == 'error' %}
+                                Error!
+                            {% else %}
+                                Info
+                            {% endif %}
+                        </div>
+                        <p>{{ message|safe }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
     <header class="bank-header">
         <h1>Skybridge Finance</h1>
         <div class="header-actions">
-            <div class="notification-bell" onclick="toggleSidebar()">
+            <div class="notification-bell" onclick="toggleNotifications()">
                 <i class="fas fa-bell"></i>
             </div>
             <div class="open-sidebar-btn" onclick="toggleSidebar()">
@@ -669,19 +1094,29 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
-            <h2>Account Menu</h2>
+            <h2><i class="fas fa-user-circle"></i> Account Menu</h2>
             <button onclick="toggleSidebar()">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="user-details">
-            <p>Name: <strong>{{ user_profile.first_name }}, {{ user_profile.last_name }}</strong></p>
-            <p>Email: <strong>{{ user_profile.email }}</strong></p>
+            <p><i class="fas fa-user"></i><strong>{{ user_profile.first_name }} {{ user_profile.last_name }}</strong></p>
+            <p><i class="fas fa-envelope"></i>{{ user_profile.email }}</p>
+            <p><i class="fas fa-id-card"></i>Account: {{ user_profile.account_number|default:"N/A" }}</p>
+        </div>
+        <div class="balance-overview">
+            <div class="balance-label">AVAILABLE BALANCE</div>
+            <div class="balance-amount">${{ user_profile.balance|intcomma }}</div>
         </div>
         <ul>
             <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a href="{% url 'investment_plans' %}"><i class="fas fa-chart-line"></i> Investments</a></li>
-            <li><a href="{% url 'profile' %}"><i class="fas fa-user-cog"></i> Profile</a></li>
+            <li class="active"><a href="{% url 'investment_dashboard' %}"><i class="fas fa-chart-line"></i> Investment Dashboard</a></li>
+            <li><a href="{% url 'investment_plans' %}"><i class="fas fa-coins"></i> Investment Plans</a></li>
+            <li><a href="{% url 'create_investment' %}"><i class="fas fa-plus-circle"></i> New Investment</a></li>
+            <li><a href="{% url 'bank_transfer' %}"><i class="fas fa-exchange-alt"></i> Transfer Funds</a></li>
+            <li><a href="{% url 'transaction_history' %}"><i class="fas fa-history"></i> Transaction History</a></li>
+            <li><a href="{% url 'profile' %}"><i class="fas fa-user-cog"></i> Profile Settings</a></li>
+            <li><a href="{% url 'support' %}"><i class="fas fa-headset"></i> Customer Support</a></li>
             <li><a href="{% url 'LogOut' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
@@ -698,74 +1133,122 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         <!-- Page Header -->
         <div class="page-header">
             <h1>Investment Dashboard</h1>
-            <p>Track and manage your investment portfolio</p>
+            <p>Track your investments, monitor performance, and manage your portfolio in real-time</p>
         </div>
 
-        <!-- Investment Summary -->
-        <div class="plans-grid">
-            <div class="plan-card">
-                <div class="plan-header">
-                    <div class="plan-name">Total Invested</div>
-                    <div class="interest-rate">${{ total_invested|intcomma }}</div>
+        <!-- Investment Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-name">Total Invested</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-wallet"></i>
+                    </div>
                 </div>
+                <div class="stat-value">${{ total_invested|intcomma|default:"0" }}</div>
+                <div class="stat-subtitle">Across all active investments</div>
             </div>
-            <div class="plan-card">
-                <div class="plan-header">
-                    <div class="plan-name">Expected Returns</div>
-                    <div class="interest-rate">${{ total_expected|intcomma }}</div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-name">Expected Returns</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
                 </div>
+                <div class="stat-value">${{ total_expected_return|intcomma|default:"0" }}</div>
+                <div class="stat-subtitle">Based on current investments</div>
             </div>
-            <div class="plan-card">
-                <div class="plan-header">
-                    <div class="plan-name">Active Investments</div>
-                    <div class="interest-rate">{{ active_investments.count }}</div>
+            
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-name">Active Investments</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
                 </div>
+                <div class="stat-value">{{ active_investments.count|default:"0" }}</div>
+                <div class="stat-subtitle">Currently earning returns</div>
             </div>
         </div>
 
         <!-- Active Investments -->
-        {% if active_investments %}
         <div class="investments-section">
+            <div class="section-header">
+                <h2><i class="fas fa-bolt"></i> Active Investments</h2>
+                {% if active_investments %}
+                <div class="investment-count">
+                    <span class="status-badge status-active">{{ active_investments.count }} Active</span>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if active_investments %}
             <div class="card-container">
                 <div class="card-header">
-                    <h2>Active Investments</h2>
+                    <h2>Your Active Portfolio</h2>
                 </div>
                 <div class="card-body">
                     <div class="table-container">
                         <table class="investments-table">
                             <thead>
                                 <tr>
-                                    <th>Plan</th>
-                                    <th>Amount</th>
-                                    <th>Expected Return</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Days Left</th>
-                                    <th class="action-column">Action</th>
+                                    <th>Investment Plan</th>
+                                    <th>Amount Invested</th>
+                                    <th>Expected Returns</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                    <th>Progress</th>
+                                    <th class="action-column">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for investment in active_investments %}
                                 <tr>
                                     <td>
-                                        <a href="{% url 'investment_detail' investment.id %}" class="investment-link">
+                                        <a href="#" class="investment-link" onclick="viewInvestmentDetails('{{ investment.id }}')">
+                                            <i class="fas fa-chart-pie"></i>
                                             {{ investment.investment_plan.name }}
-                                            <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
                                         </a>
-                                          </td>
-                                    <td>${{ investment.amount_invested|intcomma }}</td>
-                                    <td>${{ investment.expected_return|intcomma }}</td>
-                                    <td>{{ investment.start_date|date:"M d, Y" }}</td>
-                                    <td>{{ investment.end_date|date:"M d, Y" }}</td>
+                                    </td>
+                                    <td><strong>${{ investment.amount_invested|intcomma }}</strong></td>
+                                    <td>
+                                        <div style="color: var(--accent); font-weight: 700;">
+                                            ${{ investment.max_expected_return|intcomma }}
+                                        </div>
+                                        <div style="font-size: 0.85rem; color: var(--text-light);">
+                                            Min: ${{ investment.min_expected_return|intcomma }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if investment.investment_plan.investment_type == 'SHORT_TERM' %}
+                                            {{ investment.investment_plan.interval_hours }} hours
+                                        {% else %}
+                                            {{ investment.investment_plan.duration_days }} days
+                                        {% endif %}
+                                    </td>
                                     <td>
                                         <span class="status-badge status-active">
-                                            {{ investment.end_date|timeuntil }}
+                                            <i class="fas fa-circle" style="font-size: 0.7rem;"></i>
+                                            Active
                                         </span>
                                     </td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div style="flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
+                                                <div style="height: 100%; background: var(--accent); width: {{ investment.progress_percentage }}%; border-radius: 3px;"></div>
+                                            </div>
+                                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-light);">
+                                                {{ investment.progress_percentage }}%
+                                            </span>
+                                        </div>
+                                    </td>
                                     <td class="action-column">
-                                        <a href="{% url 'investment_detail' investment.id %}" class="view-btn">
-                                            View <i class="fas fa-chevron-right"></i>
-                                        </a>
+                                        <div class="action-buttons">
+                                            <a href="#" class="btn-view" onclick="viewInvestmentDetails('{{ investment.id }}')">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -774,50 +1257,96 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
                     </div>
                 </div>
             </div>
+            {% else %}
+            <div class="card-container">
+                <div class="card-body">
+                    <div class="empty-state">
+                        <i class="fas fa-coins" style="color: var(--primary);"></i>
+                        <h3>No Active Investments</h3>
+                        <p>You don't have any active investments. Start your investment journey today and watch your wealth grow!</p>
+                        <a href="{% url 'investment_plans' %}" class="btn-primary">
+                            <i class="fas fa-plus"></i> Start Investing
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
 
         <!-- Completed Investments -->
         {% if completed_investments %}
         <div class="investments-section">
+            <div class="section-header">
+                <h2><i class="fas fa-check-circle"></i> Completed Investments</h2>
+                <div class="investment-count">
+                    <span class="status-badge status-completed">{{ completed_investments.count }} Completed</span>
+                </div>
+            </div>
+
             <div class="card-container">
                 <div class="card-header">
-                    <h2>Completed Investments</h2>
+                    <h2>Investment History</h2>
                 </div>
                 <div class="card-body">
                     <div class="table-container">
                         <table class="investments-table">
                             <thead>
                                 <tr>
-                                    <th>Plan</th>
-                                    <th>Amount</th>
-                                    <th>Return</th>
+                                    <th>Investment Plan</th>
+                                    <th>Amount Invested</th>
+                                    <th>Actual Return</th>
+                                    <th>Profit</th>
                                     <th>Period</th>
                                     <th>Status</th>
-                                    <th class="action-column">Action</th>
+                                    <th class="action-column">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for investment in completed_investments %}
                                 <tr>
                                     <td>
-                                        <a href="{% url 'investment_detail' investment.id %}" class="investment-link">
+                                        <a href="#" class="investment-link" onclick="viewInvestmentDetails('{{ investment.id }}')">
+                                            <i class="fas fa-chart-line"></i>
                                             {{ investment.investment_plan.name }}
-                                            <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
                                         </a>
                                     </td>
-                                    <td>${{ investment.amount_invested|intcomma }}</td>
-                                    <td>${{ investment.expected_return|intcomma }}</td>
-                                    <td>{{ investment.start_date|date:"M d, Y" }} - {{ investment.end_date|date:"M d, Y" }}</td>
+                                    <td><strong>${{ investment.amount_invested|intcomma }}</strong></td>
+                                    <td>
+                                        <div style="color: var(--accent); font-weight: 700;">
+                                            ${{ investment.actual_return|intcomma|default:"0.00" }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if investment.actual_return %}
+                                            {% with profit=investment.actual_return|floatformat:2 investment_amount=investment.amount_invested|floatformat:2 %}
+                                            {% with profit_amount=investment.actual_return|floatformat:2|add:"-"|add:investment.amount_invested|floatformat:2 %}
+                                            <div style="color: var(--accent); font-weight: 700;">
+                                                +${{ profit_amount }}
+                                            </div>
+                                            <div style="font-size: 0.85rem; color: var(--text-light);">
+                                                {{ profit_amount|floatformat:2|div:investment.amount_invested|floatformat:2|mul:100|floatformat:2 }}% ROI
+                                            </div>
+                                            {% endwith %}
+                                            {% endwith %}
+                                        {% else %}
+                                            <div style="color: var(--text-light);">Calculating...</div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ investment.start_date|date:"M d" }} - {{ investment.end_date|date:"M d, Y" }}
+                                    </td>
                                     <td>
                                         <span class="status-badge status-completed">
+                                            <i class="fas fa-check-circle" style="font-size: 0.7rem;"></i>
                                             Completed
                                         </span>
                                     </td>
                                     <td class="action-column">
-                                        <a href="{% url 'investment_detail' investment.id %}" class="view-btn">
-                                            View <i class="fas fa-chevron-right"></i>
-                                        </a>
+                                        <div class="action-buttons">
+                                            <a href="#" class="btn-view" onclick="viewInvestmentDetails('{{ investment.id }}')">
+                                                <i class="fas fa-file-alt"></i> Details
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -829,31 +1358,40 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         </div>
         {% endif %}
 
-        <!-- Call to Action -->
+        <!-- Quick Actions -->
         <div class="card-container">
-            <div class="card-body text-center">
-                <h3>Ready to Grow Your Wealth?</h3>
-                <p>Start a new investment and watch your money grow</p>
-                <a href="{% url 'investment_plans' %}" class="btn-submit" style="max-width: 200px; margin: 0 auto;">
-                    Explore Plans
-                </a>
+            <div class="card-body" style="text-align: center;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 15px; color: var(--text-dark);">
+                    <i class="fas fa-rocket" style="color: var(--primary);"></i> Grow Your Portfolio
+                </h3>
+                <p style="color: var(--text-light); margin-bottom: 30px; font-size: 1.1rem;">
+                    Start a new investment or explore our premium plans to maximize your returns
+                </p>
+                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                    <a href="{% url 'create_investment' %}" class="btn-primary">
+                        <i class="fas fa-plus-circle"></i> New Investment
+                    </a>
+                    <a href="{% url 'investment_plans' %}" class="btn-primary" style="background: linear-gradient(135deg, #6C757D 0%, #495057 100%);">
+                        <i class="fas fa-chart-bar"></i> View All Plans
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-navbar">
-        <a href="{% url 'dashboard' %}" class="nav-item active">
+        <a href="{% url 'dashboard' %}" class="nav-item">
             <i class="fas fa-home nav-icon"></i>
-            <span class="nav-label">Home</span>
+            <span class="nav-label">Dashboard</span>
         </a>
-        <a href="{% url 'investment_plans' %}" class="nav-item">
+        <a href="{% url 'investment_dashboard' %}" class="nav-item active">
             <i class="fas fa-chart-line nav-icon"></i>
-            <span class="nav-label">Invest</span>
+            <span class="nav-label">Investments</span>
         </a>
-        <a href="{% url 'bank_transfer' %}" class="nav-item">
-            <i class="fas fa-exchange-alt nav-icon"></i>
-            <span class="nav-label">Transfer</span>
+        <a href="{% url 'create_investment' %}" class="nav-item">
+            <i class="fas fa-plus-circle nav-icon"></i>
+            <span class="nav-label">New</span>
         </a>
         <a href="{% url 'profile' %}" class="nav-item">
             <i class="fas fa-user nav-icon"></i>
@@ -861,11 +1399,16 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         </a>
     </nav>
 
-
     <script>
+        // Sidebar functionality
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('open');
+        }
+
+        function toggleNotifications() {
+            // In a real app, this would show notifications dropdown
+            alert("Notifications feature coming soon!");
         }
 
         // Stock market data
@@ -875,49 +1418,100 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             { symbol: "AMZN", price: 99.12, change: 2.31 },
             { symbol: "TSLA", price: 246.78, change: -1.67 },
             { symbol: "MSFT", price: 335.21, change: 0.89 },
-            { symbol: "META", price: 312.65, change: 1.54 }
+            { symbol: "META", price: 312.65, change: 1.54 },
+            { symbol: "NVDA", price: 489.67, change: 3.45 },
+            { symbol: "BTC", price: 43256.78, change: 234.56 }
         ];
 
         function updateStockMarquee() {
             const marquee = document.getElementById("stockMarquee");
-            const stockText = stockData.map(stock => {
-                const changeClass = stock.change >= 0 ? "fa-arrow-up" : "fa-arrow-down";
-                const changeColor = stock.change >= 0 ? "#4CAF50" : "#F44336";
-                return `<span style="margin: 0 20px;">${stock.symbol}: $${stock.price.toFixed(2)} <i class="fas ${changeClass}" style="color: ${changeColor}; margin-left: 5px;"></i> ${Math.abs(stock.change).toFixed(2)}%</span>`;
-            }).join("");
-            marquee.innerHTML = stockText;
+            if (!marquee) return;
+            
+            let stockHTML = '';
+            
+            stockData.forEach((stock) => {
+                const isPositive = stock.change >= 0;
+                const changeClass = isPositive ? 'stock-up' : 'stock-down';
+                const changeIcon = isPositive ? '▲' : '▼';
+                
+                stockHTML += `
+                    <div class="stock-item">
+                        <span class="stock-symbol">${stock.symbol}</span>
+                        <span class="stock-price">$${stock.price.toFixed(2)}</span>
+                        <span class="stock-change ${changeClass}">
+                            ${changeIcon} $${Math.abs(stock.change).toFixed(2)}
+                        </span>
+                    </div>
+                `;
+            });
+            
+            marquee.innerHTML = stockHTML;
+            
+            // Simulate price updates
+            stockData.forEach(stock => {
+                const change = (Math.random() - 0.5) * 1.5;
+                stock.price = Math.max(1, stock.price + change);
+                stock.change = change;
+            });
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            setTimeout(updateStockMarquee, 1000);
+        // Investment details modal/view function
+        function viewInvestmentDetails(investmentId) {
+            // In a real app, this would open a modal or redirect to investment detail page
+            window.location.href = `/investment/${investmentId}/`;
+        }
 
+        // Auto-hide messages after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize stock ticker
+            updateStockMarquee();
+            setInterval(updateStockMarquee, 10000);
+            
+            // Auto-hide messages
+            setTimeout(() => {
+                const messages = document.querySelectorAll('.alert-message');
+                messages.forEach(msg => {
+                    msg.style.animation = 'fadeOut 0.5s ease forwards';
+                    setTimeout(() => msg.remove(), 500);
+                });
+            }, 5000);
+            
+            // Close sidebar when clicking outside
+            document.addEventListener('click', function(event) {
+                const sidebar = document.getElementById('sidebar');
+                const openBtn = document.querySelector('.open-sidebar-btn');
+                
+                if (sidebar.classList.contains('open') && 
+                    !sidebar.contains(event.target) && 
+                    !openBtn.contains(event.target)) {
+                    toggleSidebar();
+                }
+            });
+            
             // Set current page as active in bottom nav
             const currentPage = window.location.pathname;
             const navItems = document.querySelectorAll('.nav-item');
             navItems.forEach(item => {
-                item.classList.remove('active');
                 if (item.getAttribute('href') === currentPage) {
                     item.classList.add('active');
                 }
             });
         });
     </script>
-        <script>
-     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("{% static 'sw.js' %}")
-        .then(registration => {
-            console.log('✅ Service Worker Registered:', registration);
-            
-            // Check for updates
-            registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                console.log('🔄 New service worker found:', newWorker);
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register("{% static 'sw.js' %}")
+                .then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed: ', error);
+                });
             });
-        })
-        .catch(error => {
-            console.log('❌ Service Worker registration failed:', error);
-        });
-    }
+        }
     </script>
 </body>
 </html>
