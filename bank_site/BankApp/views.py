@@ -986,25 +986,30 @@ def kyc(request):
 
 
 
+from django.utils import timezone
+from datetime import datetime, timedelta
+from decimal import Decimal
+
 @login_required
 def investment_detail(request, investment_id):
     investment = get_object_or_404(UserInvestment, id=investment_id, user=request.user)
-    transactions = InvestmentTransaction.objects.filter(investment=investment).order_by('-created_at')
-    user_profile = UserProfile.objects.get(user=request.user)
+    
+    # Try to get transactions if the model exists
+    try:
+        from .models import InvestmentTransaction
+        transactions = InvestmentTransaction.objects.filter(investment=investment).order_by('-created_at')
+    except ImportError:
+        transactions = []
+    
+    user_profile = get_object_or_404(UserProfile, user=request.user)
 
-    # Safely handle date calculations
-    today = timezone.now().date()
-
-    # Convert dates to ensure compatibility
-    def to_date(dt):
-        if isinstance(dt, datetime.datetime):
-            return dt.date()
-        return dt
-
-    start_date = to_date(investment.start_date)
-    end_date = to_date(investment.end_date)
+    # Get current time
+    today = timezone.now()
 
     # Calculate total investment period in days
+    start_date = investment.start_date
+    end_date = investment.end_date
+    
     total_days = (end_date - start_date).days
 
     # Calculate days passed and remaining
@@ -1020,40 +1025,84 @@ def investment_detail(request, investment_id):
     # Determine investment status with more context
     investment_status = investment.status
     if investment_status.lower() == 'active' and days_remaining <= 0:
-        investment_status = 'Completed'
+        investment_status = 'COMPLETED'
 
-    # Calculate expected return
-    try:
-        interest_rate = float(investment.investment_plan.interest_rate)
-        expected_return = float(investment.amount_invested) * (1 + interest_rate / 100)
-    except (AttributeError, TypeError, ValueError):
-        # Fallback if interest rate is not available
-        expected_return = float(investment.amount_invested) * 1.1  # Default 10% return
-
+    # Get the investment plan
+    plan = investment.investment_plan
+    
+    # Calculate expected returns based on profit percentage range
+    # Using min_expected_return and max_expected_return from the model
+    min_expected_return = investment.min_expected_return or Decimal('0')
+    max_expected_return = investment.max_expected_return or Decimal('0')
+    
     # Calculate current value and profit/loss
     if investment_status.lower() == 'completed':
-        current_value = expected_return
+        # For completed investments, use actual_return if available, otherwise use max_expected_return
+        current_value = investment.actual_return or max_expected_return
     else:
-        initial_investment = float(investment.amount_invested)
-        total_return = expected_return - initial_investment
-        current_return = (total_return * progress_percentage) / 100
-        current_value = initial_investment + current_return
+        # For active investments, calculate current value based on progress
+        initial_investment = Decimal(str(investment.amount_invested))
+        
+        # Calculate total expected profit range
+        min_expected_profit = min_expected_return - initial_investment
+        max_expected_profit = max_expected_return - initial_investment
+        
+        # Calculate current profit based on progress
+        current_min_profit = min_expected_profit * Decimal(str(progress_percentage / 100))
+        current_max_profit = max_expected_profit * Decimal(str(progress_percentage / 100))
+        
+        # Use average of min and max for current value
+        current_profit = (current_min_profit + current_max_profit) / 2
+        current_value = initial_investment + current_profit
 
-    profit_loss = current_value - float(investment.amount_invested)
+    # Calculate profit/loss
+    profit_loss = current_value - Decimal(str(investment.amount_invested))
+    
+    # Calculate average profit percentage (for display)
+    if plan:
+        avg_profit_percentage = (plan.min_profit_percentage + plan.max_profit_percentage) / 2
+    else:
+        avg_profit_percentage = Decimal('0')
 
+    # Calculate ROI (Return on Investment)
+    if investment.amount_invested > 0:
+        roi_percentage = (profit_loss / Decimal(str(investment.amount_invested))) * 100
+    else:
+        roi_percentage = Decimal('0')
+
+    # Prepare context data
     context = {
         'investment': investment,
         'transactions': transactions,
         'user_profile': user_profile,
+        
+        # Progress metrics
         'progress_percentage': round(progress_percentage, 1),
         'days_remaining': days_remaining,
         'total_days': total_days,
         'days_passed': days_passed,
+        
+        # Status
         'investment_status': investment_status,
+        
+        # Financial metrics
         'current_value': round(current_value, 2),
         'profit_loss': round(profit_loss, 2),
-        'expected_return': round(expected_return, 2),
+        'roi_percentage': round(roi_percentage, 2),
+        'min_expected_return': round(min_expected_return, 2),
+        'max_expected_return': round(max_expected_return, 2),
+        'avg_profit_percentage': round(avg_profit_percentage, 2),
+        
+        # Plan details
+        'profit_range': f"{plan.min_profit_percentage}% - {plan.max_profit_percentage}%" if plan else "N/A",
+        'duration_display': plan.duration_display if plan else "N/A",
     }
+    
+    # Add currency symbol if available in user_profile
+    if hasattr(user_profile, 'currency'):
+        context['currency_symbol'] = user_profile.currency
+    else:
+        context['currency_symbol'] = '$'
 
     return render(request, 'BankApp/investment_detail.html', context)
 
@@ -1251,6 +1300,11 @@ def create_investment(request):
     }
     return render(request, 'BankApp/investment_create.html', context)
 
+from django.db.models import Sum
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import UserProfile, UserInvestment
 
 @login_required
 def investment_dashboard(request):
@@ -1271,40 +1325,110 @@ def investment_dashboard(request):
         except UserInvestment.DoesNotExist:
             pass
     
-    # Get user's active investments
+    # Get user's active investments with progress calculations
     active_investments = UserInvestment.objects.filter(
         user=request.user,
         status='ACTIVE'
     ).order_by('-created_at')
     
-    # Get completed investments
+    # Prepare active investments with enhanced data
+    active_investments_data = []
+    for investment in active_investments:
+        investment_data = {
+            'investment': investment,
+            'progress_percentage': investment.progress_percentage,
+            'days_remaining': investment.days_remaining,
+            'current_value': investment.current_value,
+            'current_profit': investment.current_profit,
+            'roi_percentage': investment.roi_percentage,
+            'profit_range_display': investment.profit_range_display,
+            'expected_return_range': investment.expected_return_range,
+        }
+        active_investments_data.append(investment_data)
+    
+    # Get completed investments with ROI calculations
     completed_investments = UserInvestment.objects.filter(
         user=request.user,
         status='COMPLETED'
     ).order_by('-completed_at')
+    
+    # Prepare completed investments with ROI data
+    completed_investments_data = []
+    for investment in completed_investments:
+        investment_data = {
+            'investment': investment,
+            'actual_return': investment.actual_return,
+            'current_profit': investment.current_profit,
+            'roi_percentage': investment.roi_percentage,
+            'profit_display': f"+${float(investment.current_profit):,.2f}" if investment.current_profit else "Calculating...",
+            'roi_display': f"{float(investment.roi_percentage):.2f}% ROI" if investment.roi_percentage else "Calculating...",
+        }
+        completed_investments_data.append(investment_data)
     
     # Calculate total statistics
     total_invested = active_investments.aggregate(
         total=Sum('amount_invested')
     )['total'] or 0
     
+    # Calculate total expected return from max_expected_return
     total_expected_return = active_investments.aggregate(
         total=Sum('max_expected_return')
     )['total'] or 0
     
-    total_profit = total_expected_return - total_invested
+    # Calculate total current value and profit from active investments
+    total_current_value = sum(
+        float(investment.current_value) for investment in active_investments
+    )
+    total_current_profit = sum(
+        float(investment.current_profit) for investment in active_investments
+    )
+    
+    # Calculate completed investments totals
+    total_completed_invested = completed_investments.aggregate(
+        total=Sum('amount_invested')
+    )['total'] or 0
+    
+    total_completed_return = completed_investments.aggregate(
+        total=Sum('actual_return')
+    )['total'] or 0
+    
+    total_completed_profit = total_completed_return - total_completed_invested
+    
+    # Calculate overall totals
+    overall_invested = total_invested + total_completed_invested
+    overall_return = total_expected_return + total_completed_return
+    overall_profit = overall_return - overall_invested
     
     context = {
         'user_profile': user_profile,
-        'active_investments': active_investments,
-        'completed_investments': completed_investments,
+        
+        # Active investments with enhanced data
+        'active_investments_data': active_investments_data,
+        'active_investments_count': active_investments.count(),
+        
+        # Completed investments with ROI
+        'completed_investments_data': completed_investments_data,
+        'completed_investments_count': completed_investments.count(),
+        
+        # Active investments statistics
         'total_invested': total_invested,
         'total_expected_return': total_expected_return,
-        'total_profit': total_profit,
+        'total_current_value': total_current_value,
+        'total_current_profit': total_current_profit,
+        
+        # Completed investments statistics
+        'total_completed_invested': total_completed_invested,
+        'total_completed_return': total_completed_return,
+        'total_completed_profit': total_completed_profit,
+        
+        # Overall statistics
+        'overall_invested': overall_invested,
+        'overall_return': overall_return,
+        'overall_profit': overall_profit,
     }
+    
     return render(request, 'BankApp/investment_dashboard.html', context)
-
-
+    
 def home(request):
     return render(request, 'BankApp/index.html')
 

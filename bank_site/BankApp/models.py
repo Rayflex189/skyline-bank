@@ -214,6 +214,10 @@ class InvestmentPlan(models.Model):
             'max_profit': max_profit,
             'profit_range': f"${min_profit:.2f} - ${max_profit:.2f}"
         }
+from django.utils import timezone
+from datetime import timedelta
+from decimal import Decimal
+import random
 
 class UserInvestment(models.Model):
     STATUS_CHOICES = [
@@ -237,6 +241,147 @@ class UserInvestment(models.Model):
     actual_return = models.DecimalField(max_digits=15, decimal_places=2, null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
 
+    # === PROGRESS CALCULATION METHODS ===
+    
+    @property
+    def progress_percentage(self):
+        """Calculate investment progress percentage (0-100)"""
+        from django.utils import timezone
+        
+        if self.status == 'COMPLETED':
+            return 100
+        
+        if self.status == 'PENDING':
+            return 0
+        
+        # Calculate progress for active investments
+        try:
+            total_days = (self.end_date - self.start_date).days
+            if total_days <= 0:
+                return 100
+            
+            today = timezone.now()
+            days_passed = (today - self.start_date).days
+            
+            # Ensure days_passed is within bounds
+            if days_passed < 0:
+                return 0
+            elif days_passed > total_days:
+                return 100
+            
+            progress = (days_passed / total_days) * 100
+            return min(100, max(0, round(progress, 1)))
+            
+        except (TypeError, AttributeError):
+            return 0
+    
+    @property
+    def days_remaining(self):
+        """Calculate days remaining until completion"""
+        from django.utils import timezone
+        
+        if self.status in ['COMPLETED', 'CANCELLED']:
+            return 0
+        
+        today = timezone.now()
+        if self.end_date > today:
+            remaining = (self.end_date - today).days
+            return max(0, remaining)
+        return 0
+    
+    @property
+    def days_passed(self):
+        """Calculate days passed since investment start"""
+        from django.utils import timezone
+        
+        if self.status == 'PENDING':
+            return 0
+        
+        today = timezone.now()
+        if today > self.start_date:
+            passed = (today - self.start_date).days
+            return max(0, passed)
+        return 0
+    
+    @property
+    def total_days(self):
+        """Calculate total investment duration in days"""
+        try:
+            return (self.end_date - self.start_date).days
+        except (TypeError, AttributeError):
+            return 0
+    
+    # === FINANCIAL CALCULATION METHODS ===
+    
+    @property
+    def current_value(self):
+        """Calculate current investment value based on progress"""
+        if self.status == 'COMPLETED':
+            # For completed investments, use actual_return if available
+            if self.actual_return:
+                return self.actual_return
+            # Fallback to max_expected_return
+            return self.max_expected_return or self.amount_invested
+        
+        if self.status == 'ACTIVE':
+            # For active investments, calculate based on progress
+            progress = self.progress_percentage / 100
+            
+            # Get expected returns
+            min_return = self.min_expected_return or self.amount_invested
+            max_return = self.max_expected_return or self.amount_invested
+            
+            # Calculate profit range
+            min_profit = float(min_return) - float(self.amount_invested)
+            max_profit = float(max_return) - float(self.amount_invested)
+            
+            # Calculate current profit based on progress
+            current_min_profit = min_profit * progress
+            current_max_profit = max_profit * progress
+            
+            # Use average of min and max
+            current_profit = (current_min_profit + current_max_profit) / 2
+            current_value = float(self.amount_invested) + current_profit
+            
+            return Decimal(str(round(current_value, 2)))
+        
+        # For PENDING or CANCELLED
+        return self.amount_invested
+    
+    @property
+    def current_profit(self):
+        """Calculate current profit/loss"""
+        current_val = float(self.current_value)
+        invested = float(self.amount_invested)
+        return Decimal(str(round(current_val - invested, 2)))
+    
+    @property
+    def roi_percentage(self):
+        """Calculate Return on Investment percentage"""
+        invested = float(self.amount_invested)
+        if invested > 0:
+            profit = float(self.current_profit)
+            roi = (profit / invested) * 100
+            return Decimal(str(round(roi, 2)))
+        return Decimal('0')
+    
+    @property
+    def profit_range_display(self):
+        """Display profit range"""
+        if self.investment_plan:
+            plan = self.investment_plan
+            return f"{plan.min_profit_percentage}% - {plan.max_profit_percentage}%"
+        return "N/A"
+    
+    @property
+    def expected_return_range(self):
+        """Get expected return range"""
+        min_return = self.min_expected_return or self.amount_invested
+        max_return = self.max_expected_return or self.amount_invested
+        return f"${float(min_return):,.2f} - ${float(max_return):,.2f}"
+    
+    # === EXISTING METHODS (UPDATED) ===
+    
     def calculate_expected_return(self):
         """Calculate expected return based on investment plan"""
         plan = self.investment_plan
@@ -301,7 +446,12 @@ class UserInvestment(models.Model):
             'interval': f"{self.investment_plan.interval_hours} hours" if self.investment_plan.interval_hours else "N/A",
             'start_date': self.start_date,
             'end_date': self.end_date,
-            'status': self.get_status_display()
+            'status': self.get_status_display(),
+            'progress_percentage': self.progress_percentage,
+            'days_remaining': self.days_remaining,
+            'current_value': self.current_value,
+            'current_profit': self.current_profit,
+            'roi_percentage': self.roi_percentage,
         }
 
     def save(self, *args, **kwargs):
@@ -311,30 +461,39 @@ class UserInvestment(models.Model):
             self.min_expected_return = returns['min_total']
             self.max_expected_return = returns['max_total']
         
-        # Set end date based on plan duration
+        # Set end date based on plan duration if not set
         if not self.end_date:
-            if self.investment_plan.investment_type == 'SHORT_TERM':
+            if self.investment_plan.investment_type == 'SHORT_TERM' and self.investment_plan.interval_hours:
                 # For short-term, add hours
                 self.end_date = timezone.now() + timedelta(hours=self.investment_plan.interval_hours)
             else:
                 # For long-term, add days
                 self.end_date = timezone.now() + timedelta(days=self.investment_plan.duration_days)
         
-        # Auto-complete if past end date
+        # Auto-complete if past end date and still active
         if self.end_date and timezone.now() > self.end_date and self.status == 'ACTIVE':
             self.status = 'COMPLETED'
             self.completed_at = timezone.now()
-            # Set actual return (you can randomize between min and max)
-            import random
-            min_return = float(self.min_expected_return)
-            max_return = float(self.max_expected_return)
-            self.actual_return = Decimal(str(random.uniform(min_return, max_return)))
+            
+            # Calculate actual return between min and max expected
+            if self.min_expected_return and self.max_expected_return:
+                min_return = float(self.min_expected_return)
+                max_return = float(self.max_expected_return)
+                # Randomize between min and max (you can adjust this logic)
+                self.actual_return = Decimal(str(round(random.uniform(min_return, max_return), 2)))
+            else:
+                # Fallback to amount invested if no expected returns set
+                self.actual_return = self.amount_invested
         
         super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.user.username} - {self.investment_plan.name} - ${self.amount_invested} - {self.get_status_display()}"
-
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "User Investment"
+        verbose_name_plural = "User Investments"
 
 class InvestmentTransaction(models.Model):
     TRANSACTION_TYPES = [
