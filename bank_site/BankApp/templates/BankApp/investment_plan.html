@@ -6,16 +6,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Investment Plans - Skyline Bank</title>
-<!-- Begin of Chaport Live Chat code -->
-<script type="text/javascript">
-(function(w,d,v3){
-w.chaportConfig = {
-  appId : '698184ca2764117339b24bdd',
-};
+    <!-- Begin of Chaport Live Chat code -->
+    <script type="text/javascript">
+    (function(w,d,v3){
+    w.chaportConfig = {
+      appId : '698184ca2764117339b24bdd',
+    };
 
-if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
-</script>
-<!-- End of Chaport Live Chat code -->
+    if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
+    </script>
+    <!-- End of Chaport Live Chat code -->
+    
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
@@ -37,6 +38,9 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             --white: #ffffff;
             --text-dark: #333333;
             --text-muted: #6c757d;
+            --starter-color: #3498db;
+            --pro-color: #2ecc71;
+            --elite-color: #9b59b6;
         }
 
         body {
@@ -229,6 +233,20 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             font-size: 1.2rem;
         }
 
+        /* Plan Categories */
+        .plan-category {
+            margin-bottom: 40px;
+        }
+
+        .plan-category h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
         /* Plans Grid */
         .plans-grid {
             display: grid;
@@ -251,7 +269,6 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         }
 
         .plan-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             padding: 25px;
             text-align: center;
@@ -263,10 +280,19 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             margin-bottom: 10px;
         }
 
-        .interest-rate {
+        .profit-range-display {
             font-size: 2.5rem;
             font-weight: bold;
             margin: 15px 0;
+        }
+
+        .plan-type {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+            margin-top: 10px;
         }
 
         .plan-body {
@@ -289,7 +315,6 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         .btn-invest {
             width: 100%;
             padding: 12px;
-            background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 6px;
@@ -303,9 +328,9 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         }
 
         .btn-invest:hover {
-            background-color: var(--secondary-color);
             color: white;
             text-decoration: none;
+            opacity: 0.9;
         }
 
         /* Investments Section */
@@ -408,114 +433,8 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             }
         }
 
-        /* Media Queries */
-        @media (max-width: 1200px) {
-            .main-content {
-                padding: 25px 15px;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .services-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .plans-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header-content {
-                padding: 0 15px;
-            }
-
-            .brand-logo h1 {
-                font-size: 1.3rem;
-            }
-
-            .main-content {
-                padding: 20px 10px;
-            }
-
-            .page-header h1 {
-                font-size: 2rem;
-            }
-
-            .page-header p {
-                font-size: 1rem;
-            }
-
-            .balance-amount {
-                font-size: 2rem;
-            }
-
-            .plans-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .nav-items {
-                flex-wrap: wrap;
-            }
-
-            .nav-item {
-                flex: 0 0 25%;
-                margin-bottom: 10px;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .header-content {
-                flex-direction: column;
-                gap: 10px;
-                padding: 10px;
-            }
-
-            .user-info {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .welcome-section {
-                padding: 20px 15px;
-            }
-
-            .balance-amount {
-                font-size: 1.8rem;
-            }
-
-            .plan-header {
-                padding: 20px;
-            }
-
-            .plan-body {
-                padding: 20px;
-            }
-
-            .interest-rate {
-                font-size: 2rem;
-            }
-
-            .nav-items {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .nav-item {
-                flex-direction: row;
-                justify-content: center;
-                gap: 10px;
-            }
-
-            .nav-icon {
-                margin-bottom: 0;
-            }
-        }
-                .telegram-float {
+        /* Telegram Floating Icon */
+        .telegram-float {
             position: fixed;
             left: 20px;
             bottom: 20px;
@@ -578,7 +497,101 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             }
         }
 
+        /* Example Calculation */
+        .example-calculation {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary-color);
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        /* Investment Type Badge */
+        .investment-type-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .badge-short-term {
+            background-color: var(--starter-color);
+            color: white;
+        }
+
+        .badge-long-term {
+            background-color: var(--pro-color);
+            color: white;
+        }
+
+        /* Profit Range Display */
+        .profit-range {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Media Queries */
+        @media (max-width: 1200px) {
+            .main-content {
+                padding: 25px 15px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .plans-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
+            .header-content {
+                padding: 0 15px;
+            }
+
+            .brand-logo h1 {
+                font-size: 1.3rem;
+            }
+
+            .main-content {
+                padding: 20px 10px;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
+            }
+
+            .balance-amount {
+                font-size: 2rem;
+            }
+
+            .plans-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-items {
+                flex-wrap: wrap;
+            }
+
+            .nav-item {
+                flex: 0 0 25%;
+                margin-bottom: 10px;
+            }
+
             .telegram-float {
                 left: 10px;
                 bottom: 10px;
@@ -593,23 +606,76 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
                 width: 25px;
                 height: 25px;
             }
+
+            .profit-range-display {
+                font-size: 2rem !important;
+            }
+
+            .plan-header {
+                padding: 20px !important;
+            }
+
+            .plan-body {
+                padding: 20px !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .user-info {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-section {
+                padding: 20px 15px;
+            }
+
+            .balance-amount {
+                font-size: 1.8rem;
+            }
+
+            .nav-items {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-item {
+                flex-direction: row;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .nav-icon {
+                margin-bottom: 0;
+            }
         }
     </style>
 </head>
 <body>
-<!-- Telegram Floating Icon -->
+    <!-- Telegram Floating Icon -->
     <div class="telegram-float">
         <a href="https://" class="telegram-link" target="_blank">
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="telegram-icon">
             <span class="telegram-tooltip">Join our Telegram group</span>
         </a>
     </div>
+    
     <!-- Header -->
     <div class="header">
         <div class="header-content">
             <div class="brand-logo">
                 <i class="fas fa-university fa-2x"></i>
-                <h1>Skybride bank</h1>
+                <h1>Skybride Bank</h1>
             </div>
             <div class="user-info">
                 <div class="user-avatar">
@@ -633,17 +699,19 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <h2>Account Menu</h2>
-            <button onclick="toggleSidebar()">Close</button>
+            <button onclick="toggleSidebar()" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
         <div class="user-details">
            <p>Name: <strong>{{ user_profile.first_name }}, {{ user_profile.last_name }}</strong></p>
             <p>Email: <strong>{{ user_profile.email }}</strong></p>
         </div>
         <ul>
-            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-            <li><a href="{% url 'investment_plans' %}">Investments</a></li>
-            <li><a href="{% url 'profile' %}">Profile</a></li>
-            <li><a href="{% url 'LogOut' %}">Logout</a></li>
+            <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="{% url 'investment_plans' %}"><i class="fas fa-chart-line"></i> Investments</a></li>
+            <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="{% url 'LogOut' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 
@@ -710,51 +778,217 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         </div>
 
         <!-- Balance Display -->
-        <div class="balance-display">
+        <div style="text-align: center; margin: 30px 0; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);">
             <div class="balance-label">AVAILABLE BALANCE FOR INVESTMENT</div>
             <div class="balance-amount">${{ user_profile.balance|intcomma }}</div>
         </div>
 
-        <!-- Investment Plans Grid -->
-        <div class="plans-grid">
-            {% for plan in plans %}
-            <div class="plan-card">
-                <div class="plan-header">
-                    <div class="plan-name">{{ plan.name }}</div>
-                    <div class="interest-rate">{{ plan.interest_rate }}%</div>
-                    <div class="plan-type">{{ plan.get_plan_type_display }}</div>
+        <!-- STARTER PLANS -->
+        <div class="plan-category">
+            <h2><i class="fas fa-rocket" style="margin-right: 10px;"></i>Starter Plans</h2>
+            <div class="plans-grid">
+                {% for plan in starter_plans %}
+                <div class="plan-card">
+                    <div class="plan-header" style="background: linear-gradient(135deg, var(--starter-color), #2980b9);">
+                        <div class="plan-name">{{ plan.name }}</div>
+                        <div class="profit-range-display">
+                            {{ plan.min_profit_percentage }}% - {{ plan.max_profit_percentage }}%
+                        </div>
+                        <div class="plan-type">
+                            {% if plan.investment_type == 'SHORT_TERM' %}
+                                <i class="fas fa-clock"></i> {{ plan.interval_hours }} Hours
+                            {% else %}
+                                <i class="fas fa-calendar-alt"></i> {{ plan.duration_days }} Days
+                            {% endif %}
+                        </div>
+                        <div class="profit-range">
+                            Profit Range: {{ plan.min_profit_percentage }}% - {{ plan.max_profit_percentage }}%
+                        </div>
+                    </div>
+                    <div class="plan-body">
+                        <div class="plan-feature">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>Minimum: ${{ plan.min_amount|intcomma }}</span>
+                        </div>
+                        <div class="plan-feature">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Maximum: ${{ plan.max_amount|intcomma }}</span>
+                        </div>
+                        <div class="plan-feature">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>
+                                {% if plan.investment_type == 'SHORT_TERM' %}
+                                    Duration: {{ plan.interval_hours }} Hours
+                                {% else %}
+                                    Duration: {{ plan.duration_days }} Days
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="plan-feature">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>
+                                Min Profit: ${{ plan.min_amount|floatformat:2 }}
+                            </span>
+                        </div>
+                        <div class="plan-feature">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>
+                                Max Profit: ${{ plan.max_amount|floatformat:2 }}
+                            </span>
+                        </div>
+                        <div class="example-calculation">
+                            <i class="fas fa-calculator"></i>
+                            Example: Invest ${{ plan.min_amount|floatformat:2 }} → Return ${{ plan.max_amount|floatformat:2 }}
+                        </div>
+                        <a href="{% url 'create_investment' %}?plan={{ plan.id }}" class="btn-invest" style="background: var(--starter-color);">
+                            <i class="fas fa-chart-line"></i> Invest Now
+                        </a>
+                    </div>
                 </div>
-                <div class="plan-body">
-                    <div class="plan-feature">
-                        <i class="fas fa-dollar-sign"></i>
-                        <span>Minimum: ${{ plan.min_amount|intcomma }}</span>
-                    </div>
-                    <div class="plan-feature">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Maximum: ${{ plan.max_amount|intcomma }}</span>
-                    </div>
-                    <div class="plan-feature">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>Duration: {{ plan.duration_days }} days</span>
-                    </div>
-                    <div class="plan-feature">
-                        <i class="fas fa-info-circle"></i>
-                        <span>{{ plan.description }}</span>
-                    </div>
-                    <a href="{% url 'create_investment' %}?plan={{ plan.id }}" class="btn-invest">
-                        Invest Now
-                    </a>
-                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+        </div>
+
+        <!-- PRO PLANS -->
+        <div class="plan-category">
+            <h2><i class="fas fa-chart-line" style="margin-right: 10px;"></i>Pro Plans</h2>
+            <div class="plans-grid">
+                {% for plan in pro_plans %}
+                <div class="plan-card">
+                    <div class="plan-header" style="background: linear-gradient(135deg, var(--pro-color), #27ae60);">
+                        <div class="plan-name">{{ plan.name }}</div>
+                        <div class="profit-range-display">
+                            {{ plan.min_profit_percentage }}% - {{ plan.max_profit_percentage }}%
+                        </div>
+                        <div class="plan-type">
+                            {% if plan.investment_type == 'SHORT_TERM' %}
+                                <i class="fas fa-clock"></i> {{ plan.interval_hours }} Hours
+                            {% else %}
+                                <i class="fas fa-calendar-alt"></i> {{ plan.duration_days }} Days
+                            {% endif %}
+                        </div>
+                        <div class="profit-range">
+                            Profit Range: {{ plan.min_profit_percentage }}% - {{ plan.max_profit_percentage }}%
+                        </div>
+                    </div>
+                    <div class="plan-body">
+                        <div class="plan-feature">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>Minimum: ${{ plan.min_amount|intcomma }}</span>
+                        </div>
+                        <div class="plan-feature">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Maximum: ${{ plan.max_amount|intcomma }}</span>
+                        </div>
+                        <div class="plan-feature">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>
+                                {% if plan.investment_type == 'SHORT_TERM' %}
+                                    Duration: {{ plan.interval_hours }} Hours
+                                {% else %}
+                                    Duration: {{ plan.duration_days }} Days
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="plan-feature">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>
+                                Min Profit: ${{ plan.min_amount|floatformat:2 }}
+                            </span>
+                        </div>
+                        <div class="plan-feature">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>
+                                Max Profit: ${{ plan.max_amount|floatformat:2 }}
+                            </span>
+                        </div>
+                        <div class="example-calculation">
+                            <i class="fas fa-calculator"></i>
+                            Example: Invest ${{ plan.min_amount|floatformat:2 }} → Return ${{ plan.max_amount|floatformat:2 }}
+                        </div>
+                        <a href="{% url 'create_investment' %}?plan={{ plan.id }}" class="btn-invest" style="background: var(--pro-color);">
+                            <i class="fas fa-chart-line"></i> Invest Now
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- ELITE PLANS -->
+        <div class="plan-category">
+            <h2><i class="fas fa-crown" style="margin-right: 10px;"></i>Elite Plans</h2>
+            <div class="plans-grid">
+                {% for plan in elite_plans %}
+                <div class="plan-card">
+                    <div class="plan-header" style="background: linear-gradient(135deg, var(--elite-color), #8e44ad);">
+                        <div class="plan-name">{{ plan.name }}</div>
+                        <div class="profit-range-display">
+                            {{ plan.min_profit_percentage }}% - {{ plan.max_profit_percentage }}%
+                        </div>
+                        <div class="plan-type">
+                            {% if plan.investment_type == 'SHORT_TERM' %}
+                                <i class="fas fa-clock"></i> {{ plan.interval_hours }} Hours
+                            {% else %}
+                                <i class="fas fa-calendar-alt"></i> {{ plan.duration_days }} Days
+                            {% endif %}
+                        </div>
+                        <div class="profit-range">
+                            Profit Range: {{ plan.min_profit_percentage }}% - {{ plan.max_profit_percentage }}%
+                        </div>
+                    </div>
+                    <div class="plan-body">
+                        <div class="plan-feature">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>Minimum: ${{ plan.min_amount|intcomma }}</span>
+                        </div>
+                        <div class="plan-feature">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Maximum: ${{ plan.max_amount|intcomma }}</span>
+                        </div>
+                        <div class="plan-feature">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>
+                                {% if plan.investment_type == 'SHORT_TERM' %}
+                                    Duration: {{ plan.interval_hours }} Hours
+                                {% else %}
+                                    Duration: {{ plan.duration_days }} Days
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="plan-feature">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>
+                                Min Profit: ${{ plan.min_amount|floatformat:2 }}
+                            </span>
+                        </div>
+                        <div class="plan-feature">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>
+                                Max Profit: ${{ plan.max_amount|floatformat:2 }}
+                            </span>
+                        </div>
+                        <div class="example-calculation">
+                            <i class="fas fa-calculator"></i>
+                            Example: Invest ${{ plan.min_amount|floatformat:2 }} → Return ${{ plan.max_amount|floatformat:2 }}
+                        </div>
+                        <a href="{% url 'create_investment' %}?plan={{ plan.id }}" class="btn-invest" style="background: var(--elite-color);">
+                            <i class="fas fa-chart-line"></i> Invest Now
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
 
         <!-- Current Investments Section -->
         {% if user_investments %}
         <div class="investments-section">
-            <div class="card" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
-                <div class="card-header" style="background: var(--primary-color); color: white; border-radius: 12px 12px 0 0;">
-                    <h2 style="margin: 0; font-size: 1.8rem;">Your Current Investments</h2>
+            <div class="card" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); margin-top: 50px;">
+                <div class="card-header" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border-radius: 12px 12px 0 0; padding: 20px;">
+                    <h2 style="margin: 0; font-size: 1.8rem;">
+                        <i class="fas fa-chart-bar" style="margin-right: 10px;"></i>Your Current Investments
+                    </h2>
                 </div>
                 <div class="card-body" style="padding: 30px;">
                     <div class="table-container">
@@ -774,12 +1008,18 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
                                 <tr>
                                     <td>{{ investment.investment_plan.name }}</td>
                                     <td>${{ investment.amount_invested|intcomma }}</td>
-                                    <td>${{ investment.expected_return|intcomma }}</td>
-      <td>{{ investment.start_date|date:"M d, Y" }}</td>
+                                    <td>
+                                        ${{ investment.min_expected_return|intcomma }} - ${{ investment.max_expected_return|intcomma }}
+                                    </td>
+                                    <td>{{ investment.start_date|date:"M d, Y" }}</td>
                                     <td>{{ investment.end_date|date:"M d, Y" }}</td>
                                     <td>
-                                        <span class="status-badge status-{{ investment.status|lower }}">
-                                            {{ investment.status }}
+                                        <span style="padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; 
+                                        {% if investment.status == 'ACTIVE' %}background-color: #d4edda; color: #155724;
+                                        {% elif investment.status == 'COMPLETED' %}background-color: #e2e3e5; color: #383d41;
+                                        {% elif investment.status == 'PENDING' %}background-color: #fff3cd; color: #856404;
+                                        {% else %}background-color: #f8d7da; color: #721c24;{% endif %}">
+                                            {{ investment.get_status_display }}
                                         </span>
                                     </td>
                                 </tr>
@@ -789,6 +1029,12 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
                     </div>
                 </div>
             </div>
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 40px; margin: 40px 0; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);">
+            <i class="fas fa-chart-line" style="font-size: 3rem; color: #6c757d; margin-bottom: 20px;"></i>
+            <h3 style="color: #495057;">No Active Investments</h3>
+            <p style="color: #6c757d;">Start your investment journey by selecting a plan above.</p>
         </div>
         {% endif %}
 
@@ -821,24 +1067,75 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             sidebar.classList.toggle('open');
         }
 
-        // Mock API Data for stocks
+        // Stock Market Data
         const stockData = [
-            { symbol: "AAPL", price: 178.23 },
-            { symbol: "GOOGL", price: 123.45 },
-            { symbol: "AMZN", price: 99.12 },
-            { symbol: "TSLA", price: 246.78 }
+            { symbol: "AAPL", price: 178.23, change: "+1.2%" },
+            { symbol: "GOOGL", price: 123.45, change: "-0.5%" },
+            { symbol: "AMZN", price: 99.12, change: "+2.3%" },
+            { symbol: "TSLA", price: 246.78, change: "+0.8%" },
+            { symbol: "MSFT", price: 315.67, change: "+0.9%" },
+            { symbol: "NVDA", price: 456.89, change: "+3.5%" }
         ];
 
         // Update stock marquee dynamically
         function updateStockMarquee() {
             const marquee = document.getElementById("stockMarquee");
-            const stockText = stockData.map(stock => `${stock.symbol}: $${stock.price.toFixed(2)}`).join(" | ");
-            marquee.innerHTML = stockText;
+            const stockText = stockData.map(stock => 
+                `${stock.symbol}: $${stock.price.toFixed(2)} ${stock.change}`
+            ).join(" | ");
+            marquee.innerHTML = "📈 LIVE MARKETS: " + stockText;
+        }
+
+        // Calculate profit examples for each plan
+        function calculateProfitExamples() {
+            const planCards = document.querySelectorAll('.plan-card');
+            planCards.forEach(card => {
+                const minAmountText = card.querySelector('.plan-feature:nth-child(1) span').textContent;
+                const maxAmountText = card.querySelector('.plan-feature:nth-child(2) span').textContent;
+                
+                const minAmount = parseFloat(minAmountText.replace('Minimum: $', '').replace(',', ''));
+                const maxAmount = parseFloat(maxAmountText.replace('Maximum: $', '').replace(',', ''));
+                
+                const profitRangeText = card.querySelector('.profit-range').textContent;
+                const profitMatch = profitRangeText.match(/(\d+\.?\d*)% - (\d+\.?\d*)%/);
+                
+                if (profitMatch) {
+                    const minProfitPercent = parseFloat(profitMatch[1]);
+                    const maxProfitPercent = parseFloat(profitMatch[2]);
+                    
+                    // Calculate example returns
+                    const minInvestReturn = minAmount * (1 + minProfitPercent/100);
+                    const maxInvestReturn = maxAmount * (1 + maxProfitPercent/100);
+                    
+                    // Update example calculation
+                    const exampleDiv = card.querySelector('.example-calculation');
+                    if (exampleDiv) {
+                        exampleDiv.innerHTML = `
+                            <i class="fas fa-calculator"></i>
+                            Example: Invest $${minAmount.toFixed(2)} → Return $${minInvestReturn.toFixed(2)} to $${maxInvestReturn.toFixed(2)}
+                        `;
+                    }
+                }
+            });
         }
 
         // Call functions after the DOM is loaded
         document.addEventListener("DOMContentLoaded", () => {
             setTimeout(updateStockMarquee, 1000);
+            setTimeout(calculateProfitExamples, 1500);
+            
+            // Update marquee every 30 seconds
+            setInterval(updateStockMarquee, 30000);
+        });
+
+        // Add investment type badges
+        document.querySelectorAll('.plan-type').forEach(typeElement => {
+            const typeText = typeElement.textContent.toLowerCase();
+            if (typeText.includes('hours')) {
+                typeElement.classList.add('badge-short-term');
+            } else if (typeText.includes('days')) {
+                typeElement.classList.add('badge-long-term');
+            }
         });
     </script>
     

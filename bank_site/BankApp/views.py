@@ -35,7 +35,9 @@ from .models import *
 from .utilis import *  # If still required (consider limiting *)
 from BankApp.decorators import unauthenticated_user
 from BankApp.models import UserProfile
-
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import InvestmentPlan, UserInvestment, UserProfile
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.db.models import Count, Q
@@ -1057,12 +1059,36 @@ def investment_detail(request, investment_id):
 
 @login_required
 def investment_plans(request):
-    plans = InvestmentPlan.objects.filter(is_active=True)
-    user_investments = UserInvestment.objects.filter(user=request.user)
-
+    # Get all active investment plans, grouped by plan type
+    starter_plans = InvestmentPlan.objects.filter(
+        is_active=True,
+        plan_type='STARTER'
+    ).order_by('investment_type')
+    
+    pro_plans = InvestmentPlan.objects.filter(
+        is_active=True,
+        plan_type='PRO'
+    ).order_by('investment_type')
+    
+    elite_plans = InvestmentPlan.objects.filter(
+        is_active=True,
+        plan_type='ELITE'
+    ).order_by('investment_type')
+    
+    # Get user's current investments
+    user_investments = UserInvestment.objects.filter(
+        user=request.user
+    ).select_related('investment_plan').order_by('-start_date')
+    
+    # Get user profile
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    
     context = {
-        'plans': plans,
+        'starter_plans': starter_plans,
+        'pro_plans': pro_plans,
+        'elite_plans': elite_plans,
         'user_investments': user_investments,
+        'user_profile': user_profile,
     }
     return render(request, 'BankApp/investment_plan.html', context)
 
