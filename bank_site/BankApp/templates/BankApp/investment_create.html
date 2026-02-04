@@ -316,19 +316,6 @@
         </div>
     </div>
 
-    <!-- Hidden plan data for JavaScript -->
-    <div style="display: none;" id="plan-data">
-        {% for plan in form.fields.plan.queryset %}
-        <div data-plan="{{ plan.id }}" 
-             data-min="{{ plan.min_amount }}" 
-             data-max="{{ plan.max_amount }}" 
-             data-rate="{{ plan.interest_rate }}" 
-             data-duration="{{ plan.duration_days }}" 
-             data-name="{{ plan.name }}">
-        </div>
-        {% endfor %}
-    </div>
-
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-navbar">
         <a href="{% url 'dashboard' %}" class="nav-item">
@@ -348,220 +335,182 @@
             <span class="nav-label">Profile</span>
         </a>
     </nav>
-
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('open');
-        }
-
-        function toggleNotifications() {
-            alert("Notifications feature coming soon!");
-        }
-document.addEventListener('DOMContentLoaded', function() {
-    const planSelect = document.getElementById('id_plan');
-    const amountInput = document.getElementById('id_amount');
-    const planDetails = document.getElementById('plan-details');
-    const planTitle = document.getElementById('plan-title');
-
-    // Extract plan data from hidden div
-    const plans = {};
-    const planElements = document.querySelectorAll('#plan-data div[data-plan]');
-    
-    planElements.forEach(element => {
-        const planId = element.dataset.plan;
-        // Ensure proper parsing of numeric values
-        const minAmount = parseFloat(element.dataset.min) || 0;
-        const maxAmount = parseFloat(element.dataset.max) || 0;
-        const interestRate = parseFloat(element.dataset.rate) || 0;
-        const durationDays = parseInt(element.dataset.duration) || 0;
-        const name = element.dataset.name || 'Unknown Plan';
-        
-        console.log(`Plan ${planId}:`, { minAmount, maxAmount, interestRate, durationDays, name });
-        
-        plans[planId] = {
-            min_amount: minAmount,
-            max_amount: maxAmount,
-            interest_rate: interestRate,
-            duration_days: durationDays,
-            name: name
-        };
-    });
-
-    console.log('Available plans:', plans);
-
-    function updatePlanDetails() {
-        const selectedPlan = plans[planSelect.value];
-        console.log('Selected plan:', selectedPlan);
-        
-        if (selectedPlan) {
-            planDetails.style.display = 'block';
-            planTitle.textContent = `${selectedPlan.name} Details`;
-            
-            document.getElementById('min-amount').innerHTML = 
-                `<strong>Minimum:</strong> $${selectedPlan.min_amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            
-            document.getElementById('max-amount').innerHTML = 
-                `<strong>Maximum:</strong> $${selectedPlan.max_amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            
-            document.getElementById('interest-rate').innerHTML = 
-                `<strong>Annual Interest Rate:</strong> ${selectedPlan.interest_rate}%`;
-            
-            document.getElementById('duration').innerHTML = 
-                `<strong>Investment Duration:</strong> ${selectedPlan.duration_days} days (${Math.round(selectedPlan.duration_days/30)} months)`;
-
-            updateExpectedReturn();
-        } else {
-            planDetails.style.display = 'none';
-            console.log('No plan selected');
-        }
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('open');
     }
 
-    function updateExpectedReturn() {
-        const selectedPlan = plans[planSelect.value];
-        const amount = parseFloat(amountInput.value) || 0;
+    function toggleNotifications() {
+        alert("Notifications feature coming soon!");
+    }
 
-        if (selectedPlan && amount > 0) {
-            // Validate the plan data
-            if (isNaN(selectedPlan.interest_rate) || isNaN(selectedPlan.duration_days)) {
-                console.error('Invalid plan data:', selectedPlan);
+    document.addEventListener('DOMContentLoaded', function() {
+        const planSelect = document.getElementById('id_plan');
+        const amountInput = document.getElementById('id_amount');
+        const planDetails = document.getElementById('plan-details');
+        const planTitle = document.getElementById('plan-title');
+
+        // Create plan data directly from Django template to avoid parsing issues
+        const plans = {
+            {% for plan in form.fields.plan.queryset %}
+            "{{ plan.id }}": {
+                min_amount: {{ plan.min_amount }},
+                max_amount: {{ plan.max_amount }},
+                interest_rate: {{ plan.interest_rate }},
+                duration_days: {{ plan.duration_days }},
+                name: "{{ plan.name|escapejs }}"
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        };
+
+        console.log('Available plans:', plans);
+
+        function updatePlanDetails() {
+            const selectedPlan = plans[planSelect.value];
+            
+            if (selectedPlan) {
+                planDetails.style.display = 'block';
+                planTitle.textContent = `${selectedPlan.name} Details`;
+                
+                document.getElementById('min-amount').innerHTML = 
+                    `<strong>Minimum:</strong> $${selectedPlan.min_amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                
+                document.getElementById('max-amount').innerHTML = 
+                    `<strong>Maximum:</strong> $${selectedPlan.max_amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                
+                document.getElementById('interest-rate').innerHTML = 
+                    `<strong>Annual Interest Rate:</strong> ${selectedPlan.interest_rate}%`;
+                
+                const months = Math.round(selectedPlan.duration_days / 30);
+                document.getElementById('duration').innerHTML = 
+                    `<strong>Investment Duration:</strong> ${selectedPlan.duration_days} day${selectedPlan.duration_days !== 1 ? 's' : ''} (${months} month${months !== 1 ? 's' : ''})`;
+
+                updateExpectedReturn();
+            } else {
+                planDetails.style.display = 'none';
+            }
+        }
+
+        function updateExpectedReturn() {
+            const selectedPlan = plans[planSelect.value];
+            const amount = parseFloat(amountInput.value) || 0;
+
+            if (selectedPlan && amount > 0) {
+                // Calculate returns
+                const dailyRate = selectedPlan.interest_rate / 365 / 100;
+                const days = selectedPlan.duration_days;
+                
+                const totalInterest = amount * dailyRate * days;
+                const expectedReturn = amount + totalInterest;
+                const dailyProfit = totalInterest / days;
+                const monthlyProfit = dailyProfit * 30;
+
                 document.getElementById('expected-return').innerHTML = 
                     `<strong>Expected Returns:</strong><br>
-                     <span style="color: #dc3545;">Error: Invalid plan data</span>`;
-                return;
+                     <span style="color: #28a745;">Total Return: $${expectedReturn.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span><br>
+                     <span style="color: #17a2b8;">Total Profit: $${totalInterest.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span><br>
+                     <span>Daily: $${dailyProfit.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span><br>
+                     <span>Monthly: $${monthlyProfit.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>`;
+            } else {
+                document.getElementById('expected-return').innerHTML = 
+                    `<strong>Expected Return:</strong> Enter amount to calculate`;
             }
+        }
+
+        // Event Listeners
+        planSelect.addEventListener('change', function() {
+            updatePlanDetails();
             
-            // Calculate returns
-            const dailyRate = selectedPlan.interest_rate / 365 / 100;
-            const days = selectedPlan.duration_days;
+            // Auto-set amount to minimum when plan changes
+            const selectedPlan = plans[this.value];
+            if (selectedPlan) {
+                amountInput.value = selectedPlan.min_amount;
+                amountInput.min = selectedPlan.min_amount;
+                amountInput.max = selectedPlan.max_amount;
+                updateExpectedReturn();
+            }
+        });
+        
+        amountInput.addEventListener('input', function() {
+            updateExpectedReturn();
+        });
+        
+        amountInput.addEventListener('blur', function() {
+            const selectedPlan = plans[planSelect.value];
+            if (selectedPlan) {
+                let amount = parseFloat(this.value) || 0;
+                
+                // Enforce minimum
+                if (amount < selectedPlan.min_amount) {
+                    this.value = selectedPlan.min_amount;
+                }
+                
+                // Enforce maximum
+                if (amount > selectedPlan.max_amount) {
+                    this.value = selectedPlan.max_amount;
+                }
+                
+                updateExpectedReturn();
+            }
+        });
+
+        // Initialize on page load
+        const urlParams = new URLSearchParams(window.location.search);
+        const planId = urlParams.get('plan_id');
+        
+        if (planId && plans[planId]) {
+            // Set from URL parameter
+            planSelect.value = planId;
+            updatePlanDetails();
+        } else if (planSelect.value && plans[planSelect.value]) {
+            // Set from form initial data
+            updatePlanDetails();
+        }
+
+        // Stock market ticker
+        const stockData = [
+            { symbol: "AAPL", price: 178.23, change: 1.23 },
+            { symbol: "GOOGL", price: 123.45, change: -0.45 },
+            { symbol: "MSFT", price: 345.67, change: 2.34 },
+            { symbol: "AMZN", price: 99.12, change: 0.89 },
+            { symbol: "TSLA", price: 246.78, change: -3.21 },
+            { symbol: "NFLX", price: 567.89, change: 5.67 }
+        ];
+
+        function updateStockMarquee() {
+            const marquee = document.getElementById("stockMarquee");
+            let stockText = "";
             
-            console.log('Calculating returns:', { 
-                amount, 
-                interest_rate: selectedPlan.interest_rate,
-                dailyRate, 
-                days 
+            stockData.forEach((stock, index) => {
+                const changeClass = stock.change >= 0 ? "text-success" : "text-danger";
+                stockText += `<span style="margin: 0 20px;">${stock.symbol}: $${stock.price.toFixed(2)} <span class="${changeClass}">(${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)})</span></span>`;
+                if (index < stockData.length - 1) {
+                    stockText += " | ";
+                }
             });
             
-            const totalInterest = amount * dailyRate * days;
-            const expectedReturn = amount + totalInterest;
-            const dailyProfit = totalInterest / days;
-            const monthlyProfit = dailyProfit * 30;
-
-            document.getElementById('expected-return').innerHTML = 
-                `<strong>Expected Returns:</strong><br>
-                 <span style="color: #28a745;">Total Return: $${expectedReturn.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span><br>
-                 <span style="color: #17a2b8;">Total Profit: $${totalInterest.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span><br>
-                 <span>Daily: $${dailyProfit.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span><br>
-                 <span>Monthly: $${monthlyProfit.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>`;
-        } else {
-            document.getElementById('expected-return').innerHTML = 
-                `<strong>Expected Return:</strong> Enter amount to calculate`;
-        }
-    }
-
-    // Event Listeners
-    planSelect.addEventListener('change', function() {
-        console.log('Plan changed to:', this.value);
-        updatePlanDetails();
-        
-        // Auto-set amount to minimum when plan changes
-        const selectedPlan = plans[this.value];
-        if (selectedPlan) {
-            amountInput.value = selectedPlan.min_amount;
-            amountInput.min = selectedPlan.min_amount;
-            amountInput.max = selectedPlan.max_amount;
-            updateExpectedReturn();
-        }
-    });
-    
-    amountInput.addEventListener('input', function() {
-        console.log('Amount changed:', this.value);
-        updateExpectedReturn();
-    });
-    
-    amountInput.addEventListener('blur', function() {
-        const selectedPlan = plans[planSelect.value];
-        if (selectedPlan) {
-            let amount = parseFloat(this.value) || 0;
+            marquee.innerHTML = stockText;
             
-            // Enforce minimum
-            if (amount < selectedPlan.min_amount) {
-                this.value = selectedPlan.min_amount;
-            }
-            
-            // Enforce maximum
-            if (amount > selectedPlan.max_amount) {
-                this.value = selectedPlan.max_amount;
-            }
-            
-            updateExpectedReturn();
+            // Simulate price updates
+            stockData.forEach(stock => {
+                const change = (Math.random() - 0.5) * 2;
+                stock.price += change;
+                stock.change = change;
+            });
         }
-    });
 
-    // Initialize on page load
-    const urlParams = new URLSearchParams(window.location.search);
-    const planId = urlParams.get('plan_id');
-    
-    console.log('URL plan_id:', planId);
-    console.log('Initial planSelect value:', planSelect.value);
-    
-    if (planId && plans[planId]) {
-        // Set from URL parameter
-        planSelect.value = planId;
-        console.log('Setting plan from URL:', planId);
-        updatePlanDetails();
-    } else if (planSelect.value && plans[planSelect.value]) {
-        // Set from form initial data
-        console.log('Setting plan from form:', planSelect.value);
-        updatePlanDetails();
-    } else {
-        console.log('No plan to initialize');
-    }
-});
-
-            // Stock market ticker
-            const stockData = [
-                { symbol: "AAPL", price: 178.23, change: 1.23 },
-                { symbol: "GOOGL", price: 123.45, change: -0.45 },
-                { symbol: "MSFT", price: 345.67, change: 2.34 },
-                { symbol: "AMZN", price: 99.12, change: 0.89 },
-                { symbol: "TSLA", price: 246.78, change: -3.21 },
-                { symbol: "NFLX", price: 567.89, change: 5.67 }
-            ];
-
-            function updateStockMarquee() {
-                const marquee = document.getElementById("stockMarquee");
-                let stockText = "";
-                
-                stockData.forEach((stock, index) => {
-                    const changeClass = stock.change >= 0 ? "text-success" : "text-danger";
-                    stockText += `<span style="margin: 0 20px;">${stock.symbol}: $${stock.price.toFixed(2)} <span class="${changeClass}">(${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)})</span></span>`;
-                    if (index < stockData.length - 1) {
-                        stockText += " | ";
-                    }
-                });
-                
-                marquee.innerHTML = stockText;
-                
-                // Simulate price updates
-                stockData.forEach(stock => {
-                    const change = (Math.random() - 0.5) * 2;
-                    stock.price += change;
-                    stock.change = change;
-                });
-            }
-
-            // Update marquee immediately and every 10 seconds
-            updateStockMarquee();
-            setInterval(updateStockMarquee, 10000);
-        });
+        // Update marquee immediately and every 10 seconds
+        updateStockMarquee();
+        setInterval(updateStockMarquee, 10000);
 
         // Telegram button click handler
         document.querySelector('.telegram-link').addEventListener('click', function(e) {
             e.preventDefault();
             window.open(this.href, '_blank');
         });
-    </script>
+    });
+</script>
     
     <!-- Service Worker Registration -->
     <script>
