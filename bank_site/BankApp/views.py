@@ -1094,8 +1094,20 @@ def investment_plans(request):
 
 @login_required
 def create_investment(request):
-    user_profile = UserProfile.objects.get(user=request.user)
-
+    user_profile = get_object_or_404(UserProfile, user=request.user)
+    plan_id = request.GET.get('plan_id')
+    
+    initial_data = {}
+    if plan_id:
+        try:
+            plan = InvestmentPlan.objects.get(id=plan_id, is_active=True)
+            initial_data['plan'] = plan
+            # Pre-fill amount with minimum investment
+            initial_data['amount'] = plan.min_amount
+        except InvestmentPlan.DoesNotExist:
+            messages.error(request, "Selected investment plan is not available")
+            return redirect('investment_plans')
+    
     if request.method == 'POST':
         form = InvestmentForm(request.POST, user=request.user)
         if form.is_valid():
@@ -1103,13 +1115,17 @@ def create_investment(request):
                 with transaction.atomic():
                     plan = form.cleaned_data['plan']
                     amount = form.cleaned_data['amount']
-
+                    
                     # Create investment
-                    investment = UserInvestment(
-                        user=request.user,
-                        investment_plan=plan,
-                        amount_invested=amount
-                    )
+                    investment = form.save(commit=False)
+                    investment.user = request.user
+                    investment.amount_invested = amount
+                    
+                    # Calculate expected return
+                    daily_interest_rate = plan.interest_rate / 365 / 100
+                    investment_days = plan.duration_days
+                    investment.expected_return = amount * (1 + daily_interest_rate * investment_days)
+                    
                     investment.save()
 
                     # Deduct from user balance
@@ -1122,19 +1138,25 @@ def create_investment(request):
                         investment=investment,
                         amount=amount,
                         transaction_type='INVESTMENT',
-                        description=f"Investment in {plan.name}"
+                        description=f"Investment in {plan.name}",
+                        status='COMPLETED'
                     )
 
                     messages.success(
                         request,
-                        f"Successfully invested ${amount} in {plan.name}. Expected return: ${investment.expected_return:.2f}"
+                        f"Successfully invested ${amount:,.2f} in {plan.name}!"
                     )
                     return redirect('investment_dashboard')
 
             except Exception as e:
                 messages.error(request, f"Error creating investment: {str(e)}")
+        else:
+            # Display form errors
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{error}")
     else:
-        form = InvestmentForm(user=request.user)
+        form = InvestmentForm(user=request.user, initial=initial_data)
 
     context = {
         'form': form,

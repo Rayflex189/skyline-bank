@@ -1,4 +1,4 @@
- <!-- investment/create.html -->
+<!-- investment/create.html -->
 {% load static %}
 {% load humanize %}
 <!DOCTYPE html>
@@ -7,16 +7,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Investment - Skyline Bank</title>
-<!-- Begin of Chaport Live Chat code -->
-<script type="text/javascript">
-(function(w,d,v3){
-w.chaportConfig = {
-  appId : '698184ca2764117339b24bdd',
-};
+    
+    <!-- Begin of Chaport Live Chat code -->
+    <script type="text/javascript">
+    (function(w,d,v3){
+    w.chaportConfig = {
+      appId : '698184ca2764117339b24bdd',
+    };
 
-if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
-</script>
-<!-- End of Chaport Live Chat code -->
+    if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
+    </script>
+    <!-- End of Chaport Live Chat code -->
+    
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
@@ -30,6 +32,7 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
     <meta name="theme-color" content="{{ theme_color }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <style>
         /* All the same base styles from above */
         body, html {
@@ -43,16 +46,20 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
 
         .bank-header { background-color: #003366; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
         .bank-header h1 { font-size: 1.8rem; margin: 0; padding-left: 20px; }
-        .notification-bell, .open-sidebar-btn { cursor: pointer; color: white; font-size: 1.5rem; }
+        .notification-bell, .open-sidebar-btn { cursor: pointer; color: white; font-size: 1.5rem; margin-right: 15px; }
 
         .sidebar { width: 250px; height: 100vh; background-color: #002244; position: fixed; right: -250px; top: 0; transition: right 0.4s ease; color: #fff; box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3); z-index: 1000; }
         .sidebar.open { right: 0; }
-        .sidebar-header, .user-details, .sidebar ul li { padding: 15px 20px; border-bottom: 1px solid #004080; }
+        .sidebar-header { padding: 15px 20px; border-bottom: 1px solid #004080; display: flex; justify-content: space-between; align-items: center; }
+        .sidebar-header h2 { margin: 0; font-size: 1.4rem; }
+        .sidebar-header button { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .user-details, .sidebar ul li { padding: 15px 20px; border-bottom: 1px solid #004080; }
+        .user-details p { margin: 5px 0; }
         .sidebar ul { list-style: none; padding: 0; margin: 0; }
         .sidebar ul li a { color: white; text-decoration: none; display: block; }
         .sidebar ul li a:hover { background-color: #003366; }
 
-        .main-content { padding: 30px 20px; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+        .main-content { padding: 30px 20px; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; padding-bottom: 80px; }
 
         .card-container { background-color: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); overflow: hidden; margin-bottom: 25px; width: 100%; max-width: 600px; }
 
@@ -69,32 +76,34 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         .form-label { font-weight: bold; margin-bottom: 8px; display: block; color: #495057; }
         .form-control { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 16px; transition: all 0.3s ease; }
         .form-control:focus { outline: none; border-color: #007bff; box-shadow: 0 0 5px rgba(0, 123, 255, 0.25); }
+        select.form-control { height: 46px; }
 
         .btn-submit { width: 100%; padding: 12px; border: none; border-radius: 6px; background-color: #003366; color: white; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; font-size: 16px; margin-top: 10px; }
         .btn-submit:hover { background-color: #002244; }
+        
+        .btn-secondary { background-color: #6c757d; }
+        .btn-secondary:hover { background-color: #5a6268; }
 
-        .plan-details-card { background-color: #e7f3ff; border-radius: 8px; padding: 20px; margin-top: 20px; border-left: 4px solid #003366; display: none; }
-        .plan-details-card h5 { color: #003366; margin-bottom: 15px; }
-        .detail-item { margin-bottom: 8px; color: #495057; }
+        .plan-details-card { background-color: #e7f3ff; border-radius: 8px; padding: 20px; margin-top: 20px; border-left: 4px solid #003366; }
+        .plan-details-card h5 { color: #003366; margin-bottom: 15px; font-size: 1.2rem; }
+        .detail-item { margin-bottom: 10px; color: #495057; line-height: 1.4; }
+        .detail-item strong { color: #003366; }
 
         .error-messages { background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #f5c6cb; }
+        .error-messages p { margin: 5px 0; }
+        
+        .success-messages { background-color: #d4edda; color: #155724; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #c3e6cb; }
+        .info-messages { background-color: #d1ecf1; color: #0c5460; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #bee5eb; }
 
-        .bottom-navbar { position: fixed; bottom: 0; width: 100%; background-color: #003366; color: white; display: flex; justify-content: space-around; padding: 10px 0; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: white; }
+        .bottom-navbar { position: fixed; bottom: 0; width: 100%; background-color: #003366; color: white; display: flex; justify-content: space-around; padding: 10px 0; z-index: 999; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: white; flex: 1; }
         .nav-icon { font-size: 1.2rem; margin-bottom: 5px; }
         .nav-label { font-size: 0.8rem; }
 
-        .telegram-icon { position: fixed; bottom: 70px; left: 20px; width: 60px; height: 60px; background-color: #0088cc; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); cursor: pointer; animation: bounce 2s infinite; transition: transform 0.3s; z-index: 1000; }
-        .telegram-icon:hover { transform: scale(1.1); }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        .marquee { background-color: rgba(0, 0, 0, 0.8); color: #fff; font-weight: bold; padding: 10px; white-space: nowrap; overflow: hidden; }
-        .marquee-content { display: inline-block; animation: scrollLeft 10s linear infinite; }
-        @keyframes scrollLeft { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
-                .telegram-float {
+        .telegram-float {
             position: fixed;
             left: 20px;
-            bottom: 20px;
+            bottom: 80px;
             z-index: 1000;
             animation: float 3s ease-in-out infinite;
         }
@@ -143,40 +152,48 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         }
 
         @keyframes float {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0);
-            }
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
         }
 
-
+        .marquee { 
+            background-color: rgba(0, 0, 0, 0.8); 
+            color: #fff; 
+            font-weight: bold; 
+            padding: 10px; 
+            white-space: nowrap; 
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+        .marquee-content { 
+            display: inline-block; 
+            animation: scrollLeft 20s linear infinite; 
+            padding-left: 100%;
+        }
+        @keyframes scrollLeft { 
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .required:after { content: " *"; color: #dc3545; }
+        
         @media (max-width: 768px) {
-            .telegram-float {
-                left: 10px;
-                bottom: 10px;
-            }
-
-            .telegram-link {
-                width: 50px;
-                height: 50px;
-            }
-
-            .telegram-icon {
-                width: 25px;
-                height: 25px;
-            }
+            .main-content { padding: 20px 15px; }
+            .card-body { padding: 20px; }
+            .bank-header h1 { font-size: 1.5rem; padding-left: 10px; }
+            .telegram-float { left: 10px; bottom: 70px; }
+            .telegram-link { width: 50px; height: 50px; }
+            .telegram-icon { width: 25px; height: 25px; }
+            .balance-amount { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
-  <!-- Telegram Floating Icon -->
+    <!-- Telegram Floating Icon -->
     <div class="telegram-float">
-        <a href="https://" class="telegram-link" target="_blank">
+        <a href="https://t.me/" class="telegram-link" target="_blank">
             <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="telegram-icon">
             <span class="telegram-tooltip">Join our Telegram group</span>
         </a>
@@ -184,11 +201,13 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
 
     <header class="bank-header">
         <h1>Skybridge Bank</h1>
-        <div class="notification-bell" onclick="toggleSidebar()">
-            <i class="fas fa-bell"></i>
-        </div>
-        <div class="open-sidebar-btn" onclick="toggleSidebar()">
-            <i class="fas fa-bars"></i>
+        <div style="display: flex; align-items: center;">
+            <div class="notification-bell" onclick="toggleNotifications()">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="open-sidebar-btn" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </div>
         </div>
     </header>
 
@@ -199,14 +218,17 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             <button onclick="toggleSidebar()">Close</button>
         </div>
         <div class="user-details">
-            <p>Name: <strong>{{ user_profile.first_name }}, {{ user_profile.last_name }}</strong></p>
-            <p>Email: <strong>{{ user_profile.email }}</strong></p>
+            <p><strong>{{ user_profile.first_name }} {{ user_profile.last_name }}</strong></p>
+            <p>{{ user_profile.email }}</p>
+            <p>Account: {{ user_profile.account_number|default:"N/A" }}</p>
         </div>
         <ul>
-            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-            <li><a href="{% url 'investment_plans' %}">Investments</a></li>
-            <li><a href="{% url 'profile' %}">Profile</a></li>
-            <li><a href="{% url 'LogOut' %}">Logout</a></li>
+            <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="{% url 'investment_plans' %}"><i class="fas fa-chart-line"></i> Investments</a></li>
+            <li><a href="{% url 'investment_dashboard' %}"><i class="fas fa-wallet"></i> My Investments</a></li>
+            <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="{% url 'bank_transfer' %}"><i class="fas fa-exchange-alt"></i> Transfer</a></li>
+            <li><a href="{% url 'LogOut' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 
@@ -230,52 +252,81 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
                     <div class="balance-amount">${{ user_profile.balance|intcomma }}</div>
                 </div>
 
+                <!-- Django Messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="{% if message.tags %}{{ message.tags }}-messages{% else %}info-messages{% endif %}">
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Form Errors -->
                 {% if form.errors %}
                 <div class="error-messages">
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                            <p>{{ error }}</p>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <p><strong>{{ field.label }}:</strong> {{ error }}</p>
                         {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
                     {% endfor %}
                 </div>
                 {% endif %}
 
-                <form method="post">
+                <form method="post" action="{% url 'create_investment' %}">
                     {% csrf_token %}
 
                     <div class="form-group">
-                        <label for="{{ form.plan.id_for_label }}" class="form-label">Investment Plan</label>
+                        <label for="{{ form.plan.id_for_label }}" class="form-label required">Investment Plan</label>
                         {{ form.plan }}
+                        <small class="form-text text-muted">
+                            Select an investment plan from available options
+                        </small>
                     </div>
 
                     <div class="form-group">
-                        <label for="{{ form.amount.id_for_label }}" class="form-label">Investment Amount ($)</label>
+                        <label for="{{ form.amount.id_for_label }}" class="form-label required">Investment Amount ($)</label>
                         {{ form.amount }}
                         <small class="form-text text-muted">
-                            Enter the amount you want to invest in USD
+                            Minimum investment: $100.00
                         </small>
                     </div>
 
                     <!-- Plan Details Card -->
-                    <div class="plan-details-card" id="plan-details">
-                        <h5>Plan Details</h5>
+                    <div class="plan-details-card" id="plan-details" style="display: none;">
+                        <h5 id="plan-title">Plan Details</h5>
                         <div class="detail-item" id="min-amount"></div>
                         <div class="detail-item" id="max-amount"></div>
                         <div class="detail-item" id="interest-rate"></div>
                         <div class="detail-item" id="duration"></div>
-                        <div class="detail-item" id="expected-return" style="font-weight: bold; color: #28a745;"></div>
+                        <div class="detail-item" id="expected-return" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ccc;"></div>
                     </div>
 
                     <button type="submit" class="btn-submit">
-                        Confirm Investment
+                        <i class="fas fa-check-circle"></i> Confirm Investment
                     </button>
 
-                    <a href="{% url 'investment_plans' %}" class="btn-submit" style="background-color: #6c757d; text-align: center; display: block; text-decoration: none; margin-top: 10px;">
-                        Back to Plans
+                    <a href="{% url 'investment_plans' %}" class="btn-submit btn-secondary" style="text-align: center; display: block; text-decoration: none; margin-top: 10px;">
+                        <i class="fas fa-arrow-left"></i> Back to Plans
                     </a>
                 </form>
             </div>
         </div>
+    </div>
+
+    <!-- Hidden plan data for JavaScript -->
+    <div style="display: none;" id="plan-data">
+        {% for plan in form.fields.plan.queryset %}
+        <div data-plan="{{ plan.id }}" 
+             data-min="{{ plan.min_amount }}" 
+             data-max="{{ plan.max_amount }}" 
+             data-rate="{{ plan.interest_rate }}" 
+             data-duration="{{ plan.duration_days }}" 
+             data-name="{{ plan.name }}">
+        </div>
+        {% endfor %}
     </div>
 
     <!-- Bottom Navigation Bar -->
@@ -304,35 +355,48 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             sidebar.classList.toggle('open');
         }
 
+        function toggleNotifications() {
+            alert("Notifications feature coming soon!");
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const planSelect = document.getElementById('id_plan');
             const amountInput = document.getElementById('id_amount');
             const planDetails = document.getElementById('plan-details');
+            const planTitle = document.getElementById('plan-title');
 
-            const plans = {
-                {% for plan in form.fields.plan.queryset %}
-                '{{ plan.id }}': {
-                    min_amount: '{{ plan.min_amount }}',
-                    max_amount: '{{ plan.max_amount }}',
-                    interest_rate: '{{ plan.interest_rate }}',
-                    duration_days: '{{ plan.duration_days }}',
-                    name: '{{ plan.name }}'
-                },
-                {% endfor %}
-            };
+            // Extract plan data from hidden div
+            const plans = {};
+            const planElements = document.querySelectorAll('#plan-data div[data-plan]');
+            
+            planElements.forEach(element => {
+                const planId = element.dataset.plan;
+                plans[planId] = {
+                    min_amount: parseFloat(element.dataset.min),
+                    max_amount: parseFloat(element.dataset.max),
+                    interest_rate: parseFloat(element.dataset.rate),
+                    duration_days: parseInt(element.dataset.duration),
+                    name: element.dataset.name
+                };
+            });
 
             function updatePlanDetails() {
                 const selectedPlan = plans[planSelect.value];
                 if (selectedPlan) {
                     planDetails.style.display = 'block';
-                    document.getElementById('min-amount').textContent =
-                        `Minimum: $${parseFloat(selectedPlan.min_amount).toLocaleString()}`;
-                    document.getElementById('max-amount').textContent =
-                        `Maximum: $${parseFloat(selectedPlan.max_amount).toLocaleString()}`;
-                    document.getElementById('interest-rate').textContent =
-                        `Interest Rate: ${selectedPlan.interest_rate}% per annum`;
-                    document.getElementById('duration').textContent =
-                        `Duration: ${selectedPlan.duration_days} days`;
+                    planTitle.textContent = `${selectedPlan.name} Details`;
+                    
+                    document.getElementById('min-amount').innerHTML = 
+                        `<strong>Minimum:</strong> $${selectedPlan.min_amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    
+                    document.getElementById('max-amount').innerHTML = 
+                        `<strong>Maximum:</strong> $${selectedPlan.max_amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    
+                    document.getElementById('interest-rate').innerHTML = 
+                        `<strong>Annual Interest Rate:</strong> ${selectedPlan.interest_rate}%`;
+                    
+                    document.getElementById('duration').innerHTML = 
+                        `<strong>Investment Duration:</strong> ${selectedPlan.duration_days} days (${Math.round(selectedPlan.duration_days/30)} months)`;
 
                     updateExpectedReturn();
                 } else {
@@ -345,66 +409,140 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
                 const amount = parseFloat(amountInput.value) || 0;
 
                 if (selectedPlan && amount > 0) {
-                    const dailyRate = parseFloat(selectedPlan.interest_rate) / 365 / 100;
-                    const days = parseInt(selectedPlan.duration_days);
-                    const expectedReturn = amount * (1 + dailyRate * days);
-                    const profit = expectedReturn - amount;
+                    // Calculate returns
+                    const dailyRate = selectedPlan.interest_rate / 365 / 100;
+                    const days = selectedPlan.duration_days;
+                    
+                    const totalInterest = amount * dailyRate * days;
+                    const expectedReturn = amount + totalInterest;
+                    const dailyProfit = totalInterest / days;
+                    const monthlyProfit = dailyProfit * 30;
+                    const annualProfit = dailyProfit * 365;
 
-                    document.getElementById('expected-return').textContent =
-                        `Expected Return: $${expectedReturn.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} (Profit: $${profit.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})})`;
+                    document.getElementById('expected-return').innerHTML = 
+                        `<strong>Expected Returns:</strong><br>
+                         <span style="color: #28a745;">Total Return: $${expectedReturn.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span><br>
+                         <span style="color: #17a2b8;">Total Profit: $${totalInterest.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span><br>
+                         <span>Daily: $${dailyProfit.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span><br>
+                         <span>Monthly: $${monthlyProfit.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>`;
                 } else {
-                    document.getElementById('expected-return').textContent = 'Expected Return: $0.00';
+                    document.getElementById('expected-return').innerHTML = 
+                        `<strong>Expected Return:</strong> Enter amount to calculate`;
                 }
             }
 
-            planSelect.addEventListener('change', updatePlanDetails);
-            amountInput.addEventListener('input', updateExpectedReturn);
+            // Event Listeners
+            planSelect.addEventListener('change', function() {
+                updatePlanDetails();
+                
+                // Auto-set amount to minimum when plan changes
+                const selectedPlan = plans[planSelect.value];
+                if (selectedPlan) {
+                    amountInput.value = selectedPlan.min_amount;
+                    amountInput.min = selectedPlan.min_amount;
+                    amountInput.max = selectedPlan.max_amount;
+                    updateExpectedReturn();
+                }
+            });
+            
+            amountInput.addEventListener('input', function() {
+                updateExpectedReturn();
+            });
+            
+            amountInput.addEventListener('blur', function() {
+                const selectedPlan = plans[planSelect.value];
+                if (selectedPlan) {
+                    let amount = parseFloat(this.value) || 0;
+                    
+                    // Enforce minimum
+                    if (amount < selectedPlan.min_amount) {
+                        this.value = selectedPlan.min_amount;
+                    }
+                    
+                    // Enforce maximum
+                    if (amount > selectedPlan.max_amount) {
+                        this.value = selectedPlan.max_amount;
+                    }
+                    
+                    updateExpectedReturn();
+                }
+            });
 
-            // Initialize if plan is preselected from URL
+            // Initialize on page load
             const urlParams = new URLSearchParams(window.location.search);
-            const planId = urlParams.get('plan');
-            if (planId) {
+            const planId = urlParams.get('plan_id');
+            
+            if (planId && plans[planId]) {
+                // Set from URL parameter
                 planSelect.value = planId;
+                updatePlanDetails();
+            } else if (planSelect.value) {
+                // Set from form initial data
                 updatePlanDetails();
             }
 
-            // Stock market data
+            // Stock market ticker
             const stockData = [
-                { symbol: "AAPL", price: 178.23 },
-                { symbol: "GOOGL", price: 123.45 },
-                { symbol: "AMZN", price: 99.12 },
-                { symbol: "TSLA", price: 246.78 }
+                { symbol: "AAPL", price: 178.23, change: 1.23 },
+                { symbol: "GOOGL", price: 123.45, change: -0.45 },
+                { symbol: "MSFT", price: 345.67, change: 2.34 },
+                { symbol: "AMZN", price: 99.12, change: 0.89 },
+                { symbol: "TSLA", price: 246.78, change: -3.21 },
+                { symbol: "NFLX", price: 567.89, change: 5.67 }
             ];
 
             function updateStockMarquee() {
                 const marquee = document.getElementById("stockMarquee");
-                const stockText = stockData.map(stock => `${stock.symbol}: $${stock.price.toFixed(2)}`).join(" | ");
+                let stockText = "";
+                
+                stockData.forEach((stock, index) => {
+                    const changeClass = stock.change >= 0 ? "text-success" : "text-danger";
+                    stockText += `<span style="margin: 0 20px;">${stock.symbol}: $${stock.price.toFixed(2)} <span class="${changeClass}">(${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)})</span></span>`;
+                    if (index < stockData.length - 1) {
+                        stockText += " | ";
+                    }
+                });
+                
                 marquee.innerHTML = stockText;
+                
+                // Simulate price updates
+                stockData.forEach(stock => {
+                    const change = (Math.random() - 0.5) * 2;
+                    stock.price += change;
+                    stock.change = change;
+                });
             }
 
-            setTimeout(updateStockMarquee, 1000);
+            // Update marquee immediately and every 10 seconds
+            updateStockMarquee();
+            setInterval(updateStockMarquee, 10000);
         });
 
-        document.getElementById("telegramBtn").addEventListener("click", function() {
-            window.open("https://t.me/", "_blank");
+        // Telegram button click handler
+        document.querySelector('.telegram-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.open(this.href, '_blank');
         });
     </script>
-        <script>
-     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("{% static 'sw.js' %}")
-        .then(registration => {
-            console.log('✅ Service Worker Registered:', registration);
-            
-            // Check for updates
-            registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                console.log('🔄 New service worker found:', newWorker);
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register("{% static 'sw.js' %}")
+                .then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed: ', error);
+                });
             });
-        })
-        .catch(error => {
-            console.log('❌ Service Worker registration failed:', error);
-        });
-    }
+        }
     </script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
