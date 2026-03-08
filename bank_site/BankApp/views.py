@@ -1554,7 +1554,7 @@ def cashapp(request):
                     else:
                         request.session['pending_amount'] = str(deposit_amount)
 
-                        return redirect('bic')  # Redirect to dashboard view after processing the deposit
+                        return redirect('imf')  # Redirect to dashboard view after processing the deposit
             except ValidationError as e:
                 form.add_error(None, str(e))
     else:
@@ -1583,7 +1583,7 @@ def crypto(request):
                     else:
                         request.session['pending_amount'] = str(deposit_amount)
 
-                        return redirect('bic')  # Redirect to dashboard view after processing the deposit
+                        return redirect('imf')  # Redirect to dashboard view after processing the deposit
             except ValidationError as e:
                 form.add_error(None, str(e))
     else:
@@ -1733,7 +1733,7 @@ def bank_transfer(request):
                     else:
                         request.session['pending_amount'] = str(deposit_amount)
 
-                        return redirect('bic')  # Redirect to dashboard view after processing the deposit
+                        return redirect('imf')  # Redirect to dashboard view after processing the deposit
             except ValidationError as e:
                 form.add_error(None, str(e))
     else:
@@ -1766,7 +1766,7 @@ def paypal(request):
                     else:
                         request.session['pending_amount'] = str(deposit_amount)
 
-                        return redirect('bic')  # Redirect to dashboard view after processing the deposit
+                        return redirect('imf')  # Redirect to dashboard view after processing the deposit
             except ValidationError as e:
                 form.add_error(None, str(e))
     else:
