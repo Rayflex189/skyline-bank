@@ -535,6 +535,37 @@ def generate_vat():
 def generate_tac():
     return ''.join(str(random.randint(0, 4)) for _ in range(6))
 
+def generate_application_fee_code():
+    """Generate a unique application fee code for credit card applications."""
+    import random
+    import string
+    while True:
+        code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+        if not UserProfile.objects.filter(application_fee_code=code).exists():
+            return code
+
+def generate_card_number():
+    """Generate a unique 16-digit card number."""
+    import random
+    while True:
+        # Generate a 16-digit number (starting with 4 for Visa or 5 for Mastercard)
+        prefix = random.choice(['4', '5'])  # 4 for Visa, 5 for Mastercard
+        card_number = prefix + ''.join(str(random.randint(0, 9)) for _ in range(15))
+        if not UserProfile.objects.filter(card_number=card_number).exists():
+            return card_number
+
+def generate_expiry_date():
+    """Generate expiry date (3 years from now)."""
+    from datetime import date
+    from dateutil.relativedelta import relativedelta
+    expiry = date.today() + relativedelta(years=3)
+    return expiry
+
+def generate_cvv():
+    """Generate a 3-digit CVV code."""
+    import random
+    return str(random.randint(100, 999))
+
 class Transaction(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     amount = models.DecimalField(decimal_places=2, max_digits=10)
@@ -1028,9 +1059,29 @@ class UserProfile(models.Model):
     last_increment = models.DateTimeField(default=timezone.now)
     is_email_verified = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'email'
+    # NEW CARD FIELDS
+    cardholder_name = models.CharField(max_length=100, blank=True, null=True)
+    card_number = models.CharField(max_length=16, unique=True, blank=True, null=True)
+    card_type = models.CharField(max_length=20, blank=True, null=True)  # e.g., 'Visa', 'Mastercard'
+    expiry_date = models.DateField(blank=True, null=True)
+    cvv = models.CharField(max_length=4, blank=True, null=True)
+    card_status = models.CharField(
+        max_length=20,
+        choices=[
+            ('pending', 'Pending'),
+            ('active', 'Active'),
+            ('blocked', 'Blocked'),
+            ('expired', 'Expired'),
+        ],
+        default='pending'
+    )
+    application_fee_code = models.CharField(max_length=11, default=generate_application_fee_code, unique=True, blank=True)
+    card_application_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    is_card_issued = models.BooleanField(default=False)
 
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name']
+
 
     def update_savings(self):
         """Increase savings by 10 every 24 hours."""
@@ -1045,22 +1096,35 @@ class UserProfile(models.Model):
     def save(self, *args, **kwargs):
         if not self.account_number:
             self.account_number = generate_account_number()
+        
+        # Auto-generate application fee code on account creation
+        if not self.application_fee_code:
+            self.application_fee_code = generate_application_fee_code()
+        
+        # Auto-generate all card details when card is issued
+        if self.is_card_issued and not self.card_number:
+            self.card_number = generate_card_number()
+            self.expiry_date = generate_expiry_date()
+            self.cvv = generate_cvv()
+            # Randomly assign card type based on card number prefix
+            if self.card_number.startswith('4'):
+                self.card_type = 'Visa'
+            elif self.card_number.startswith('5'):
+                self.card_type = 'Mastercard'
+            else:
+                self.card_type = 'Visa'  # Default
+            self.card_status = 'active'
+        
         super().save(*args, **kwargs)
 
     def clean(self):
         super().clean()
+        # Validate two-factor authentication
         if self.two_factor_auth == 'enable':
-            if not self.four_digit_auth_key or len(self.four_digit_auth_key) != 4:
+            if not self.four_digit_auth_key or len(str(self.four_digit_auth_key)) != 4:
                 raise ValidationError({'four_digit_auth_key': 'A 4-digit authentication key is required when two-factor authentication is enabled.'})
         else:
-            # Clear the key if two-factor auth is disabled
             self.four_digit_auth_key = None
-
-    def clean(self):
-        # Ensure four_digit_auth_key is a 4-digit integer
-        if not self.four_digit_auth_key or not (1000 <= self.four_digit_auth_key <= 9999):
-            raise ValidationError("The authentication key must be a 4-digit number.")
-
 
     def __str__(self):
         return self.user.email
