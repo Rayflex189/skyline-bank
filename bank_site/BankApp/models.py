@@ -1074,12 +1074,7 @@ class UserProfile(models.Model):
         ],
         default='pending'
     )
-    application_fee_code = models.CharField(
-        max_length=11, 
-        unique=True, 
-        blank=True, 
-        null=True  # Allow null initially
-    )
+    application_fee_code = models.CharField(max_length=11, default=generate_application_fee_code, unique=True, blank=True)
     card_application_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     is_card_issued = models.BooleanField(default=False)
 
