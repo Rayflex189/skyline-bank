@@ -187,8 +187,8 @@ class UserProfileAdmin(admin.ModelAdmin):
         'country',
         'is_upgraded',
         'is_email_verified',
-        'has_card',  # New: Show if user has a card
-        'card_status'  # New: Show card status
+        'has_card',
+        'card_status'
     ]
     search_fields = ['user__email', 'user__username', 'first_name', 'last_name', 'account_number', 'card_number']
     list_filter = ['country', 'is_upgraded', 'is_email_verified', 'Gender', 'card_status', 'card_type']
@@ -201,11 +201,11 @@ class UserProfileAdmin(admin.ModelAdmin):
         'tac_code', 
         'vat_code', 
         'created_at',
-        'application_fee_code',  # New: Readonly
-        'card_number',  # New: Readonly
-        'cvv',  # New: Readonly
-        'expiry_date',  # New: Readonly
-        'card_application_date'  # New: Readonly
+        'application_fee_code',
+        'card_number',
+        'cvv',
+        'expiry_date',
+        'card_application_date'
     ]
     
     fieldsets = (
@@ -225,7 +225,6 @@ class UserProfileAdmin(admin.ModelAdmin):
             'fields': ('linking_code', 'otp_code', 'imf_code', 'aml_code', 'tac_code', 'vat_code'),
             'classes': ('collapse',)
         }),
-        # New: Card Information Section
         ('Credit/Debit Card Information', {
             'fields': (
                 'cardholder_name',
@@ -270,6 +269,42 @@ class UserProfileAdmin(admin.ModelAdmin):
         return obj.is_card_issued
     has_card.boolean = True
     has_card.short_description = 'Has Card'
+    
+    def get_fieldsets(self, request, obj=None):
+        """Customize fieldsets based on whether card is issued"""
+        fieldsets = super().get_fieldsets(request, obj)
+        
+        # Convert tuple to list for modification
+        fieldsets_list = list(fieldsets)
+        
+        if obj and obj.is_card_issued:
+            # Add a warning about card being issued
+            from django.utils.safestring import mark_safe
+            card_section_index = 5  # Index of Card Information section
+            
+            if len(fieldsets_list) > card_section_index:
+                card_section = list(fieldsets_list[card_section_index])
+                if 'description' not in card_section[1]:
+                    card_section[1]['description'] = mark_safe(
+                        '<div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; border-radius: 5px;">'
+                        '<strong>⚠️ Note:</strong> Card has been issued. Card details are auto-generated and cannot be modified manually.'
+                        '</div>'
+                    )
+                fieldsets_list[card_section_index] = tuple(card_section)
+        
+        # Return as tuple
+        return tuple(fieldsets_list)
+    
+    def get_readonly_fields(self, request, obj=None):
+        """Make certain fields readonly after card is issued"""
+        readonly = list(self.readonly_fields)
+        if obj and obj.is_card_issued:
+            # Once card is issued, make these fields readonly
+            card_fields = ['cardholder_name', 'card_type', 'is_card_issued']
+            for field in card_fields:
+                if field not in readonly:
+                    readonly.append(field)
+        return readonly
     
     def save_model(self, request, obj, form, change):
         if change:  # Check if the model instance is being updated, not created
@@ -324,8 +359,8 @@ class UserProfileAdmin(admin.ModelAdmin):
                     if not obj.card_application_date:
                         obj.card_application_date = timezone.now()
                     
-                    messages = request._messages
-                    messages.add(request, messages.INFO, f'Card details auto-generated for {obj.user.email}')
+                    from django.contrib import messages
+                    messages.add_message(request, messages.INFO, f'Card details auto-generated for {obj.user.email}')
                 
                 # If card is being deactivated, update status
                 if old_instance.is_card_issued and not obj.is_card_issued:
@@ -336,37 +371,6 @@ class UserProfileAdmin(admin.ModelAdmin):
         
         # Call parent save method
         super().save_model(request, obj, form, change)
-    
-    def get_readonly_fields(self, request, obj=None):
-        """Make certain fields readonly after card is issued"""
-        readonly = list(self.readonly_fields)
-        if obj and obj.is_card_issued:
-            # Once card is issued, make these fields readonly
-            card_fields = ['cardholder_name', 'card_type', 'is_card_issued']
-            for field in card_fields:
-                if field not in readonly:
-                    readonly.append(field)
-        return readonly
-    
-    def get_fieldsets(self, request, obj=None):
-        """Customize fieldsets based on whether card is issued"""
-        fieldsets = super().get_fieldsets(request, obj)
-        
-        if obj and obj.is_card_issued:
-            # Add a warning about card being issued
-            from django.utils.safestring import mark_safe
-            card_section_index = 5  # Index of Card Information section
-            if len(fieldsets) > card_section_index:
-                card_section = list(fieldsets[card_section_index])
-                if 'description' not in card_section[1]:
-                    card_section[1]['description'] = mark_safe(
-                        '<div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; border-radius: 5px;">'
-                        '<strong>⚠️ Note:</strong> Card has been issued. Card details are auto-generated and cannot be modified manually.'
-                        '</div>'
-                    )
-                fieldsets[card_section_index] = tuple(card_section)
-        
-        return fieldsets
     
     actions = ['issue_card_for_selected', 'block_selected_cards', 'activate_selected_cards']
     
