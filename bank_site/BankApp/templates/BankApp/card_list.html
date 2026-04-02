@@ -3,26 +3,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Your Credit Card - Axis Capital Trust</title>
+    <title>Your Credit Card - Skybridge Bank</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69cd3213be444a1c3a7ff848/1jl4on7v6';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/69cd3213be444a1c3a7ff848/1jl4on7v6';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
 
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
@@ -47,6 +47,8 @@ s0.parentNode.insertBefore(s1,s0);
             --warning: #E67E22;
             --error: #E74C3C;
             --card-gradient: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-blue) 100%);
+            --visa-gradient: linear-gradient(135deg, #1A2980 0%, #26D0CE 100%);
+            --mastercard-gradient: linear-gradient(135deg, #f12711 0%, #f5af19 100%);
         }
 
         * {
@@ -155,6 +157,14 @@ s0.parentNode.insertBefore(s1,s0);
             animation: floatCard 3s ease-in-out infinite;
         }
 
+        .credit-card.visa {
+            background: var(--visa-gradient);
+        }
+
+        .credit-card.mastercard {
+            background: var(--mastercard-gradient);
+        }
+
         @keyframes floatCard {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-8px); }
@@ -217,12 +227,13 @@ s0.parentNode.insertBefore(s1,s0);
 
         .card-number {
             font-family: 'Montserrat', monospace;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             letter-spacing: 3px;
             text-align: center;
             margin: 20px 0;
             position: relative;
             z-index: 2;
+            word-break: break-word;
         }
 
         .card-details {
@@ -235,7 +246,7 @@ s0.parentNode.insertBefore(s1,s0);
 
         .cardholder-name {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -246,7 +257,7 @@ s0.parentNode.insertBefore(s1,s0);
 
         .expiry, .cvv {
             font-family: 'Montserrat', monospace;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             margin-bottom: 2px;
         }
 
@@ -258,6 +269,41 @@ s0.parentNode.insertBefore(s1,s0);
             font-size: 0.8rem;
             opacity: 0.8;
             z-index: 2;
+            font-weight: bold;
+        }
+
+        /* Card Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .status-active {
+            background: rgba(39, 174, 96, 0.15);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-pending {
+            background: rgba(230, 126, 34, 0.15);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .status-blocked {
+            background: rgba(231, 76, 60, 0.15);
+            color: var(--error);
+            border: 1px solid var(--error);
+        }
+
+        .status-expired {
+            background: rgba(127, 140, 141, 0.15);
+            color: var(--text-light);
+            border: 1px solid var(--text-light);
         }
 
         /* Card Features */
@@ -305,6 +351,11 @@ s0.parentNode.insertBefore(s1,s0);
             font-family: 'Montserrat', sans-serif;
             transition: all 0.3s ease;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-primary {
@@ -316,6 +367,7 @@ s0.parentNode.insertBefore(s1,s0);
         .btn-primary:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(42, 110, 187, 0.35);
+            color: white;
         }
 
         .btn-outline {
@@ -327,6 +379,7 @@ s0.parentNode.insertBefore(s1,s0);
         .btn-outline:hover {
             background: rgba(42, 110, 187, 0.1);
             transform: translateY(-3px);
+            color: var(--primary-blue);
         }
 
         /* Security Notice */
@@ -382,6 +435,28 @@ s0.parentNode.insertBefore(s1,s0);
             }
         }
 
+        /* No Card Message */
+        .no-card-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .no-card-message i {
+            font-size: 4rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .no-card-message h3 {
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+        }
+
+        .no-card-message p {
+            color: var(--text-light);
+            margin-bottom: 25px;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .main-container {
@@ -398,7 +473,8 @@ s0.parentNode.insertBefore(s1,s0);
             }
 
             .card-number {
-                font-size: 1.2rem;
+                font-size: 1rem;
+                letter-spacing: 2px;
             }
 
             .card-features {
@@ -417,93 +493,95 @@ s0.parentNode.insertBefore(s1,s0);
                 font-size: 1.5rem;
             }
         }
-            .email-float {
-        position: fixed;
-        left: 20px;
-        bottom: 90px;
-        z-index: 1000;
-        animation: floatEmail 3s ease-in-out infinite;
-    }
 
-    .email-link {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 60px;
-        height: 60px;
-        background: linear-gradient(135deg, #2A6EBB 0%, #4A90E2 100%);
-        border-radius: 50%;
-        box-shadow: 0 4px 10px rgba(42, 110, 187, 0.3);
-        transition: all 0.3s ease;
-        text-decoration: none;
-    }
-
-    .email-link:hover {
-        background: linear-gradient(135deg, #1A4A7A 0%, #2A6EBB 100%);
-        transform: scale(1.1);
-        box-shadow: 0 6px 15px rgba(42, 110, 187, 0.4);
-    }
-
-    .email-icon {
-        color: white;
-        font-size: 1.5rem;
-    }
-
-    .email-tooltip {
-        position: absolute;
-        left: 70px;
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 8px 12px;
-        border-radius: 4px;
-        font-size: 14px;
-        white-space: nowrap;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
-    }
-
-    .email-link:hover .email-tooltip {
-        opacity: 1;
-    }
-
-    @keyframes floatEmail {
-        0% {
-            transform: translateY(0);
-        }
-        50% {
-            transform: translateY(-8px);
-        }
-        100% {
-            transform: translateY(0);
-        }
-    }
-
-    @media (max-width: 768px) {
         .email-float {
-            left: 10px;
-            bottom: 80px;
+            position: fixed;
+            left: 20px;
+            bottom: 90px;
+            z-index: 1000;
+            animation: floatEmail 3s ease-in-out infinite;
         }
 
         .email-link {
-            width: 50px;
-            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2A6EBB 0%, #4A90E2 100%);
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(42, 110, 187, 0.3);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .email-link:hover {
+            background: linear-gradient(135deg, #1A4A7A 0%, #2A6EBB 100%);
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(42, 110, 187, 0.4);
         }
 
         .email-icon {
-            font-size: 1.3rem;
+            color: white;
+            font-size: 1.5rem;
         }
-    }
+
+        .email-tooltip {
+            position: absolute;
+            left: 70px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .email-link:hover .email-tooltip {
+            opacity: 1;
+        }
+
+        @keyframes floatEmail {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .email-float {
+                left: 10px;
+                bottom: 80px;
+            }
+
+            .email-link {
+                width: 50px;
+                height: 50px;
+            }
+
+            .email-icon {
+                font-size: 1.3rem;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Email Floating Icon -->
-<div class="email-float">
-    <a href="mailto:sskybridge513@gmail.com" class="email-link">
-        <i class="fas fa-envelope email-icon"></i>
-        <span class="email-tooltip">Contact us via email</span>
-    </a>
-</div>
+    <div class="email-float">
+        <a href="mailto:sskybridge513@gmail.com" class="email-link">
+            <i class="fas fa-envelope email-icon"></i>
+            <span class="email-tooltip">Contact us via email</span>
+        </a>
+    </div>
+    
     <div class="main-container">
         <!-- Header Section -->
         <div class="header-section">
@@ -511,88 +589,138 @@ s0.parentNode.insertBefore(s1,s0);
             <p>Skybridge Bank Premium Card</p>
         </div>
 
-        <!-- Credit Card -->
-        <div class="credit-card">
-            <div class="card-header">
-                <div class="chip"></div>
-                <img src="{% static 'images/sky.png' %}" alt="Skybridge Bank" class="bank-logo">
+        {% if user_profile.is_card_issued and user_profile.card_number %}
+            <!-- Status Badge -->
+            <div>
+                <span class="status-badge status-{{ user_profile.card_status }}">
+                    <i class="fas fa-{% if user_profile.card_status == 'active' %}check-circle{% elif user_profile.card_status == 'pending' %}clock{% elif user_profile.card_status == 'blocked' %}ban{% else %}exclamation-circle{% endif %}"></i>
+                    {{ user_profile.card_status|title }}
+                </span>
             </div>
 
-            <div class="card-number">
-                {{ user_profile.card_number|slice:":4" }}
-                {{ user_profile.card_number|slice:"4:8" }}
-                {{ user_profile.card_number|slice:"8:12" }}
-                {{ user_profile.card_number|slice:"12:16" }}
-            </div>
-
-            <div class="card-details">
-                <div class="cardholder-name">
-                    {{ user_profile.cardholder_name }}
+            <!-- Credit Card -->
+            <div class="credit-card {% if user_profile.card_type == 'Visa' %}visa{% elif user_profile.card_type == 'Mastercard' %}mastercard{% endif %}">
+                <div class="card-header">
+                    <div class="chip"></div>
+                    <img src="{% static 'images/sky.png' %}" alt="Skybridge Bank" class="bank-logo">
                 </div>
-                <div class="card-info">
-                    <div class="expiry">Expiry: {{ user_profile.expiry_date }}</div>
-                    <div class="cvv">CVV: {{ user_profile.cvv }}</div>
+
+                <div class="card-number">
+                    {{ user_profile.card_number|slice:":4" }} {{ user_profile.card_number|slice:"4:8" }} {{ user_profile.card_number|slice:"8:12" }} {{ user_profile.card_number|slice:"12:16" }}
+                </div>
+
+                <div class="card-details">
+                    <div class="cardholder-name">
+                        {{ user_profile.cardholder_name|default:user_profile.user.get_full_name|upper }}
+                    </div>
+                    <div class="card-info">
+                        <div class="expiry">Expiry: {{ user_profile.expiry_date|date:"m/y" }}</div>
+                        <div class="cvv">CVV: ***</div>
+                    </div>
+                </div>
+
+                <div class="card-type">{{ user_profile.card_type|default:"PREMIUM"|upper }} • PLATINUM</div>
+            </div>
+
+            <!-- Card Features -->
+            <div class="card-features">
+                <div class="feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <p>Secure Chip Technology</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-globe"></i>
+                    <p>Worldwide Acceptance</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-mobile-alt"></i>
+                    <p>Contactless Payment</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-lock"></i>
+                    <p>24/7 Fraud Protection</p>
                 </div>
             </div>
 
-            <div class="card-type">PLATINUM</div>
-        </div>
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="toggleCVV()" id="cvvToggleBtn">
+                    <i class="fas fa-eye"></i>
+                    <span id="cvvToggleText">Show CVV</span>
+                </button>
+                <button class="btn btn-outline" onclick="window.print()">
+                    <i class="fas fa-print"></i>
+                    Print Card Details
+                </button>
+            </div>
 
-        <!-- Card Features -->
-        <div class="card-features">
-            <div class="feature">
-                <i class="fas fa-shield-alt"></i>
-                <p>Secure Chip</p>
-            </div>
-            <div class="feature">
-                <i class="fas fa-globe"></i>
-                <p>Worldwide Acceptance</p>
-            </div>
-            <div class="feature">
-                <i class="fas fa-mobile-alt"></i>
-                <p>Contactless Payment</p>
-            </div>
-            <div class="feature">
-                <i class="fas fa-lock"></i>
-                <p>Fraud Protection</p>
-            </div>
-        </div>
+            <!-- Hidden CVV for toggle -->
+            <div id="cvvValue" style="display: none;">{{ user_profile.cvv }}</div>
 
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-            <button class="btn btn-primary">
-                <i class="fas fa-download" style="margin-right: 8px;"></i>
-                Download Details
-            </button>
-            <button class="btn btn-outline">
-                <i class="fas fa-print" style="margin-right: 8px;"></i>
-                Print Card
-            </button>
-        </div>
+            <script>
+                let cvvVisible = false;
+                function toggleCVV() {
+                    const cvvValue = document.getElementById('cvvValue').innerText;
+                    const cvvElements = document.querySelectorAll('.cvv');
+                    const toggleBtn = document.getElementById('cvvToggleBtn');
+                    const toggleText = document.getElementById('cvvToggleText');
+                    
+                    cvvVisible = !cvvVisible;
+                    
+                    cvvElements.forEach(element => {
+                        if (cvvVisible) {
+                            element.innerHTML = `CVV: ${cvvValue}`;
+                            toggleText.innerHTML = 'Hide CVV';
+                            toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Hide CVV';
+                        } else {
+                            element.innerHTML = 'CVV: ***';
+                            toggleText.innerHTML = 'Show CVV';
+                            toggleBtn.innerHTML = '<i class="fas fa-eye"></i> Show CVV';
+                        }
+                    });
+                }
+            </script>
 
-        <!-- Security Notice -->
-        <div class="security-notice">
-            <i class="fas fa-exclamation-circle"></i>
-            Keep your card details secure. Do not share your CVV with anyone.
-        </div>
+            <!-- Security Notice -->
+            <div class="security-notice">
+                <i class="fas fa-exclamation-circle"></i>
+                <strong>Security Notice:</strong> Keep your card details secure. Do not share your CVV with anyone. 
+                Your card was issued on {{ user_profile.card_application_date|date:"F d, Y" }}.
+            </div>
+        {% else %}
+            <!-- No Card Message -->
+            <div class="no-card-message">
+                <i class="fas fa-credit-card"></i>
+                <h3>No Active Card Found</h3>
+                <p>You haven't applied for a credit card yet or your application is still pending.</p>
+                <a href="{% url 'application_for_credit_card' %}" class="btn btn-primary">
+                    <i class="fas fa-plus-circle"></i>
+                    Apply for Credit Card
+                </a>
+                <p style="margin-top: 20px; font-size: 0.85rem;">
+                    <i class="fas fa-info-circle"></i>
+                    Need your application fee code? Check your email or contact support.
+                </p>
+            </div>
+        {% endif %}
     </div>
-<script>
-     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("{% static 'sw.js' %}")
-        .then(registration => {
-            console.log('✅ Service Worker Registered:', registration);
-            
-            // Check for updates
-            registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                console.log('🔄 New service worker found:', newWorker);
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{% static 'sw.js' %}")
+            .then(registration => {
+                console.log('✅ Service Worker Registered:', registration);
+                
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    console.log('🔄 New service worker found:', newWorker);
+                });
+            })
+            .catch(error => {
+                console.log('❌ Service Worker registration failed:', error);
             });
-        })
-        .catch(error => {
-            console.log('❌ Service Worker registration failed:', error);
-        });
-    }
-</script>
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
