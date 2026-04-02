@@ -1126,5 +1126,10 @@ class UserProfile(models.Model):
         else:
             self.four_digit_auth_key = None
 
+    def clean(self):
+        # Ensure four_digit_auth_key is a 4-digit integer
+        if not self.four_digit_auth_key or not (1000 <= self.four_digit_auth_key <= 9999):
+            raise ValidationError("The authentication key must be a 4-digit number.")
+
     def __str__(self):
         return self.user.email
