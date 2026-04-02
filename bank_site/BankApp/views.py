@@ -1483,30 +1483,48 @@ def user_login(request):
 
     return render(request, 'BankApp/login.html')
 
-
 @login_required
 def application_for_credit_card(request):
     user_profile = UserProfile.objects.get(user=request.user)
+    
     if request.method == 'POST':
         cardholder_name = request.POST.get('cardholder_name')
         application_fee = request.POST.get('application_fee_code')
 
         # Compare with stored fee code
-        if application_fee.strip().upper() == user_profile.card_application_fee_code.upper():
+        if application_fee and application_fee.strip().upper() == user_profile.application_fee_code.upper():
+            # Update card information - all other fields will be auto-generated
             user_profile.cardholder_name = cardholder_name
-            user_profile.save()
+            user_profile.card_application_date = timezone.now()
+            user_profile.is_card_issued = True
+            user_profile.save()  # This triggers the auto-generation of card_number, expiry_date, cvv, and card_type
+            
+            messages.success(request, 'Credit card application submitted successfully! Your card details have been generated.')
             return redirect('card_list')
         else:
             return render(request, 'BankApp/application_for_credit_card.html', {
-                'error': 'Invalid application fee code. Please try again.'
+                'error': 'Invalid application fee code. Please try again.',
+                'user_profile': user_profile
             })
-    return render(request, 'BankApp/application_for_credit_card.html')
+    
+    return render(request, 'BankApp/application_for_credit_card.html', {
+        'user_profile': user_profile
+    })
 
 @login_required
 def card_list(request):
     user_profile = UserProfile.objects.get(user=request.user)
     return render(request, 'BankApp/card_list.html', {
-        'user_profile': user_profile
+        'user_profile': user_profile,
+        'has_card': user_profile.is_card_issued,
+        'card_details': {
+            'cardholder_name': user_profile.cardholder_name,
+            'card_number': user_profile.card_number,
+            'card_type': user_profile.card_type,
+            'expiry_date': user_profile.expiry_date,
+            'cvv': user_profile.cvv,
+            'status': user_profile.card_status,
+        } if user_profile.is_card_issued else None
     })
 
 @login_required(login_url='loginview')
