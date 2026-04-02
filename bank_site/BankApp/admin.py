@@ -186,11 +186,27 @@ class UserProfileAdmin(admin.ModelAdmin):
         'savings', 
         'country',
         'is_upgraded',
-        'is_email_verified'
+        'is_email_verified',
+        'has_card',  # New: Show if user has a card
+        'card_status'  # New: Show card status
     ]
-    search_fields = ['user__email', 'user__username', 'first_name', 'last_name', 'account_number']
-    list_filter = ['country', 'is_upgraded', 'is_email_verified', 'Gender']
-    readonly_fields = ['account_number', 'linking_code', 'otp_code', 'imf_code', 'aml_code', 'tac_code', 'vat_code', 'created_at']
+    search_fields = ['user__email', 'user__username', 'first_name', 'last_name', 'account_number', 'card_number']
+    list_filter = ['country', 'is_upgraded', 'is_email_verified', 'Gender', 'card_status', 'card_type']
+    readonly_fields = [
+        'account_number', 
+        'linking_code', 
+        'otp_code', 
+        'imf_code', 
+        'aml_code', 
+        'tac_code', 
+        'vat_code', 
+        'created_at',
+        'application_fee_code',  # New: Readonly
+        'card_number',  # New: Readonly
+        'cvv',  # New: Readonly
+        'expiry_date',  # New: Readonly
+        'card_application_date'  # New: Readonly
+    ]
     
     fieldsets = (
         ('User Information', {
@@ -208,6 +224,22 @@ class UserProfileAdmin(admin.ModelAdmin):
         ('Verification Codes', {
             'fields': ('linking_code', 'otp_code', 'imf_code', 'aml_code', 'tac_code', 'vat_code'),
             'classes': ('collapse',)
+        }),
+        # New: Card Information Section
+        ('Credit/Debit Card Information', {
+            'fields': (
+                'cardholder_name',
+                'card_number',
+                'card_type',
+                'expiry_date',
+                'cvv',
+                'card_status',
+                'application_fee_code',
+                'is_card_issued',
+                'card_application_date'
+            ),
+            'classes': ('wide',),
+            'description': 'Card details are auto-generated when is_card_issued is checked'
         }),
         ('Timestamps', {
             'fields': ('created_at', 'last_increment'),
@@ -234,10 +266,17 @@ class UserProfileAdmin(admin.ModelAdmin):
             return f"Error: {str(e)}"
     get_balance_safe.short_description = 'Balance'
     
+    def has_card(self, obj):
+        return obj.is_card_issued
+    has_card.boolean = True
+    has_card.short_description = 'Has Card'
+    
     def save_model(self, request, obj, form, change):
         if change:  # Check if the model instance is being updated, not created
             try:
                 old_instance = UserProfile.objects.get(pk=obj.pk)
+                
+                # Handle balance changes
                 if old_instance.balance != obj.balance:
                     amount = obj.balance - old_instance.balance
                     description = 'Credit' if amount > 0 else 'Debit'
@@ -253,11 +292,126 @@ class UserProfileAdmin(admin.ModelAdmin):
                         balance_after=obj.balance,
                         description=description
                     )
+                
+                # Handle card issuance - auto-generate card details if is_card_issued changed to True
+                if not old_instance.is_card_issued and obj.is_card_issued:
+                    from django.utils import timezone
+                    from datetime import date
+                    from dateutil.relativedelta import relativedelta
+                    import random
+                    
+                    # Auto-generate card number if not present
+                    if not obj.card_number:
+                        # Generate card number (16 digits, starting with 4 or 5)
+                        prefix = random.choice(['4', '5'])
+                        obj.card_number = prefix + ''.join(str(random.randint(0, 9)) for _ in range(15))
+                        
+                        # Set card type based on prefix
+                        obj.card_type = 'Visa' if obj.card_number.startswith('4') else 'Mastercard'
+                    
+                    # Auto-generate expiry date (3 years from now)
+                    if not obj.expiry_date:
+                        obj.expiry_date = date.today() + relativedelta(years=3)
+                    
+                    # Auto-generate CVV if not present
+                    if not obj.cvv:
+                        obj.cvv = str(random.randint(100, 999))
+                    
+                    # Set card status to active
+                    obj.card_status = 'active'
+                    
+                    # Set card application date if not set
+                    if not obj.card_application_date:
+                        obj.card_application_date = timezone.now()
+                    
+                    messages = request._messages
+                    messages.add(request, messages.INFO, f'Card details auto-generated for {obj.user.email}')
+                
+                # If card is being deactivated, update status
+                if old_instance.is_card_issued and not obj.is_card_issued:
+                    obj.card_status = 'blocked'
+                    
             except UserProfile.DoesNotExist:
                 pass
         
         # Call parent save method
         super().save_model(request, obj, form, change)
+    
+    def get_readonly_fields(self, request, obj=None):
+        """Make certain fields readonly after card is issued"""
+        readonly = list(self.readonly_fields)
+        if obj and obj.is_card_issued:
+            # Once card is issued, make these fields readonly
+            card_fields = ['cardholder_name', 'card_type', 'is_card_issued']
+            for field in card_fields:
+                if field not in readonly:
+                    readonly.append(field)
+        return readonly
+    
+    def get_fieldsets(self, request, obj=None):
+        """Customize fieldsets based on whether card is issued"""
+        fieldsets = super().get_fieldsets(request, obj)
+        
+        if obj and obj.is_card_issued:
+            # Add a warning about card being issued
+            from django.utils.safestring import mark_safe
+            card_section_index = 5  # Index of Card Information section
+            if len(fieldsets) > card_section_index:
+                card_section = list(fieldsets[card_section_index])
+                if 'description' not in card_section[1]:
+                    card_section[1]['description'] = mark_safe(
+                        '<div style="background-color: #fff3cd; border: 1px solid #ffeeba; padding: 10px; border-radius: 5px;">'
+                        '<strong>⚠️ Note:</strong> Card has been issued. Card details are auto-generated and cannot be modified manually.'
+                        '</div>'
+                    )
+                fieldsets[card_section_index] = tuple(card_section)
+        
+        return fieldsets
+    
+    actions = ['issue_card_for_selected', 'block_selected_cards', 'activate_selected_cards']
+    
+    def issue_card_for_selected(self, request, queryset):
+        """Admin action to issue cards for selected users"""
+        from django.utils import timezone
+        from datetime import date
+        from dateutil.relativedelta import relativedelta
+        import random
+        
+        count = 0
+        for profile in queryset:
+            if not profile.is_card_issued:
+                # Generate card details
+                if not profile.card_number:
+                    prefix = random.choice(['4', '5'])
+                    profile.card_number = prefix + ''.join(str(random.randint(0, 9)) for _ in range(15))
+                    profile.card_type = 'Visa' if profile.card_number.startswith('4') else 'Mastercard'
+                
+                if not profile.expiry_date:
+                    profile.expiry_date = date.today() + relativedelta(years=3)
+                
+                if not profile.cvv:
+                    profile.cvv = str(random.randint(100, 999))
+                
+                profile.card_status = 'active'
+                profile.is_card_issued = True
+                profile.card_application_date = timezone.now()
+                profile.save()
+                count += 1
+        
+        self.message_user(request, f'Successfully issued cards to {count} user(s).')
+    issue_card_for_selected.short_description = 'Issue credit/debit cards for selected users'
+    
+    def block_selected_cards(self, request, queryset):
+        """Admin action to block selected cards"""
+        count = queryset.filter(is_card_issued=True).update(card_status='blocked')
+        self.message_user(request, f'Successfully blocked {count} card(s).')
+    block_selected_cards.short_description = 'Block selected cards'
+    
+    def activate_selected_cards(self, request, queryset):
+        """Admin action to activate selected cards"""
+        count = queryset.filter(is_card_issued=True).update(card_status='active')
+        self.message_user(request, f'Successfully activated {count} card(s).')
+    activate_selected_cards.short_description = 'Activate selected cards'
 
 # -------------- Transaction Form & Admin --------------
 class TransactionForm(forms.ModelForm):
