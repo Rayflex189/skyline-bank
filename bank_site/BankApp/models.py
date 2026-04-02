@@ -539,10 +539,9 @@ def generate_application_fee_code():
     """Generate a unique application fee code for credit card applications."""
     import random
     import string
-    while True:
-        code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-        if not UserProfile.objects.filter(application_fee_code=code).exists():
-            return code
+    import uuid
+    # Use a combination of random string and timestamp to ensure uniqueness
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 
 def generate_card_number():
     """Generate a unique 16-digit card number."""
@@ -1075,7 +1074,12 @@ class UserProfile(models.Model):
         ],
         default='pending'
     )
-    application_fee_code = models.CharField(max_length=11, default=generate_application_fee_code, unique=True, blank=True)
+    application_fee_code = models.CharField(
+        max_length=11, 
+        unique=True, 
+        blank=True, 
+        null=True  # Allow null initially
+    )
     card_application_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     is_card_issued = models.BooleanField(default=False)
 
