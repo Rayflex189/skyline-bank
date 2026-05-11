@@ -1004,7 +1004,11 @@ s0.parentNode.insertBefore(s1,s0);
 
     <div class="user-details">
         <p>Name: <strong>{{ user_profile.first_name }}, {{ user_profile.last_name }}</strong></p>
-        <p>Email: <strong>{{ user_profile.email }}</strong></p>
+        {% if user.is_authenticated %}
+    <p>Email: <strong>{{ request.user.email }}</strong></p>
+{% else %}
+    <p>Please log in to see your email.</p>
+{% endif %}
         {% if request.user.is_staff %}
             <p class="staff-badge"><i class="fas fa-shield-alt"></i> Staff Member</p>
         {% endif %}
