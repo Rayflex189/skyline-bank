@@ -33,7 +33,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres.qrcpbwlscndulbuigtmz',
-        'PASSWORD': '959AXvskY1wwRah9',  # Replace with your actual password
+        'PASSWORD': 'jPuebkAXXNh9Rtm9',  # Replace with your actual password
         'HOST': 'aws-1-us-west-1.pooler.supabase.com',
         'PORT': '6543',
         'OPTIONS': {
@@ -44,6 +44,7 @@ DATABASES = {
         'CONN_MAX_AGE': 600,  # Optional: connection persistence in seconds
     }
 }
+
 
 cloudinary.config(
     cloud_name="dlzn0moho",
