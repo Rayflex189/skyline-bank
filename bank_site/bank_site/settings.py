@@ -66,16 +66,15 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'skybridgefinance.online',
     'www.skybridgefinance.online',
-    'skybridge-finance.fly.dev',
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://skybridgefinance.online',
                         'https://www.skybridgefinance.online',
-                        'https://www.skybridgefinance.online'
                         ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+USE_X_FORWARDED_HOST = True
 
 # Application definition
 
