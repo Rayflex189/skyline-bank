@@ -54,7 +54,7 @@ SECRET_KEY = 'django-insecure-os%ceh%!b_zte(60bvi9)pujn1v#lyuh^u4l!hr+_-5)rmf&9-
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'axosbank.guru',
+    'www.axosbank.guru',
 ]
 
 CSRF_TRUSTED_ORIGINS = ['https://axosbank.guru',
