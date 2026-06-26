@@ -3,49 +3,52 @@
 {% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ investment.investment_plan.name }} - Investment Details | Skybridge Finance</title>
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Track your {{ investment.investment_plan.name }} investment performance with detailed analytics and transaction history.">
-    <meta name="keywords" content="investment, portfolio, {{ investment.investment_plan.name }}, finance, Skybridge Finance">
-    <meta property="og:title" content="{{ investment.investment_plan.name }} - Investment Details">
-    <meta property="og:description" content="View detailed analytics of your {{ investment.investment_plan.name }} investment.">
-    
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fc33962525f11c38faecba/1jo0ij1kg';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <title>{{ investment.investment_plan.name }} - Investment Details | Axos Finance</title>
 
-    
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Track your {{ investment.investment_plan.name }} investment performance with detailed analytics and transaction history.">
+    <meta name="keywords" content="investment, portfolio, {{ investment.investment_plan.name }}, finance, Axos Finance">
+    <meta property="og:title" content="{{ investment.investment_plan.name }} - Investment Details">
+    <meta property="og:description"
+        content="View detailed analytics of your {{ investment.investment_plan.name }} investment.">
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6a3e914d0858271d4af4e711/1js26f6la';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-    
+
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
-    
+
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Custom CSS -->
     <style>
         :root {
@@ -76,7 +79,8 @@ s0.parentNode.insertBefore(s1,s0);
             box-sizing: border-box;
         }
 
-        body, html {
+        body,
+        html {
             font-family: 'Inter', sans-serif;
             background-color: var(--light-bg);
             color: var(--text-dark);
@@ -128,7 +132,8 @@ s0.parentNode.insertBefore(s1,s0);
             align-items: center;
         }
 
-        .notification-bell, .open-sidebar-btn {
+        .notification-bell,
+        .open-sidebar-btn {
             cursor: pointer;
             color: white;
             font-size: 1.3rem;
@@ -142,7 +147,8 @@ s0.parentNode.insertBefore(s1,s0);
             position: relative;
         }
 
-        .notification-bell:hover, .open-sidebar-btn:hover {
+        .notification-bell:hover,
+        .open-sidebar-btn:hover {
             background-color: rgba(255, 255, 255, 0.15);
         }
 
@@ -173,7 +179,9 @@ s0.parentNode.insertBefore(s1,s0);
             flex-direction: column;
         }
 
-        .sidebar.open { right: 0; }
+        .sidebar.open {
+            right: 0;
+        }
 
         .sidebar-header {
             padding: 24px;
@@ -269,7 +277,8 @@ s0.parentNode.insertBefore(s1,s0);
             border-left: 4px solid transparent;
         }
 
-        .sidebar-nav a:hover, .sidebar-nav a.active {
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
             background: var(--primary-light);
             color: var(--primary);
             border-left-color: var(--primary);
@@ -309,8 +318,15 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Investment Header */
@@ -416,9 +432,17 @@ s0.parentNode.insertBefore(s1,s0);
             gap: 4px;
         }
 
-        .positive { color: var(--accent); }
-        .negative { color: var(--danger); }
-        .neutral { color: var(--warning); }
+        .positive {
+            color: var(--accent);
+        }
+
+        .negative {
+            color: var(--danger);
+        }
+
+        .neutral {
+            color: var(--warning);
+        }
 
         /* Investment Details Card */
         .investment-card {
@@ -459,9 +483,17 @@ s0.parentNode.insertBefore(s1,s0);
             backdrop-filter: blur(10px);
         }
 
-        .status-active { background: rgba(76, 175, 80, 0.2); }
-        .status-completed { background: rgba(33, 150, 243, 0.2); }
-        .status-pending { background: rgba(255, 152, 0, 0.2); }
+        .status-active {
+            background: rgba(76, 175, 80, 0.2);
+        }
+
+        .status-completed {
+            background: rgba(33, 150, 243, 0.2);
+        }
+
+        .status-pending {
+            background: rgba(255, 152, 0, 0.2);
+        }
 
         .investment-card-body {
             padding: 30px;
@@ -538,8 +570,13 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         .progress-dates {
@@ -629,9 +666,20 @@ s0.parentNode.insertBefore(s1,s0);
             font-weight: 600;
         }
 
-        .type-deposit { background: var(--accent-light); color: var(--accent); }
-        .type-withdrawal { background: var(--danger-light); color: var(--danger); }
-        .type-interest { background: var(--warning-light); color: var(--warning); }
+        .type-deposit {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .type-withdrawal {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .type-interest {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
 
         /* Bottom Navigation */
         .bottom-nav {
@@ -736,8 +784,15 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         /* No Data State */
@@ -810,6 +865,7 @@ s0.parentNode.insertBefore(s1,s0);
 
         /* Print Styles */
         @media print {
+
             .bottom-nav,
             .floating-actions,
             .btn-back,
@@ -834,16 +890,17 @@ s0.parentNode.insertBefore(s1,s0);
         .profit-positive {
             color: var(--accent);
         }
-        
+
         .profit-negative {
             color: var(--danger);
         }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <header class="bank-header">
-        <h1>Skybridge Finance</h1>
+        <h1>Axos Finance</h1>
         <div class="header-actions">
             <div class="notification-bell" onclick="toggleNotifications()">
                 <i class="fas fa-bell"></i>
@@ -863,7 +920,7 @@ s0.parentNode.insertBefore(s1,s0);
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        
+
         <div class="user-profile">
             <div class="user-avatar">
                 {{ user_profile.first_name|first }}{{ user_profile.last_name|first }}
@@ -871,7 +928,7 @@ s0.parentNode.insertBefore(s1,s0);
             <h3>{{ user_profile.first_name }} {{ user_profile.last_name }}</h3>
             <p>{{ user_profile.email }}</p>
         </div>
-        
+
         <nav class="sidebar-nav">
             <ul>
                 <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
@@ -881,7 +938,7 @@ s0.parentNode.insertBefore(s1,s0);
                 <li><a href="{% url 'profile' %}"><i class="fas fa-user-cog"></i> Profile Settings</a></li>
             </ul>
         </nav>
-        
+
         <button class="logout-btn" onclick="window.location.href='{% url 'LogOut' %}'">
             <i class="fas fa-sign-out-alt"></i> Logout
         </button>
@@ -904,7 +961,7 @@ s0.parentNode.insertBefore(s1,s0);
             <a href="{% url 'investment_dashboard' %}" class="btn-back">
                 <i class="fas fa-arrow-left"></i> Back to Investments
             </a>
-            
+
             <h1 class="page-title">
                 <i class="fas fa-chart-line"></i>
                 {{ investment.investment_plan.name }}
@@ -925,16 +982,16 @@ s0.parentNode.insertBefore(s1,s0);
                     <i class="fas fa-arrow-{% if profit_loss >= 0 %}up{% else %}down{% endif %}"></i>
                     <!-- Fixed: Removed abs filter and use if statement instead -->
                     {% if profit_loss >= 0 %}
-                        +{{ user_profile.currency }}{{ profit_loss|intcomma }}
+                    +{{ user_profile.currency }}{{ profit_loss|intcomma }}
                     {% else %}
-                        -{{ user_profile.currency }}{{ profit_loss|cut:"-"|intcomma }}
+                    -{{ user_profile.currency }}{{ profit_loss|cut:"-"|intcomma }}
                     {% endif %}
                     {% if roi_percentage %}
-                        ({{ roi_percentage|floatformat:2 }}%)
+                    ({{ roi_percentage|floatformat:2 }}%)
                     {% endif %}
                 </div>
             </div>
-            
+
             <div class="stat-card">
                 <div class="stat-label">
                     <i class="fas fa-hand-holding-usd"></i> Amount Invested
@@ -945,7 +1002,7 @@ s0.parentNode.insertBefore(s1,s0);
                     {{ investment.start_date|date:"M d, Y" }}
                 </div>
             </div>
-            
+
             <div class="stat-card">
                 <div class="stat-label">
                     <i class="fas fa-bullseye"></i> Expected Return
@@ -956,7 +1013,7 @@ s0.parentNode.insertBefore(s1,s0);
                     {{ investment.investment_plan.interest_rate }}% interest
                 </div>
             </div>
-            
+
             <div class="stat-card">
                 <div class="stat-label">
                     <i class="fas fa-clock"></i> Investment Period
@@ -976,38 +1033,39 @@ s0.parentNode.insertBefore(s1,s0);
                 <h2 class="plan-name">{{ investment.investment_plan.name }}</h2>
                 <p class="plan-description">{{ investment.investment_plan.description }}</p>
                 <span class="status-badge status-{{ investment_status|lower }}">
-                    <i class="fas fa-{% if investment_status == 'active' %}check-circle{% elif investment_status == 'completed' %}flag-checkered{% else %}clock{% endif %}"></i>
+                    <i
+                        class="fas fa-{% if investment_status == 'active' %}check-circle{% elif investment_status == 'completed' %}flag-checkered{% else %}clock{% endif %}"></i>
                     {{ investment_status|title }}
                 </span>
             </div>
-            
+
             <div class="investment-card-body">
                 <div class="details-grid">
                     <div class="detail-item">
                         <div class="detail-label">Investment ID</div>
                         <div class="detail-value">#{{ investment.id|stringformat:"06d" }}</div>
                     </div>
-                    
+
                     <div class="detail-item">
                         <div class="detail-label">Interest Rate</div>
                         <div class="detail-value">{{ investment.investment_plan.interest_rate }}%</div>
                     </div>
-                    
+
                     <div class="detail-item">
                         <div class="detail-label">Start Date</div>
                         <div class="detail-value">{{ investment.start_date|date:"F d, Y" }}</div>
                     </div>
-                    
+
                     <div class="detail-item">
                         <div class="detail-label">Maturity Date</div>
                         <div class="detail-value">{{ investment.end_date|date:"F d, Y" }}</div>
                     </div>
-                    
+
                     <div class="detail-item">
                         <div class="detail-label">Duration</div>
                         <div class="detail-value">{{ total_days }} days</div>
                     </div>
-                    
+
                     <div class="detail-item">
                         <div class="detail-label">Days Passed</div>
                         <div class="detail-value">{{ days_passed }}</div>
@@ -1034,9 +1092,11 @@ s0.parentNode.insertBefore(s1,s0);
                 <div class="detail-item" style="grid-column: 1 / -1; margin-top: 20px;">
                     <div class="detail-label">Profit Range</div>
                     <div class="detail-value">
-                        {{ user_profile.currency }}{{ min_expected_return|intcomma }} - {{ user_profile.currency }}{{ max_expected_return|intcomma }}
+                        {{ user_profile.currency }}{{ min_expected_return|intcomma }} - {{ user_profile.currency }}{{
+                        max_expected_return|intcomma }}
                         <div style="font-size: 1rem; color: var(--text-light); margin-top: 5px;">
-                            ({{ investment.investment_plan.min_profit_percentage }}% - {{ investment.investment_plan.max_profit_percentage }}%)
+                            ({{ investment.investment_plan.min_profit_percentage }}% - {{
+                            investment.investment_plan.max_profit_percentage }}%)
                         </div>
                     </div>
                 </div>
@@ -1051,51 +1111,52 @@ s0.parentNode.insertBefore(s1,s0);
                     <i class="fas fa-sync-alt"></i> Refresh
                 </button>
             </div>
-            
+
             {% if transactions %}
-                <div class="table-container">
-                    <table class="transactions-table">
-                        <thead>
-                            <tr>
-                                <th>Date & Time</th>
-                                <th>Transaction ID</th>
-                                <th>Description</th>
-                                <th>Amount</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for transaction in transactions %}
-                            <tr>
-                                <td>{{ transaction.created_at|date:"M d, Y H:i" }}</td>
-                                <td>#{{ transaction.id|stringformat:"08d" }}</td>
-                                <td>{{ transaction.description }}</td>
-                                <td>
-                                    <strong>{{ user_profile.currency }}{{ transaction.amount|intcomma }}</strong>
-                                </td>
-                                <td>
-                                    <span class="transaction-type type-{{ transaction.transaction_type|lower }}">
-                                        <i class="fas fa-{% if transaction.transaction_type == 'deposit' %}plus{% elif transaction.transaction_type == 'withdrawal' %}minus{% else %}percent{% endif %}"></i>
-                                        {{ transaction.transaction_type|title }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="status-badge status-active">
-                                        <i class="fas fa-check-circle"></i> Completed
-                                    </span>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            <div class="table-container">
+                <table class="transactions-table">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Transaction ID</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.created_at|date:"M d, Y H:i" }}</td>
+                            <td>#{{ transaction.id|stringformat:"08d" }}</td>
+                            <td>{{ transaction.description }}</td>
+                            <td>
+                                <strong>{{ user_profile.currency }}{{ transaction.amount|intcomma }}</strong>
+                            </td>
+                            <td>
+                                <span class="transaction-type type-{{ transaction.transaction_type|lower }}">
+                                    <i
+                                        class="fas fa-{% if transaction.transaction_type == 'deposit' %}plus{% elif transaction.transaction_type == 'withdrawal' %}minus{% else %}percent{% endif %}"></i>
+                                    {{ transaction.transaction_type|title }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-badge status-active">
+                                    <i class="fas fa-check-circle"></i> Completed
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {% else %}
-                <div class="no-data">
-                    <i class="fas fa-receipt"></i>
-                    <h3>No Transactions Yet</h3>
-                    <p>Transaction history will appear here once you start earning returns.</p>
-                </div>
+            <div class="no-data">
+                <i class="fas fa-receipt"></i>
+                <h3>No Transactions Yet</h3>
+                <p>Transaction history will appear here once you start earning returns.</p>
+            </div>
             {% endif %}
         </section>
     </main>
@@ -1134,9 +1195,9 @@ s0.parentNode.insertBefore(s1,s0);
             const sidebar = document.getElementById('sidebar');
             const openBtn = document.querySelector('.open-sidebar-btn');
             const closeBtn = document.querySelector('.close-sidebar');
-            
-            if (sidebar.classList.contains('open') && 
-                !sidebar.contains(e.target) && 
+
+            if (sidebar.classList.contains('open') &&
+                !sidebar.contains(e.target) &&
                 !openBtn.contains(e.target)) {
                 sidebar.classList.remove('open');
                 document.body.style.overflow = '';
@@ -1147,11 +1208,11 @@ s0.parentNode.insertBefore(s1,s0);
         function refreshTransactions() {
             const btn = event.target.closest('.refresh-btn');
             const icon = btn.querySelector('i');
-            
+
             // Add loading animation
             icon.style.animation = 'spin 1s linear infinite';
             btn.disabled = true;
-            
+
             // Simulate API call
             setTimeout(() => {
                 location.reload();
@@ -1186,12 +1247,12 @@ s0.parentNode.insertBefore(s1,s0);
                 navigator.serviceWorker.register('{% static "sw.js" %}')
                     .then(registration => {
                         console.log('ServiceWorker registered:', registration);
-                        
+
                         // Check for updates
                         registration.addEventListener('updatefound', () => {
                             const newWorker = registration.installing;
                             console.log('New service worker found:', newWorker);
-                            
+
                             newWorker.addEventListener('statechange', () => {
                                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                                     // New update available
@@ -1254,4 +1315,5 @@ s0.parentNode.insertBefore(s1,s0);
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

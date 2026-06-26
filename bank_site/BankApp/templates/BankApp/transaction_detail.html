@@ -2,39 +2,41 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Transaction Details - Skybridge Bank</title>
+  <title>Transaction Details - Axos Bank</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Favicons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
-    <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-    
-    <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="{{ icons.180 }}">
- <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fc33962525f11c38faecba/1jo0ij1kg';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
+  <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
 
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="{{ manifest_path }}">
-    <meta name="theme-color" content="{{ theme_color }}">
+  <!-- Apple Touch Icon -->
+  <link rel="apple-touch-icon" href="{{ icons.180 }}">
+  <!--Start of Tawk.to Script-->
+  <script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = 'https://embed.tawk.to/6a3e914d0858271d4af4e711/1js26f6la';
+      s1.charset = 'UTF-8';
+      s1.setAttribute('crossorigin', '*');
+      s0.parentNode.insertBefore(s1, s0);
+    })();
+  </script>
+  <!--End of Tawk.to Script-->
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="{{ manifest_path }}">
+  <meta name="theme-color" content="{{ theme_color }}">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     /* Base styles */
-    body, html {
+    body,
+    html {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
@@ -53,12 +55,15 @@ s0.parentNode.insertBefore(s1,s0);
       align-items: center;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
+
     .bank-header h1 {
       font-size: 1.8rem;
       margin: 0;
       padding-left: 20px;
     }
-    .notification-bell, .open-sidebar-btn {
+
+    .notification-bell,
+    .open-sidebar-btn {
       cursor: pointer;
       color: white;
       font-size: 1.5rem;
@@ -77,23 +82,30 @@ s0.parentNode.insertBefore(s1,s0);
       box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
       z-index: 1000;
     }
+
     .sidebar.open {
       right: 0;
     }
-    .sidebar-header, .user-details, .sidebar ul li {
+
+    .sidebar-header,
+    .user-details,
+    .sidebar ul li {
       padding: 15px 20px;
       border-bottom: 1px solid #004080;
     }
+
     .sidebar ul {
       list-style: none;
       padding: 0;
       margin: 0;
     }
+
     .sidebar ul li a {
       color: white;
       text-decoration: none;
       display: block;
     }
+
     .sidebar ul li a:hover {
       background-color: #003366;
     }
@@ -124,6 +136,7 @@ s0.parentNode.insertBefore(s1,s0);
         opacity: 0;
         transform: translateY(-20px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -137,16 +150,19 @@ s0.parentNode.insertBefore(s1,s0);
       padding: 30px;
       text-align: center;
     }
+
     .card-header h2 {
       margin: 0;
       font-size: 1.8rem;
       margin-bottom: 10px;
     }
+
     .receipt-icon {
       font-size: 3rem;
       margin-bottom: 15px;
       color: white;
     }
+
     .bank-logo {
       width: 80px;
       height: 80px;
@@ -164,6 +180,7 @@ s0.parentNode.insertBefore(s1,s0);
     .transaction-details {
       margin-bottom: 30px;
     }
+
     .detail-row {
       display: flex;
       justify-content: space-between;
@@ -171,28 +188,34 @@ s0.parentNode.insertBefore(s1,s0);
       padding: 15px 0;
       border-bottom: 1px solid #e9ecef;
     }
+
     .detail-row:last-child {
       border-bottom: none;
     }
+
     .detail-label {
       font-weight: bold;
       color: #495057;
       flex: 1;
     }
+
     .detail-value {
       color: #6c757d;
       flex: 1;
       text-align: right;
     }
+
     .amount-value {
       color: #28a745;
       font-weight: bold;
       font-size: 1.2rem;
     }
+
     .balance-value {
       color: #003366;
       font-weight: bold;
     }
+
     .transaction-id {
       font-family: monospace;
       color: #6c757d;
@@ -207,10 +230,12 @@ s0.parentNode.insertBefore(s1,s0);
       font-weight: bold;
       text-transform: uppercase;
     }
+
     .status-completed {
       background-color: #d4edda;
       color: #155724;
     }
+
     .status-pending {
       background-color: #fff3cd;
       color: #856404;
@@ -224,6 +249,7 @@ s0.parentNode.insertBefore(s1,s0);
       padding-top: 25px;
       border-top: 1px solid #e9ecef;
     }
+
     .btn {
       flex: 1;
       padding: 12px;
@@ -236,24 +262,30 @@ s0.parentNode.insertBefore(s1,s0);
       text-align: center;
       font-size: 16px;
     }
+
     .btn-primary {
       background-color: #003366;
       color: white;
     }
+
     .btn-primary:hover {
       background-color: #002244;
     }
+
     .btn-secondary {
       background-color: #6c757d;
       color: white;
     }
+
     .btn-secondary:hover {
       background-color: #545b62;
     }
+
     .btn-print {
       background-color: #28a745;
       color: white;
     }
+
     .btn-print:hover {
       background-color: #218838;
     }
@@ -269,6 +301,7 @@ s0.parentNode.insertBefore(s1,s0);
       justify-content: space-around;
       padding: 10px 0;
     }
+
     .nav-item {
       display: flex;
       flex-direction: column;
@@ -276,10 +309,12 @@ s0.parentNode.insertBefore(s1,s0);
       text-decoration: none;
       color: white;
     }
+
     .nav-icon {
       font-size: 1.2rem;
       margin-bottom: 5px;
     }
+
     .nav-label {
       font-size: 0.8rem;
     }
@@ -293,14 +328,17 @@ s0.parentNode.insertBefore(s1,s0);
       white-space: nowrap;
       overflow: hidden;
     }
+
     .marquee-content {
       display: inline-block;
       animation: scrollLeft 10s linear infinite;
     }
+
     @keyframes scrollLeft {
       from {
         transform: translateX(100%);
       }
+
       to {
         transform: translateX(-100%);
       }
@@ -311,13 +349,16 @@ s0.parentNode.insertBefore(s1,s0);
       .no-print {
         display: none !important;
       }
+
       body {
         background: white !important;
       }
+
       .card-container {
         box-shadow: none !important;
         border: 1px solid #ddd !important;
       }
+
       .action-buttons {
         display: none !important;
       }
@@ -328,204 +369,215 @@ s0.parentNode.insertBefore(s1,s0);
       .card-body {
         padding: 20px;
       }
+
       .action-buttons {
         flex-direction: column;
       }
+
       .detail-row {
         flex-direction: column;
         align-items: flex-start;
         gap: 5px;
       }
+
       .detail-value {
         text-align: left;
       }
     }
 
-        .telegram-float {
-            position: fixed;
-            left: 20px;
-            bottom: 20px;
-            z-index: 1000;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .telegram-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 60px;
-            height: 60px;
-            background: #0088cc;
-            border-radius: 50%;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .telegram-link:hover {
-            background: #0077b5;
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-        }
-
-        .telegram-icon {
-            width: 30px;
-            height: 30px;
-            filter: brightness(0) invert(1);
-        }
-
-        .telegram-tooltip {
-            position: absolute;
-            left: 70px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-
-        .telegram-link:hover .telegram-tooltip {
-            opacity: 1;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-            100% {
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .telegram-float {
-                left: 10px;
-                bottom: 10px;
-            }
-
-            .telegram-link {
-                width: 50px;
-                height: 50px;
-            }
-
-            .telegram-icon {
-                width: 25px;
-                height: 25px;
-            }
-        }
-    .email-float {
-        position: fixed;
-        left: 20px;
-        bottom: 90px;
-        z-index: 1000;
-        animation: floatEmail 3s ease-in-out infinite;
+    .telegram-float {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      z-index: 1000;
+      animation: float 3s ease-in-out infinite;
     }
 
-    .email-link {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 60px;
-        height: 60px;
-        background: linear-gradient(135deg, #2A6EBB 0%, #4A90E2 100%);
-        border-radius: 50%;
-        box-shadow: 0 4px 10px rgba(42, 110, 187, 0.3);
-        transition: all 0.3s ease;
-        text-decoration: none;
+    .telegram-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      background: #0088cc;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      text-decoration: none;
     }
 
-    .email-link:hover {
-        background: linear-gradient(135deg, #1A4A7A 0%, #2A6EBB 100%);
-        transform: scale(1.1);
-        box-shadow: 0 6px 15px rgba(42, 110, 187, 0.4);
+    .telegram-link:hover {
+      background: #0077b5;
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
     }
 
-    .email-icon {
-        color: white;
-        font-size: 1.5rem;
+    .telegram-icon {
+      width: 30px;
+      height: 30px;
+      filter: brightness(0) invert(1);
     }
 
-    .email-tooltip {
-        position: absolute;
-        left: 70px;
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 8px 12px;
-        border-radius: 4px;
-        font-size: 14px;
-        white-space: nowrap;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        pointer-events: none;
+    .telegram-tooltip {
+      position: absolute;
+      left: 70px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
     }
 
-    .email-link:hover .email-tooltip {
-        opacity: 1;
+    .telegram-link:hover .telegram-tooltip {
+      opacity: 1;
     }
 
-    @keyframes floatEmail {
-        0% {
-            transform: translateY(0);
-        }
-        50% {
-            transform: translateY(-8px);
-        }
-        100% {
-            transform: translateY(0);
-        }
+    @keyframes float {
+      0% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
     }
 
     @media (max-width: 768px) {
-        .email-float {
-            left: 10px;
-            bottom: 80px;
-        }
+      .telegram-float {
+        left: 10px;
+        bottom: 10px;
+      }
 
-        .email-link {
-            width: 50px;
-            height: 50px;
-        }
+      .telegram-link {
+        width: 50px;
+        height: 50px;
+      }
 
-        .email-icon {
-            font-size: 1.3rem;
-        }
+      .telegram-icon {
+        width: 25px;
+        height: 25px;
+      }
+    }
+
+    .email-float {
+      position: fixed;
+      left: 20px;
+      bottom: 90px;
+      z-index: 1000;
+      animation: floatEmail 3s ease-in-out infinite;
+    }
+
+    .email-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #2A6EBB 0%, #4A90E2 100%);
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(42, 110, 187, 0.3);
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .email-link:hover {
+      background: linear-gradient(135deg, #1A4A7A 0%, #2A6EBB 100%);
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px rgba(42, 110, 187, 0.4);
+    }
+
+    .email-icon {
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .email-tooltip {
+      position: absolute;
+      left: 70px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .email-link:hover .email-tooltip {
+      opacity: 1;
+    }
+
+    @keyframes floatEmail {
+      0% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .email-float {
+        left: 10px;
+        bottom: 80px;
+      }
+
+      .email-link {
+        width: 50px;
+        height: 50px;
+      }
+
+      .email-icon {
+        font-size: 1.3rem;
+      }
     }
   </style>
   <!-- Begin of Chaport Live Chat code -->
-<script type="text/javascript">
-(function(w,d,v3){
-w.chaportConfig = {
-  appId : '698184ca2764117339b24bdd',
-};
+  <script type="text/javascript">
+    (function (w, d, v3) {
+      w.chaportConfig = {
+        appId: '698184ca2764117339b24bdd',
+      };
 
-if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
-</script>
-<!-- End of Chaport Live Chat code -->
+      if (w.chaport) return; v3 = w.chaport = {}; v3._q = []; v3._l = {}; v3.q = function () { v3._q.push(arguments) }; v3.on = function (e, fn) { if (!v3._l[e]) v3._l[e] = []; v3._l[e].push(fn) }; var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = 'https://app.chaport.com/javascripts/insert.js'; var ss = d.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss)
+    })(window, document);
+  </script>
+  <!-- End of Chaport Live Chat code -->
 </head>
+
 <body>
-    <!-- Email Floating Icon -->
-<div class="email-float">
+  <!-- Email Floating Icon -->
+  <div class="email-float">
     <a href="mailto:axiscapitaltrustbank@gmail.com" class="email-link">
-        <i class="fas fa-envelope email-icon"></i>
-        <span class="email-tooltip">Contact us via email</span>
+      <i class="fas fa-envelope email-icon"></i>
+      <span class="email-tooltip">Contact us via email</span>
     </a>
-</div>
-   <!-- Telegram Floating Icon -->
-    <div class="telegram-float">
-        <a href="https://t.me/" class="telegram-link" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="telegram-icon">
-            <span class="telegram-tooltip">Join our Telegram group</span>
-        </a>
-    </div>
+  </div>
+  <!-- Telegram Floating Icon -->
+  <div class="telegram-float">
+    <a href="https://t.me/" class="telegram-link" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram"
+        class="telegram-icon">
+      <span class="telegram-tooltip">Join our Telegram group</span>
+    </a>
+  </div>
   <header class="bank-header">
-    <h1>Skybridge Bank</h1>
+    <h1>Axos Bank</h1>
     <div class="notification-bell" onclick="toggleSidebar()">
       <i class="fas fa-bell"></i>
     </div>
@@ -605,9 +657,9 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             <span class="detail-label">Transaction Type:</span>
             <span class="detail-value">
               {% if transaction.description == 'Credit' %}
-                <span class="status-badge status-completed">Credit</span>
+              <span class="status-badge status-completed">Credit</span>
               {% else %}
-                <span class="status-badge" style="background-color: #f8d7da; color: #721c24;">Debit</span>
+              <span class="status-badge" style="background-color: #f8d7da; color: #721c24;">Debit</span>
               {% endif %}
             </span>
           </div>
@@ -677,24 +729,25 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
       setTimeout(updateStockMarquee, 1000);
     });
 
-    document.getElementById("telegramBtn").addEventListener("click", function() {
+    document.getElementById("telegramBtn").addEventListener("click", function () {
       window.open("https://t.me/", "_blank");
     });
-     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("{% static 'sw.js' %}")
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register("{% static 'sw.js' %}")
         .then(registration => {
-            console.log('✅ Service Worker Registered:', registration);
-            
-            // Check for updates
-            registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                console.log('🔄 New service worker found:', newWorker);
-            });
+          console.log('✅ Service Worker Registered:', registration);
+
+          // Check for updates
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            console.log('🔄 New service worker found:', newWorker);
+          });
         })
         .catch(error => {
-            console.log('❌ Service Worker registration failed:', error);
+          console.log('❌ Service Worker registration failed:', error);
         });
     }
   </script>
 </body>
+
 </html>

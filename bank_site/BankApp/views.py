@@ -264,7 +264,7 @@ def approve_loan(request, loan_id):
         if user_email:
             try:
                 send_mail(
-                    subject="Loan Approved - SkyBridge Finance",
+                    subject="Loan Approved - Axos Finance",
                     message=(
                         f"Hello {loan.user.get_full_name() or loan.user.username},\n\n"
                         f"Congratulations! Your loan application (ID: #{loan.id}) has been approved.\n\n"
@@ -283,8 +283,8 @@ def approve_loan(request, loan_id):
                         f"You will receive the funds within 2-3 business days.\n\n"
                         "If you have any questions, please contact our support team.\n\n"
                         "Best regards,\n"
-                        "SkyBridge Finance Team\n"
-                        "support@skybridgefinance.online"
+                        "Axos Finance Team\n"
+                        "support@axosbank.com"
                     ),
                     from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[user_email],
@@ -341,7 +341,7 @@ def reject_loan(request, loan_id):
         if user_email:
             try:
                 send_mail(
-                    subject="Loan Application Update - SkyBridge Finance",
+                    subject="Loan Application Update - Axos Finance",
                     message=(
                         f"Hello {loan.user.get_full_name() or loan.user.username},\n\n"
                         f"We regret to inform you that your loan application (ID: #{loan.id}) "
@@ -352,10 +352,10 @@ def reject_loan(request, loan_id):
                         f"Amount Requested: ${loan.amount:,.2f}\n"
                         f"Loan Type: {loan.loan_type}\n"
                         f"Purpose: {loan.purpose if loan.purpose else loan.loan_type}\n\n"
-                        f"Thank you for considering SkyBridge Finance for your lending needs.\n\n"
+                        f"Thank you for considering Axos Finance for your lending needs.\n\n"
                         "Best regards,\n"
-                        "SkyBridge Finance Team\n"
-                        "support@skybridgefinance.online"
+                        "Axos Finance Team\n"
+                        "support@axosbank.com"
                     ),
                     from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[user_email],
@@ -900,7 +900,7 @@ def register(request):
             email_body = f"""
 Hi {user.email},
 
-Your Skybridge Bank account has been successfully created.
+Your Axos Bank account has been successfully created.
 
 Please verify your email by clicking the link below:
 {verification_link}
@@ -909,11 +909,11 @@ This link is valid for 7 days.
 
 If you did not create this account, simply ignore this message.
 
-Skybridge Bank Security Team
+Axos Bank Security Team
 """
 
             send_mail(
-                subject="🎉 Welcome to Skybridge Bank – Verify Your Email",
+                subject="🎉 Welcome to Axos Bank – Verify Your Email",
                 message=email_body,
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[user.email],

@@ -1,36 +1,37 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - SkyBridge Finance</title>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fc33962525f11c38faecba/1jo0ij1kg';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <title>Admin Dashboard - Axos Finance</title>
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6a3e914d0858271d4af4e711/1js26f6la';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-    
+
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
-    
+
     <!-- Safari Pinned Tab -->
     <link rel="mask-icon" href="/static/img/blue.svg" color="#1A4A7A">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -261,13 +262,33 @@ s0.parentNode.insertBefore(s1,s0);
             height: 100%;
         }
 
-        .stat-users::before { background: var(--primary-blue); }
-        .stat-total::before { background: var(--accent-blue); }
-        .stat-pending::before { background: var(--warning-color); }
-        .stat-approved::before { background: var(--success-color); }
-        .stat-rejected::before { background: var(--danger-color); }
-        .stat-recent::before { background: #8b5cf6; }
-        .stat-amount::before { background: #06b6d4; }
+        .stat-users::before {
+            background: var(--primary-blue);
+        }
+
+        .stat-total::before {
+            background: var(--accent-blue);
+        }
+
+        .stat-pending::before {
+            background: var(--warning-color);
+        }
+
+        .stat-approved::before {
+            background: var(--success-color);
+        }
+
+        .stat-rejected::before {
+            background: var(--danger-color);
+        }
+
+        .stat-recent::before {
+            background: #8b5cf6;
+        }
+
+        .stat-amount::before {
+            background: #06b6d4;
+        }
 
         .stat-header {
             display: flex;
@@ -286,13 +307,40 @@ s0.parentNode.insertBefore(s1,s0);
             font-size: 24px;
         }
 
-        .stat-users .stat-icon { background: rgba(10, 25, 47, 0.1); color: var(--primary-blue); }
-        .stat-total .stat-icon { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
-        .stat-pending .stat-icon { background: rgba(245, 158, 11, 0.1); color: var(--warning-color); }
-        .stat-approved .stat-icon { background: rgba(16, 185, 129, 0.1); color: var(--success-color); }
-        .stat-rejected .stat-icon { background: rgba(239, 68, 68, 0.1); color: var(--danger-color); }
-        .stat-recent .stat-icon { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
-        .stat-amount .stat-icon { background: rgba(6, 182, 212, 0.1); color: #06b6d4; }
+        .stat-users .stat-icon {
+            background: rgba(10, 25, 47, 0.1);
+            color: var(--primary-blue);
+        }
+
+        .stat-total .stat-icon {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-blue);
+        }
+
+        .stat-pending .stat-icon {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .stat-approved .stat-icon {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .stat-rejected .stat-icon {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .stat-recent .stat-icon {
+            background: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
+        }
+
+        .stat-amount .stat-icon {
+            background: rgba(6, 182, 212, 0.1);
+            color: #06b6d4;
+        }
 
         .trend-badge {
             padding: 6px 12px;
@@ -499,7 +547,9 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Responsive Design */
@@ -509,12 +559,12 @@ s0.parentNode.insertBefore(s1,s0);
                 flex-direction: column;
                 gap: 20px;
             }
-            
+
             .admin-nav {
                 flex-wrap: wrap;
                 justify-content: center;
             }
-            
+
             .user-info {
                 border-left: none;
                 border-top: 2px solid var(--border-color);
@@ -523,23 +573,23 @@ s0.parentNode.insertBefore(s1,s0);
                 width: 100%;
                 justify-content: center;
             }
-            
+
             .main-container {
                 padding: 20px;
             }
-            
+
             .stats-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .charts-section {
                 gap: 20px;
             }
-            
+
             .chart-container {
                 padding: 20px;
             }
-            
+
             .data-section {
                 padding: 20px;
             }
@@ -550,62 +600,64 @@ s0.parentNode.insertBefore(s1,s0);
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             .quick-actions {
                 width: 100%;
             }
-            
+
             .btn {
                 width: 100%;
                 justify-content: center;
             }
-            
+
             .chart-wrapper {
                 height: 250px;
             }
         }
+
         .user-avatar {
-    width: 42px;
-    height: 42px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 600;
-    font-size: 18px;
-    flex-shrink: 0;
-}
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
 
-.user-avatar.with-image {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
+        .user-avatar.with-image {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
 
-.user-info:hover {
-    cursor: pointer;
-}
+        .user-info:hover {
+            cursor: pointer;
+        }
 
-.user-menu-dropdown {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    min-width: 200px;
-    z-index: 1000;
-    margin-top: 10px;
-}
+        .user-menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            z-index: 1000;
+            margin-top: 10px;
+        }
 
-.user-menu-dropdown.show {
-    display: block;
-}
+        .user-menu-dropdown.show {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <!-- Admin Header -->
     <header class="admin-header">
@@ -614,11 +666,11 @@ s0.parentNode.insertBefore(s1,s0);
                 <i class="fas fa-shield-alt"></i>
             </div>
             <div class="logo-text">
-                <h1>SkyBridge Finance</h1>
+                <h1>Axos Finance</h1>
                 <p>Administration Dashboard</p>
             </div>
         </div>
-        
+
         <nav class="admin-nav">
             <a href="{% url 'admin_dashboard' %}" class="nav-link active">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
@@ -633,77 +685,85 @@ s0.parentNode.insertBefore(s1,s0);
                 <i class="fas fa-chart-line"></i> Reports
             </a>
         </nav>
-        
-<div class="user-info" style="position: relative;">
-    <div style="display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="toggleUserMenu()">
-        <!-- Profile Picture -->
-        {% if user.userprofile.profile_picture %}
-            <div class="user-avatar" style="background-image: url('{{ user.userprofile.profile_picture.url }}'); background-size: cover; background-position: center;">
-                <span style="display: none;">{{ user.email|slice:":1"|upper }}</span>
-            </div>
-        {% else %}
-            <div class="user-avatar">
-                {{ user.email|slice:":1"|upper }}
-            </div>
-        {% endif %}
-        
-        <!-- User Details -->
-        <div>
-            <div style="font-weight: 600; font-size: 14px;">
-                {{ user.get_full_name|default:user.username }}
-            </div>
-            <div style="font-size: 12px; color: var(--text-light);">
-                {{ user.email|truncatechars:25 }}
-            </div>
-        </div>
-        <i class="fas fa-chevron-down" style="font-size: 12px; color: var(--text-light);"></i>
-    </div>
-    
-    <!-- User Menu Dropdown -->
-    <div id="userMenu" style="display: none; position: absolute; top: 100%; right: 0; background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); min-width: 200px; z-index: 1000; margin-top: 10px;">
-        <div style="padding: 20px; border-bottom: 1px solid var(--border-color);">
-            <div style="font-weight: 600; margin-bottom: 5px;">{{ user.get_full_name|default:user.username }}</div>
-            <div style="font-size: 12px; color: var(--text-light); margin-bottom: 10px;">{{ user.email }}</div>
-            <div style="font-size: 11px; color: var(--accent-blue);">
-                <i class="fas fa-shield-alt"></i> 
-                {% if user.is_superuser %}Super Administrator{% elif user.is_staff %}Administrator{% else %}User{% endif %}
-            </div>
-        </div>
-        <div style="padding: 10px 0;">
-            <a href="{% url 'profile' %}" style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--text-dark); text-decoration: none; transition: background 0.3s;">
-                <i class="fas fa-user"></i> My Profile
-            </a>
-            <a href="{% url 'reset_profile' %}" style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--text-dark); text-decoration: none; transition: background 0.3s;">
-                <i class="fas fa-cog"></i> Settings
-            </a>
-            <a href="{% url 'admin:index' %}" style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--text-dark); text-decoration: none; transition: background 0.3s;">
-                <i class="fas fa-cogs"></i> Django Admin
-            </a>
-        </div>
-        <div style="border-top: 1px solid var(--border-color); padding: 10px 0;">
-            <a href="{% url 'LogOut' %}" style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--danger-color); text-decoration: none; transition: background 0.3s;">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-        </div>
-    </div>
-</div>
 
-<script>
-    function toggleUserMenu() {
-        const menu = document.getElementById('userMenu');
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', function(event) {
-        const menu = document.getElementById('userMenu');
-        const userInfo = event.target.closest('.user-info');
-        
-        if (menu && !userInfo) {
-            menu.style.display = 'none';
-        }
-    });
-</script>
+        <div class="user-info" style="position: relative;">
+            <div style="display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="toggleUserMenu()">
+                <!-- Profile Picture -->
+                {% if user.userprofile.profile_picture %}
+                <div class="user-avatar"
+                    style="background-image: url('{{ user.userprofile.profile_picture.url }}'); background-size: cover; background-position: center;">
+                    <span style="display: none;">{{ user.email|slice:":1"|upper }}</span>
+                </div>
+                {% else %}
+                <div class="user-avatar">
+                    {{ user.email|slice:":1"|upper }}
+                </div>
+                {% endif %}
+
+                <!-- User Details -->
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">
+                        {{ user.get_full_name|default:user.username }}
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-light);">
+                        {{ user.email|truncatechars:25 }}
+                    </div>
+                </div>
+                <i class="fas fa-chevron-down" style="font-size: 12px; color: var(--text-light);"></i>
+            </div>
+
+            <!-- User Menu Dropdown -->
+            <div id="userMenu"
+                style="display: none; position: absolute; top: 100%; right: 0; background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); min-width: 200px; z-index: 1000; margin-top: 10px;">
+                <div style="padding: 20px; border-bottom: 1px solid var(--border-color);">
+                    <div style="font-weight: 600; margin-bottom: 5px;">{{ user.get_full_name|default:user.username }}
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-light); margin-bottom: 10px;">{{ user.email }}</div>
+                    <div style="font-size: 11px; color: var(--accent-blue);">
+                        <i class="fas fa-shield-alt"></i>
+                        {% if user.is_superuser %}Super Administrator{% elif user.is_staff %}Administrator{% else
+                        %}User{% endif %}
+                    </div>
+                </div>
+                <div style="padding: 10px 0;">
+                    <a href="{% url 'profile' %}"
+                        style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--text-dark); text-decoration: none; transition: background 0.3s;">
+                        <i class="fas fa-user"></i> My Profile
+                    </a>
+                    <a href="{% url 'reset_profile' %}"
+                        style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--text-dark); text-decoration: none; transition: background 0.3s;">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                    <a href="{% url 'admin:index' %}"
+                        style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--text-dark); text-decoration: none; transition: background 0.3s;">
+                        <i class="fas fa-cogs"></i> Django Admin
+                    </a>
+                </div>
+                <div style="border-top: 1px solid var(--border-color); padding: 10px 0;">
+                    <a href="{% url 'LogOut' %}"
+                        style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--danger-color); text-decoration: none; transition: background 0.3s;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function toggleUserMenu() {
+                const menu = document.getElementById('userMenu');
+                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            }
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function (event) {
+                const menu = document.getElementById('userMenu');
+                const userInfo = event.target.closest('.user-info');
+
+                if (menu && !userInfo) {
+                    menu.style.display = 'none';
+                }
+            });
+        </script>
     </header>
 
     <!-- Main Content -->
@@ -767,9 +827,9 @@ s0.parentNode.insertBefore(s1,s0);
                     </div>
                     <span class="trend-badge {% if pending_loans > 5 %}trend-up{% else %}trend-down{% endif %}">
                         {% if pending_loans > 5 %}
-                            <i class="fas fa-arrow-up"></i> Action Required
+                        <i class="fas fa-arrow-up"></i> Action Required
                         {% else %}
-                            <i class="fas fa-arrow-down"></i> Good
+                        <i class="fas fa-arrow-down"></i> Good
                         {% endif %}
                     </span>
                 </div>
@@ -820,7 +880,8 @@ s0.parentNode.insertBefore(s1,s0);
                 </div>
                 <div class="stat-value">{{ this_week_loans|default:"0" }}</div>
                 <div class="stat-label">This Week</div>
-                <div class="stat-subtext">{{ today_loans|default:"0" }} today, {{ this_month_loans|default:"0" }} this month</div>
+                <div class="stat-subtext">{{ today_loans|default:"0" }} today, {{ this_month_loans|default:"0" }} this
+                    month</div>
             </div>
         </div>
 
@@ -879,34 +940,39 @@ s0.parentNode.insertBefore(s1,s0);
                     </thead>
                     <tbody>
                         {% if recent_pending_loans %}
-                            {% for loan in recent_pending_loans %}
-                            <tr>
-                                <td>#{{ loan.id }}</td>
-                                <td>
-                                    <div style="font-weight: 600;">{{ loan.user.get_full_name|default:loan.user.username }}</div>
-                                    <div style="font-size: 12px; color: var(--text-light);">{{ loan.user.email|default:"N/A" }}</div>
-                                </td>
-                                <td style="font-weight: 600;">${{ loan.amount|floatformat:2 }}</td>
-                                <td><span class="loan-type-tag">{{ loan.loan_type }}</span></td>
-                                <td>{{ loan.purpose|truncatewords:5|default:"N/A" }}</td>
-                                <td>{{ loan.submitted_at|date:"M d, Y" }}</td>
-                                <td>
-                                    <a href="{% url 'approve_loan' loan.id %}" class="btn btn-success btn-sm" style="padding: 6px 12px; font-size: 13px;">
-                                        <i class="fas fa-check"></i> Approve
-                                    </a>
-                                    <a href="{% url 'reject_loan' loan.id %}" class="btn btn-danger btn-sm" style="padding: 6px 12px; font-size: 13px;">
-                                        <i class="fas fa-times"></i> Reject
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
+                        {% for loan in recent_pending_loans %}
+                        <tr>
+                            <td>#{{ loan.id }}</td>
+                            <td>
+                                <div style="font-weight: 600;">{{ loan.user.get_full_name|default:loan.user.username }}
+                                </div>
+                                <div style="font-size: 12px; color: var(--text-light);">{{ loan.user.email|default:"N/A"
+                                    }}</div>
+                            </td>
+                            <td style="font-weight: 600;">${{ loan.amount|floatformat:2 }}</td>
+                            <td><span class="loan-type-tag">{{ loan.loan_type }}</span></td>
+                            <td>{{ loan.purpose|truncatewords:5|default:"N/A" }}</td>
+                            <td>{{ loan.submitted_at|date:"M d, Y" }}</td>
+                            <td>
+                                <a href="{% url 'approve_loan' loan.id %}" class="btn btn-success btn-sm"
+                                    style="padding: 6px 12px; font-size: 13px;">
+                                    <i class="fas fa-check"></i> Approve
+                                </a>
+                                <a href="{% url 'reject_loan' loan.id %}" class="btn btn-danger btn-sm"
+                                    style="padding: 6px 12px; font-size: 13px;">
+                                    <i class="fas fa-times"></i> Reject
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
                         {% else %}
-                            <tr>
-                                <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-light);">
-                                    <i class="fas fa-check-circle" style="font-size: 48px; margin-bottom: 15px; color: var(--success-color); display: block;"></i>
-                                    No pending loans requiring action
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-light);">
+                                <i class="fas fa-check-circle"
+                                    style="font-size: 48px; margin-bottom: 15px; color: var(--success-color); display: block;"></i>
+                                No pending loans requiring action
+                            </td>
+                        </tr>
                         {% endif %}
                     </tbody>
                 </table>
@@ -937,28 +1003,31 @@ s0.parentNode.insertBefore(s1,s0);
                     </thead>
                     <tbody>
                         {% if loan_type_stats %}
-                            {% for stat in loan_type_stats %}
-                            <tr>
-                                <td><span class="loan-type-tag">{{ stat.loan_type|default:"Unknown" }}</span></td>
-                                <td>{{ stat.count }}</td>
-                                <td>${{ stat.total_amount|floatformat:2|default:"0.00" }}</td>
-                                <td>${{ stat.avg_amount|floatformat:2|default:"0.00" }}</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="flex: 1; height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden;">
-                                            <div style="height: 100%; width: {% widthratio stat.count total_loans 100 %}%; background: var(--accent-blue);"></div>
+                        {% for stat in loan_type_stats %}
+                        <tr>
+                            <td><span class="loan-type-tag">{{ stat.loan_type|default:"Unknown" }}</span></td>
+                            <td>{{ stat.count }}</td>
+                            <td>${{ stat.total_amount|floatformat:2|default:"0.00" }}</td>
+                            <td>${{ stat.avg_amount|floatformat:2|default:"0.00" }}</td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div
+                                        style="flex: 1; height: 8px; background: var(--border-color); border-radius: 4px; overflow: hidden;">
+                                        <div
+                                            style="height: 100%; width: {% widthratio stat.count total_loans 100 %}%; background: var(--accent-blue);">
                                         </div>
-                                        <span>{% widthratio stat.count total_loans 100 %}%</span>
                                     </div>
-                                </td>
-                            </tr>
-                            {% endfor %}
+                                    <span>{% widthratio stat.count total_loans 100 %}%</span>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
                         {% else %}
-                            <tr>
-                                <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-light);">
-                                    No loan type data available
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-light);">
+                                No loan type data available
+                            </td>
+                        </tr>
                         {% endif %}
                     </tbody>
                 </table>
@@ -968,21 +1037,22 @@ s0.parentNode.insertBefore(s1,s0);
 
     <!-- Footer -->
     <footer class="admin-footer">
-        <p>SkyBridge Finance Admin Dashboard &copy; 2024 • Last updated: {% now "F j, Y g:i A" %}</p>
-        <p style="font-size: 12px; margin-top: 5px;">System Status: <span style="color: var(--success-color); font-weight: 600;">● Operational</span></p>
+        <p>Axos Finance Admin Dashboard &copy; 2024 • Last updated: {% now "F j, Y g:i A" %}</p>
+        <p style="font-size: 12px; margin-top: 5px;">System Status: <span
+                style="color: var(--success-color); font-weight: 600;">● Operational</span></p>
     </footer>
 
     <!-- JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Initialize charts
             initializeCharts();
-            
+
             // Set up auto-refresh every 5 minutes
             setInterval(refreshData, 300000);
-            
+
             // Add keyboard shortcuts
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 // Ctrl+R to refresh
                 if (e.ctrlKey && e.key === 'r') {
                     e.preventDefault();
@@ -1008,119 +1078,120 @@ s0.parentNode.insertBefore(s1,s0);
                     labels: ['Pending', 'Approved', 'Rejected'],
                     datasets: [{
                         data: [
-                            {{ pending_loans|default:0 }},
-                            {{ approved_loans|default:0 }},
-                            {{ rejected_loans|default:0 }}
+                            {{ pending_loans|default: 0
+                    }},
+                            {{ approved_loans|default: 0 }},
+        { { rejected_loans |default: 0 } }
                         ],
-                        backgroundColor: [
-                            '#f59e0b',
-                            '#10b981',
-                            '#ef4444'
-                        ],
-                        borderWidth: 2,
-                        borderColor: '#ffffff'
+        backgroundColor: [
+            '#f59e0b',
+            '#10b981',
+            '#ef4444'
+        ],
+            borderWidth: 2,
+                borderColor: '#ffffff'
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+        options: {
+            responsive: true,
+                maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                padding: 20,
-                                usePointStyle: true,
+                legend: {
+                    position: 'right',
+                        labels: {
+                        padding: 20,
+                            usePointStyle: true,
                                 font: {
-                                    size: 14
-                                }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const label = context.label || '';
-                                    const value = context.raw || 0;
-                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                    const percentage = Math.round((value / total) * 100);
-                                    return `${label}: ${value} (${percentage}%)`;
-                                }
-                            }
+                            size: 14
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = Math.round((value / total) * 100);
+                            return `${label}: ${value} (${percentage}%)`;
                         }
                     }
                 }
+            }
+        }
             });
 
-            // Monthly Trends Chart
-            const trendCtx = document.getElementById('trendChart').getContext('2d');
-            const monthlyData = JSON.parse('{{ monthly_trends|safe|default:"[]" }}');
-            
-            trendChart = new Chart(trendCtx, {
-                type: 'line',
-                data: {
-                    labels: monthlyData.map(item => item.month),
-                    datasets: [{
-                        label: 'Loan Count',
-                        data: monthlyData.map(item => item.count),
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4
-                    }]
+        // Monthly Trends Chart
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        const monthlyData = JSON.parse('{{ monthly_trends|safe|default:"[]" }}');
+
+        trendChart = new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: monthlyData.map(item => item.month),
+                datasets: [{
+                    label: 'Loan Count',
+                    data: monthlyData.map(item => item.count),
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return value;
-                                }
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function (value) {
+                                return value;
                             }
                         }
                     }
                 }
-            });
+            }
+        });
 
-            // Loan Type Chart
-            const typeCtx = document.getElementById('typeChart').getContext('2d');
-            const loanTypeData = JSON.parse('{{ loan_type_stats|safe|default:"[]" }}');
-            
-            typeChart = new Chart(typeCtx, {
-                type: 'bar',
-                data: {
-                    labels: loanTypeData.map(item => item.loan_type || 'Unknown'),
-                    datasets: [{
-                        label: 'Loan Count',
-                        data: loanTypeData.map(item => item.count),
-                        backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                        borderColor: '#3b82f6',
-                        borderWidth: 1
-                    }]
+        // Loan Type Chart
+        const typeCtx = document.getElementById('typeChart').getContext('2d');
+        const loanTypeData = JSON.parse('{{ loan_type_stats|safe|default:"[]" }}');
+
+        typeChart = new Chart(typeCtx, {
+            type: 'bar',
+            data: {
+                labels: loanTypeData.map(item => item.loan_type || 'Unknown'),
+                datasets: [{
+                    label: 'Loan Count',
+                    data: loanTypeData.map(item => item.count),
+                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                    borderColor: '#3b82f6',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
+            }
+        });
         }
 
         function updateChartPeriod(period) {
@@ -1136,24 +1207,24 @@ s0.parentNode.insertBefore(s1,s0);
 
         function updateTrendChart(type) {
             const monthlyData = JSON.parse('{{ monthly_trends|safe|default:"[]" }}');
-            
+
             if (type === 'amount') {
                 trendChart.data.datasets[0].label = 'Loan Amount ($)';
-                trendChart.data.datasets[0].data = monthlyData.map(item => 
+                trendChart.data.datasets[0].data = monthlyData.map(item =>
                     parseFloat(item.amount) || 0
                 );
             } else {
                 trendChart.data.datasets[0].label = 'Loan Count';
                 trendChart.data.datasets[0].data = monthlyData.map(item => item.count);
             }
-            
+
             trendChart.update();
         }
 
         function toggleLoanTypeChart() {
             const chartDiv = document.getElementById('loanTypeChart');
             const tableDiv = document.getElementById('loanTypeTable');
-            
+
             if (chartDiv.style.display === 'none') {
                 chartDiv.style.display = 'block';
                 tableDiv.style.display = 'none';
@@ -1165,7 +1236,7 @@ s0.parentNode.insertBefore(s1,s0);
 
         function refreshDashboard() {
             showLoading('Refreshing dashboard data...');
-            
+
             // Simulate API call
             setTimeout(() => {
                 window.location.reload();
@@ -1180,20 +1251,20 @@ s0.parentNode.insertBefore(s1,s0);
 
         function exportReport() {
             showLoading('Generating report...');
-            
+
             setTimeout(() => {
                 hideLoading();
-                
+
                 // Create and trigger download of a CSV file
                 const csvContent = generateCSV();
                 const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement('a');
                 const url = URL.createObjectURL(blob);
-                
+
                 link.setAttribute('href', url);
-                link.setAttribute('download', `skybridge-report-${new Date().toISOString().split('T')[0]}.csv`);
+                link.setAttribute('download', `axos-report-${new Date().toISOString().split('T')[0]}.csv`);
                 link.style.visibility = 'hidden';
-                
+
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -1202,23 +1273,24 @@ s0.parentNode.insertBefore(s1,s0);
 
         function generateCSV() {
             // Generate CSV content from current data
-            let csv = 'SkyBridge Finance Dashboard Report\n';
+            let csv = 'Axos Finance Dashboard Report\n';
             csv += 'Generated: ' + new Date().toLocaleString() + '\n\n';
-            
+
             csv += 'STATISTICS\n';
             csv += 'Metric,Value\n';
-            csv += `Total Users,${ {{ total_users|default:0 }} }\n`;
-            csv += `Total Loans,${ {{ total_loans|default:0 }} }\n`;
-            csv += `Pending Loans,${ {{ pending_loans|default:0 }} }\n`;
-            csv += `Approved Loans,${ {{ approved_loans|default:0 }} }\n`;
-            csv += `Total Loan Amount,$${ {{ total_loan_amount|default:0 }} }\n\n`;
+            csv += `Total Users,${{{ total_users |default: 0 }
+        } }\n`;
+            csv += `Total Loans, ${ { { total_loans |default: 0 } } } \n`;
+            csv += `Pending Loans, ${ { { pending_loans |default: 0 } } } \n`;
+            csv += `Approved Loans, ${ { { approved_loans |default: 0 } } } \n`;
+            csv += `Total Loan Amount, $${ { { total_loan_amount |default: 0 } } } \n\n`;
             
             csv += 'RECENT PENDING LOANS\n';
             csv += 'ID,Applicant,Amount,Type,Purpose,Submitted\n';
             
             // Add pending loans data
             {% for loan in recent_pending_loans %}
-            csv += `{{ loan.id }},{{ loan.user.get_full_name|default:loan.user.username }},$${{ loan.amount|floatformat:2 }},{{ loan.loan_type }},{{ loan.purpose|default:"N/A" }},{{ loan.submitted_at|date:"Y-m-d" }}\n`;
+            csv += `{ { loan.id } }, { { loan.user.get_full_name |default: loan.user.username } },$${ { loan.amount | floatformat: 2 } }, { { loan.loan_type } }, { { loan.purpose |default: "N/A" } }, { { loan.submitted_at | date: "Y-m-d" } } \n`;
             {% endfor %}
             
             return csv;
@@ -1228,10 +1300,10 @@ s0.parentNode.insertBefore(s1,s0);
             let overlay = document.createElement('div');
             overlay.className = 'loading-overlay';
             overlay.innerHTML = `
-                <div style="text-align: center;">
+            < div style = "text-align: center;" >
                     <div class="loading-spinner"></div>
                     <p style="margin-top: 20px; color: var(--text-dark); font-weight: 600;">${message}</p>
-                </div>
+                </div >
             `;
             overlay.id = 'loadingOverlay';
             document.body.appendChild(overlay);
@@ -1250,12 +1322,12 @@ s0.parentNode.insertBefore(s1,s0);
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
     </script>
-        <script>
+    <script>
   if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register("{% static 'sw.js' %}")
         .then(registration => {
             console.log('✅ Service Worker Registered:', registration);
-            
+
             // Check for updates
             registration.addEventListener('updatefound', () => {
                 const newWorker = registration.installing;
@@ -1268,4 +1340,5 @@ s0.parentNode.insertBefore(s1,s0);
     }
     </script>
 </body>
+
 </html>

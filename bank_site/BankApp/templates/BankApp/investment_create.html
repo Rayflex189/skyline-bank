@@ -3,40 +3,41 @@
 {% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Investment - Skybridge Bank</title>
-    
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fc33962525f11c38faecba/1jo0ij1kg';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <title>Create Investment - Axos Bank</title>
 
-    
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6a3e914d0858271d4af4e711/1js26f6la';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+
+
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-    
+
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
+
     <style>
         :root {
             --primary-color: #003366;
@@ -49,7 +50,8 @@ s0.parentNode.insertBefore(s1,s0);
             --transition: all 0.3s ease;
         }
 
-        body, html {
+        body,
+        html {
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -58,49 +60,51 @@ s0.parentNode.insertBefore(s1,s0);
             overflow-x: hidden;
         }
 
-        .bank-header { 
-            background: linear-gradient(135deg, var(--primary-color) 0%, #002244 100%); 
-            color: white; 
-            padding: 15px 20px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
+        .bank-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #002244 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             position: sticky;
             top: 0;
             z-index: 1000;
             backdrop-filter: blur(10px);
         }
-        
-        .bank-header h1 { 
-            font-size: 1.8rem; 
-            margin: 0; 
+
+        .bank-header h1 {
+            font-size: 1.8rem;
+            margin: 0;
             font-weight: 700;
             letter-spacing: 1px;
             background: linear-gradient(45deg, #fff, #4dabf7);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        
+
         .header-actions {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        
-        .notification-bell, .open-sidebar-btn { 
-            cursor: pointer; 
-            color: white; 
-            font-size: 1.5rem; 
+
+        .notification-bell,
+        .open-sidebar-btn {
+            cursor: pointer;
+            color: white;
+            font-size: 1.5rem;
             transition: var(--transition);
             position: relative;
         }
-        
-        .notification-bell:hover, .open-sidebar-btn:hover {
+
+        .notification-bell:hover,
+        .open-sidebar-btn:hover {
             transform: scale(1.2) rotate(10deg);
             color: #4dabf7;
         }
-        
+
         .notification-bell::after {
             content: '';
             position: absolute;
@@ -112,107 +116,118 @@ s0.parentNode.insertBefore(s1,s0);
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
         }
 
-        .sidebar { 
-            width: 320px; 
-            height: 100vh; 
+        .sidebar {
+            width: 320px;
+            height: 100vh;
             background: linear-gradient(180deg, #001a33 0%, #000d1a 100%);
-            position: fixed; 
-            right: -320px; 
-            top: 0; 
-            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
-            color: #fff; 
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5); 
-            z-index: 2000; 
+            position: fixed;
+            right: -320px;
+            top: 0;
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            color: #fff;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 2000;
             overflow-y: auto;
         }
-        
-        .sidebar.open { right: 0; }
-        
-        .sidebar-header { 
-            padding: 25px; 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-header {
+            padding: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             background: rgba(0, 0, 0, 0.2);
         }
-        
-        .sidebar-header h2 { 
-            margin: 0; 
-            font-size: 1.6rem; 
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.6rem;
             font-weight: 700;
             color: #4dabf7;
         }
-        
+
         .close-sidebar {
-            background: rgba(220, 53, 69, 0.8); 
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
-            border-radius: 8px; 
-            cursor: pointer; 
+            background: rgba(220, 53, 69, 0.8);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
             font-weight: 600;
             transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        
-        .close-sidebar:hover { 
+
+        .close-sidebar:hover {
             background: var(--danger-color);
             transform: translateX(-5px);
         }
-        
-        .user-details { 
-            padding: 25px; 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+
+        .user-details {
+            padding: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(255, 255, 255, 0.05);
         }
-        
-        .user-details p { 
-            margin: 10px 0; 
+
+        .user-details p {
+            margin: 10px 0;
             font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
+
         .user-details strong {
             color: #4dabf7;
             font-weight: 600;
         }
-        
+
         .user-details i {
             color: #6c757d;
             width: 20px;
         }
-        
-        .sidebar ul { 
-            list-style: none; 
-            padding: 0; 
-            margin: 0; 
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
-        
-        .sidebar ul li { 
+
+        .sidebar ul li {
             padding: 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             transition: var(--transition);
         }
-        
+
         .sidebar ul li:hover {
             background: rgba(77, 171, 247, 0.1);
             border-left: 4px solid #4dabf7;
         }
-        
-        .sidebar ul li a { 
-            color: white; 
-            text-decoration: none; 
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
             display: flex;
             align-items: center;
             padding: 18px 25px;
@@ -220,12 +235,12 @@ s0.parentNode.insertBefore(s1,s0);
             font-weight: 500;
             font-size: 1.1rem;
         }
-        
-        .sidebar ul li a:hover { 
+
+        .sidebar ul li a:hover {
             padding-left: 30px;
         }
-        
-        .sidebar ul li a i { 
+
+        .sidebar ul li a i {
             margin-right: 15px;
             width: 25px;
             text-align: center;
@@ -233,14 +248,14 @@ s0.parentNode.insertBefore(s1,s0);
             color: #4dabf7;
         }
 
-        .main-content { 
-            padding: 40px 20px; 
-            max-width: 900px; 
-            margin: 0 auto; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding-bottom: 120px; 
+        .main-content {
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 120px;
             min-height: 100vh;
         }
 
@@ -314,31 +329,31 @@ s0.parentNode.insertBefore(s1,s0);
             font-weight: 700;
         }
 
-        .card-container { 
-            background: white; 
-            border-radius: 20px; 
-            box-shadow: var(--card-shadow); 
-            overflow: hidden; 
-            margin-bottom: 30px; 
-            width: 100%; 
+        .card-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: 30px;
+            width: 100%;
             transition: var(--transition);
             border: 1px solid rgba(0, 0, 0, 0.08);
         }
-        
+
         .card-container:hover {
             transform: translateY(-10px);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         }
 
-        .card-header { 
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); 
-            color: white; 
-            padding: 35px 40px; 
-            text-align: center; 
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 35px 40px;
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
-        
+
         .card-header::before {
             content: '';
             position: absolute;
@@ -346,25 +361,30 @@ s0.parentNode.insertBefore(s1,s0);
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
             animation: shine 3s infinite;
         }
-        
+
         @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
         }
-        
-        .card-header h2 { 
-            margin: 0; 
-            font-size: 2.2rem; 
+
+        .card-header h2 {
+            margin: 0;
+            font-size: 2.2rem;
             font-weight: 700;
             letter-spacing: 1px;
             position: relative;
             z-index: 1;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
-        
+
         .card-header p {
             margin: 15px 0 0;
             opacity: 0.9;
@@ -373,24 +393,24 @@ s0.parentNode.insertBefore(s1,s0);
             z-index: 1;
         }
 
-        .card-body { 
-            padding: 40px; 
+        .card-body {
+            padding: 40px;
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
         }
 
-        .balance-display { 
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); 
-            border-radius: 15px; 
-            padding: 30px; 
-            margin-bottom: 35px; 
-            text-align: center; 
+        .balance-display {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 35px;
+            text-align: center;
             border: 2px solid #e9ecef;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
             position: relative;
             overflow: hidden;
             border-left: 5px solid var(--accent-color);
         }
-        
+
         .balance-display::before {
             content: '';
             position: absolute;
@@ -400,19 +420,19 @@ s0.parentNode.insertBefore(s1,s0);
             height: 5px;
             background: linear-gradient(90deg, var(--accent-color), var(--warning-color));
         }
-        
-        .balance-label { 
-            font-size: 1.1rem; 
-            color: #6c757d; 
-            margin-bottom: 15px; 
+
+        .balance-label {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 15px;
             font-weight: 600;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
-        
-        .balance-amount { 
-            font-size: 3.5rem; 
-            font-weight: 800; 
+
+        .balance-amount {
+            font-size: 3.5rem;
+            font-weight: 800;
             color: var(--accent-color);
             text-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
             margin: 10px 0;
@@ -420,7 +440,7 @@ s0.parentNode.insertBefore(s1,s0);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        
+
         .balance-info {
             display: flex;
             justify-content: space-between;
@@ -428,63 +448,63 @@ s0.parentNode.insertBefore(s1,s0);
             padding-top: 20px;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
-        
+
         .balance-item {
             text-align: center;
             flex: 1;
         }
-        
+
         .balance-item-label {
             font-size: 0.9rem;
             color: #6c757d;
             margin-bottom: 5px;
         }
-        
+
         .balance-item-value {
             font-size: 1.2rem;
             font-weight: 700;
             color: var(--primary-color);
         }
 
-        .form-group { 
-            margin-bottom: 30px; 
+        .form-group {
+            margin-bottom: 30px;
             position: relative;
         }
-        
-        .form-label { 
-            font-weight: 700; 
-            margin-bottom: 12px; 
-            display: flex; 
+
+        .form-label {
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
             align-items: center;
             gap: 10px;
             color: var(--primary-color);
             font-size: 1.1rem;
         }
-        
+
         .form-label i {
             color: var(--secondary-color);
         }
-        
-        .form-control { 
-            width: 100%; 
-            padding: 16px 20px; 
-            border: 2px solid #dee2e6; 
-            border-radius: 12px; 
-            font-size: 1.1rem; 
+
+        .form-control {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            font-size: 1.1rem;
             transition: var(--transition);
             background: white;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
-        
-        .form-control:focus { 
-            outline: none; 
-            border-color: var(--primary-color); 
-            box-shadow: 0 0 0 4px rgba(0, 51, 102, 0.2); 
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0, 51, 102, 0.2);
             transform: translateY(-2px);
         }
-        
-        select.form-control { 
-            height: 60px; 
+
+        select.form-control {
+            height: 60px;
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%23003366' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
@@ -493,11 +513,11 @@ s0.parentNode.insertBefore(s1,s0);
             padding-right: 60px;
             cursor: pointer;
         }
-        
+
         .input-group {
             position: relative;
         }
-        
+
         .input-group .input-group-text {
             position: absolute;
             right: 10px;
@@ -511,17 +531,17 @@ s0.parentNode.insertBefore(s1,s0);
             font-weight: 600;
         }
 
-        .btn-submit { 
-            width: 100%; 
-            padding: 20px; 
-            border: none; 
-            border-radius: 12px; 
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); 
-            color: white; 
-            font-weight: 700; 
-            cursor: pointer; 
-            transition: var(--transition); 
-            font-size: 1.2rem; 
+        .btn-submit {
+            width: 100%;
+            padding: 20px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.2rem;
             margin-top: 20px;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -531,62 +551,63 @@ s0.parentNode.insertBefore(s1,s0);
             justify-content: center;
             gap: 15px;
         }
-        
-        .btn-submit:hover { 
-            background: linear-gradient(135deg, #002244 0%, var(--primary-color) 100%); 
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #002244 0%, var(--primary-color) 100%);
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0, 51, 102, 0.6);
         }
-        
+
         .btn-submit:active {
             transform: translateY(-2px);
         }
-        
-        .btn-submit i { 
+
+        .btn-submit i {
             font-size: 1.4rem;
             transition: var(--transition);
         }
-        
+
         .btn-submit:hover i {
             transform: rotate(360deg);
         }
-        
-        .btn-secondary { 
-            background: linear-gradient(135deg, #6c757d 0%, #495057 100%); 
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
             box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
         }
-        
-        .btn-secondary:hover { 
-            background: linear-gradient(135deg, #5a6268 0%, #343a40 100%); 
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
             box-shadow: 0 10px 30px rgba(108, 117, 125, 0.6);
         }
 
-        .plan-details-card { 
-            background: linear-gradient(135deg, #e7f3ff 0%, #d4e7ff 100%); 
-            border-radius: 15px; 
-            padding: 30px; 
-            margin-top: 30px; 
+        .plan-details-card {
+            background: linear-gradient(135deg, #e7f3ff 0%, #d4e7ff 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
             border-left: 6px solid var(--primary-color);
             box-shadow: 0 6px 20px rgba(0, 51, 102, 0.15);
             animation: slideUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             display: none;
         }
-        
+
         @keyframes slideUp {
-            from { 
-                opacity: 0; 
-                transform: translateY(30px) scale(0.95); 
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
             }
-            to { 
-                opacity: 1; 
-                transform: translateY(0) scale(1); 
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
             }
         }
-        
-        .plan-details-card h5 { 
-            color: var(--primary-color); 
-            margin-bottom: 25px; 
-            font-size: 1.5rem; 
+
+        .plan-details-card h5 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 1.5rem;
             font-weight: 800;
             border-bottom: 3px solid rgba(0, 51, 102, 0.3);
             padding-bottom: 15px;
@@ -594,15 +615,15 @@ s0.parentNode.insertBefore(s1,s0);
             align-items: center;
             gap: 15px;
         }
-        
+
         .plan-details-card h5 i {
             color: var(--secondary-color);
         }
-        
-        .detail-item { 
-            margin-bottom: 15px; 
-            color: #495057; 
-            line-height: 1.8; 
+
+        .detail-item {
+            margin-bottom: 15px;
+            color: #495057;
+            line-height: 1.8;
             font-size: 1.1rem;
             display: flex;
             align-items: center;
@@ -611,99 +632,116 @@ s0.parentNode.insertBefore(s1,s0);
             border-radius: 8px;
             transition: var(--transition);
         }
-        
+
         .detail-item:hover {
             background: rgba(255, 255, 255, 0.9);
             transform: translateX(10px);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-        
-        .detail-item strong { 
-            color: var(--primary-color); 
+
+        .detail-item strong {
+            color: var(--primary-color);
             min-width: 200px;
             font-weight: 700;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
+
         .detail-item i {
             color: var(--secondary-color);
             width: 20px;
         }
 
-        .error-messages { 
-            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); 
-            color: #721c24; 
-            padding: 25px; 
-            border-radius: 12px; 
-            margin-bottom: 30px; 
+        .error-messages {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
             border: 3px solid #f5c6cb;
-            animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
+            animation: shake 0.8s cubic-bezier(.36, .07, .19, .97) both;
             transform: translate3d(0, 0, 0);
         }
-        
+
         @keyframes shake {
-            10%, 90% { transform: translate3d(-1px, 0, 0); }
-            20%, 80% { transform: translate3d(2px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-            40%, 60% { transform: translate3d(4px, 0, 0); }
+
+            10%,
+            90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(4px, 0, 0);
+            }
         }
-        
-        .error-messages p { 
-            margin: 12px 0; 
+
+        .error-messages p {
+            margin: 12px 0;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
+
         .error-messages p i {
             color: var(--danger-color);
         }
-        
-        .success-messages { 
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); 
-            color: #155724; 
-            padding: 25px; 
-            border-radius: 12px; 
-            margin-bottom: 30px; 
+
+        .success-messages {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
             border: 3px solid #c3e6cb;
             animation: fadeIn 0.8s ease;
         }
-        
-        .info-messages { 
-            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%); 
-            color: #0c5460; 
-            padding: 25px; 
-            border-radius: 12px; 
-            margin-bottom: 30px; 
+
+        .info-messages {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            color: #0c5460;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
             border: 3px solid #bee5eb;
             animation: fadeIn 0.8s ease;
         }
 
-        .bottom-navbar { 
-            position: fixed; 
-            bottom: 0; 
-            width: 100%; 
-            background: linear-gradient(135deg, var(--primary-color) 0%, #001a33 100%); 
-            color: white; 
-            display: flex; 
-            justify-content: space-around; 
-            padding: 15px 0; 
-            z-index: 1000; 
+        .bottom-navbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #001a33 100%);
+            color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 1000;
             box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        .nav-item { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            text-decoration: none; 
-            color: white; 
-            flex: 1; 
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            flex: 1;
             padding: 12px 0;
             transition: var(--transition);
             border-radius: 12px;
@@ -711,7 +749,7 @@ s0.parentNode.insertBefore(s1,s0);
             position: relative;
             overflow: hidden;
         }
-        
+
         .nav-item::before {
             content: '';
             position: absolute;
@@ -722,34 +760,34 @@ s0.parentNode.insertBefore(s1,s0);
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: left 0.5s ease;
         }
-        
+
         .nav-item:hover::before {
             left: 100%;
         }
-        
-        .nav-item:hover { 
+
+        .nav-item:hover {
             background: rgba(255, 255, 255, 0.15);
             transform: translateY(-8px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
-        
+
         .nav-item.active {
             background: rgba(255, 255, 255, 0.2);
             transform: translateY(-5px);
         }
-        
+
         .nav-item.active .nav-icon {
             color: #4dabf7;
         }
-        
-        .nav-icon { 
-            font-size: 1.6rem; 
-            margin-bottom: 8px; 
+
+        .nav-icon {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
             transition: var(--transition);
         }
-        
-        .nav-label { 
-            font-size: 0.9rem; 
+
+        .nav-label {
+            font-size: 0.9rem;
             font-weight: 600;
             letter-spacing: 0.5px;
         }
@@ -776,7 +814,7 @@ s0.parentNode.insertBefore(s1,s0);
             position: relative;
             overflow: hidden;
         }
-        
+
         .telegram-link::before {
             content: '';
             position: absolute;
@@ -784,13 +822,18 @@ s0.parentNode.insertBefore(s1,s0);
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
             animation: telegramShine 3s infinite;
         }
-        
+
         @keyframes telegramShine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
         }
 
         .telegram-link:hover {
@@ -824,7 +867,7 @@ s0.parentNode.insertBefore(s1,s0);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transform: translateX(-20px);
         }
-        
+
         .telegram-tooltip::before {
             content: '';
             position: absolute;
@@ -842,36 +885,52 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            33% { transform: translateY(-15px) rotate(5deg); }
-            66% { transform: translateY(5px) rotate(-5deg); }
-            100% { transform: translateY(0) rotate(0deg); }
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            33% {
+                transform: translateY(-15px) rotate(5deg);
+            }
+
+            66% {
+                transform: translateY(5px) rotate(-5deg);
+            }
+
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
         }
 
-        .marquee { 
-            background: linear-gradient(90deg, #000000 0%, #1a1a1a 100%); 
-            color: #fff; 
-            font-weight: 700; 
-            padding: 15px; 
-            white-space: nowrap; 
+        .marquee {
+            background: linear-gradient(90deg, #000000 0%, #1a1a1a 100%);
+            color: #fff;
+            font-weight: 700;
+            padding: 15px;
+            white-space: nowrap;
             overflow: hidden;
             position: relative;
             z-index: 1;
             font-family: 'Courier New', monospace;
             border-bottom: 2px solid var(--primary-color);
         }
-        
-        .marquee-content { 
-            display: inline-block; 
-            animation: scrollLeft 30s linear infinite; 
+
+        .marquee-content {
+            display: inline-block;
+            animation: scrollLeft 30s linear infinite;
             padding-left: 100%;
         }
-        
-        @keyframes scrollLeft { 
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
+
+        @keyframes scrollLeft {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
         }
-        
+
         .stock-item {
             display: inline-block;
             margin: 0 30px;
@@ -880,46 +939,46 @@ s0.parentNode.insertBefore(s1,s0);
             border-radius: 8px;
             transition: var(--transition);
         }
-        
+
         .stock-item:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: scale(1.1);
         }
-        
+
         .stock-symbol {
             font-weight: 800;
             color: #4dabf7;
             margin-right: 10px;
         }
-        
+
         .stock-price {
             font-weight: 700;
             margin-right: 10px;
         }
-        
+
         .stock-change {
             font-weight: 700;
             padding: 3px 10px;
             border-radius: 5px;
         }
-        
+
         .stock-up {
             background: rgba(40, 167, 69, 0.2);
             color: #28a745;
         }
-        
+
         .stock-down {
             background: rgba(220, 53, 69, 0.2);
             color: #dc3545;
         }
-        
-        .required:after { 
-            content: " *"; 
-            color: var(--danger-color); 
+
+        .required:after {
+            content: " *";
+            color: var(--danger-color);
             font-weight: 800;
             animation: pulse 1.5s infinite;
         }
-        
+
         /* Loading animation */
         .loading-spinner {
             display: inline-block;
@@ -931,11 +990,13 @@ s0.parentNode.insertBefore(s1,s0);
             animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
             margin-right: 15px;
         }
-        
+
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
-        
+
         /* Progress bar */
         .progress-bar {
             height: 8px;
@@ -944,7 +1005,7 @@ s0.parentNode.insertBefore(s1,s0);
             overflow: hidden;
             margin: 20px 0;
         }
-        
+
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
@@ -953,7 +1014,7 @@ s0.parentNode.insertBefore(s1,s0);
             position: relative;
             overflow: hidden;
         }
-        
+
         .progress-fill::after {
             content: '';
             position: absolute;
@@ -961,51 +1022,119 @@ s0.parentNode.insertBefore(s1,s0);
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+            background: linear-gradient(90deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
             animation: progressShine 2s infinite;
         }
-        
+
         @keyframes progressShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
-        
+
         @media (max-width: 768px) {
-            .main-content { padding: 20px 15px; }
-            .card-body { padding: 25px; }
-            .bank-header h1 { font-size: 1.5rem; }
-            .telegram-float { left: 15px; bottom: 90px; }
-            .telegram-link { width: 60px; height: 60px; }
-            .telegram-icon { width: 30px; height: 30px; }
-            .balance-amount { font-size: 2.5rem; }
-            .sidebar { width: 85%; right: -85%; }
-            .form-control { padding: 14px 16px; }
-            .btn-submit { padding: 18px; font-size: 1.1rem; }
-            .card-header h2 { font-size: 1.8rem; }
-            .wizard-steps { flex-wrap: wrap; gap: 15px; }
-            .wizard-step { flex: 0 0 calc(50% - 15px); }
+            .main-content {
+                padding: 20px 15px;
+            }
+
+            .card-body {
+                padding: 25px;
+            }
+
+            .bank-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .telegram-float {
+                left: 15px;
+                bottom: 90px;
+            }
+
+            .telegram-link {
+                width: 60px;
+                height: 60px;
+            }
+
+            .telegram-icon {
+                width: 30px;
+                height: 30px;
+            }
+
+            .balance-amount {
+                font-size: 2.5rem;
+            }
+
+            .sidebar {
+                width: 85%;
+                right: -85%;
+            }
+
+            .form-control {
+                padding: 14px 16px;
+            }
+
+            .btn-submit {
+                padding: 18px;
+                font-size: 1.1rem;
+            }
+
+            .card-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .wizard-steps {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .wizard-step {
+                flex: 0 0 calc(50% - 15px);
+            }
         }
-        
+
         @media (max-width: 480px) {
-            .wizard-step { flex: 0 0 100%; }
-            .detail-item { flex-direction: column; align-items: flex-start; }
-            .detail-item strong { min-width: auto; margin-bottom: 5px; }
-            .balance-info { flex-direction: column; gap: 15px; }
-            .stock-item { margin: 0 15px; }
+            .wizard-step {
+                flex: 0 0 100%;
+            }
+
+            .detail-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .detail-item strong {
+                min-width: auto;
+                margin-bottom: 5px;
+            }
+
+            .balance-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .stock-item {
+                margin: 0 15px;
+            }
         }
     </style>
 </head>
+
 <body>
     <!-- Telegram Floating Icon -->
     <div class="telegram-float">
         <a href="https://t.me/" class="telegram-link" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="telegram-icon">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram"
+                class="telegram-icon">
             <span class="telegram-tooltip">Join our Telegram group for updates</span>
         </a>
     </div>
 
     <header class="bank-header">
-        <h1>Skybridge Investment</h1>
+        <h1>Axos Investment</h1>
         <div class="header-actions">
             <div class="notification-bell" onclick="toggleNotifications()">
                 <i class="fas fa-bell"></i>
@@ -1025,7 +1154,8 @@ s0.parentNode.insertBefore(s1,s0);
             </button>
         </div>
         <div class="user-details">
-            <p><i class="fas fa-user"></i><strong>{{ user_profile.first_name }} {{ user_profile.last_name }}</strong></p>
+            <p><i class="fas fa-user"></i><strong>{{ user_profile.first_name }} {{ user_profile.last_name }}</strong>
+            </p>
             <p><i class="fas fa-envelope"></i>{{ user_profile.email }}</p>
             <p><i class="fas fa-id-card"></i>Account: {{ user_profile.account_number|default:"N/A" }}</p>
             <p><i class="fas fa-wallet"></i>Balance: ${{ user_profile.balance|intcomma }}</p>
@@ -1101,23 +1231,26 @@ s0.parentNode.insertBefore(s1,s0);
 
                     <!-- Django Messages -->
                     {% if messages %}
-                        {% for message in messages %}
-                            <div class="{% if message.tags %}{{ message.tags }}-messages{% else %}info-messages{% endif %}">
-                                <p><i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i> {{ message|safe }}</p>
-                            </div>
-                        {% endfor %}
+                    {% for message in messages %}
+                    <div class="{% if message.tags %}{{ message.tags }}-messages{% else %}info-messages{% endif %}">
+                        <p><i
+                                class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                            {{ message|safe }}</p>
+                    </div>
+                    {% endfor %}
                     {% endif %}
 
                     <!-- Form Errors -->
                     {% if form.errors %}
                     <div class="error-messages">
                         {% for field in form %}
-                            {% for error in field.errors %}
-                                <p><i class="fas fa-exclamation-triangle"></i> <strong>{{ field.label }}:</strong> {{ error }}</p>
-                            {% endfor %}
+                        {% for error in field.errors %}
+                        <p><i class="fas fa-exclamation-triangle"></i> <strong>{{ field.label }}:</strong> {{ error }}
+                        </p>
+                        {% endfor %}
                         {% endfor %}
                         {% for error in form.non_field_errors %}
-                            <p><i class="fas fa-exclamation-triangle"></i> {{ error }}</p>
+                        <p><i class="fas fa-exclamation-triangle"></i> {{ error }}</p>
                         {% endfor %}
                     </div>
                     {% endif %}
@@ -1155,31 +1288,33 @@ s0.parentNode.insertBefore(s1,s0);
                         <div class="plan-details-card" id="plan-details">
                             <h5><i class="fas fa-file-alt"></i> Plan Details</h5>
                             <div class="detail-item" id="min-amount">
-                                <strong><i class="fas fa-arrow-down"></i> Minimum Investment:</strong> 
+                                <strong><i class="fas fa-arrow-down"></i> Minimum Investment:</strong>
                                 <span id="min-amount-value">$0.00</span>
                             </div>
                             <div class="detail-item" id="max-amount">
-                                <strong><i class="fas fa-arrow-up"></i> Maximum Investment:</strong> 
+                                <strong><i class="fas fa-arrow-up"></i> Maximum Investment:</strong>
                                 <span id="max-amount-value">$0.00</span>
                             </div>
                             <div class="detail-item" id="profit-range">
-                                <strong><i class="fas fa-percentage"></i> Profit Range:</strong> 
+                                <strong><i class="fas fa-percentage"></i> Profit Range:</strong>
                                 <span id="profit-range-value">0% - 0%</span>
                             </div>
                             <div class="detail-item" id="duration">
-                                <strong><i class="fas fa-clock"></i> Investment Duration:</strong> 
+                                <strong><i class="fas fa-clock"></i> Investment Duration:</strong>
                                 <span id="duration-value">0 days</span>
                             </div>
                             <div class="detail-item" id="investment-type">
-                                <strong><i class="fas fa-project-diagram"></i> Investment Type:</strong> 
+                                <strong><i class="fas fa-project-diagram"></i> Investment Type:</strong>
                                 <span id="investment-type-value">N/A</span>
                             </div>
                             <div class="detail-item" id="plan-type">
-                                <strong><i class="fas fa-layer-group"></i> Plan Type:</strong> 
+                                <strong><i class="fas fa-layer-group"></i> Plan Type:</strong>
                                 <span id="plan-type-value">N/A</span>
                             </div>
-                            <div class="detail-item" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid rgba(0, 51, 102, 0.2);" id="expected-return">
-                                <strong><i class="fas fa-calculator"></i> Expected Returns:</strong> 
+                            <div class="detail-item"
+                                style="margin-top: 20px; padding-top: 20px; border-top: 2px solid rgba(0, 51, 102, 0.2);"
+                                id="expected-return">
+                                <strong><i class="fas fa-calculator"></i> Expected Returns:</strong>
                                 <span id="expected-return-value">Enter amount to calculate</span>
                             </div>
                         </div>
@@ -1188,7 +1323,8 @@ s0.parentNode.insertBefore(s1,s0);
                             <i class="fas fa-lock"></i> Confirm Investment
                         </button>
 
-                        <a href="{% url 'investment_plans' %}" class="btn-submit btn-secondary" style="text-align: center; display: block; text-decoration: none; margin-top: 15px;">
+                        <a href="{% url 'investment_plans' %}" class="btn-submit btn-secondary"
+                            style="text-align: center; display: block; text-decoration: none; margin-top: 15px;">
                             <i class="fas fa-arrow-left"></i> Back to Investment Plans
                         </a>
                     </form>
@@ -1222,19 +1358,19 @@ s0.parentNode.insertBefore(s1,s0);
         // Plan data from Django template
         const plans = {
             {% for plan in form.fields.investment_plan.queryset %}
-            "{{ plan.id }}": {
-                min_amount: {{ plan.min_amount }},
-                max_amount: {{ plan.max_amount }},
-                min_profit_percentage: {{ plan.min_profit_percentage }},
-                max_profit_percentage: {{ plan.max_profit_percentage }},
-                duration_days: {{ plan.duration_days }},
-                interval_hours: {% if plan.interval_hours %}{{ plan.interval_hours }}{% else %}0{% endif %},
-                name: "{{ plan.name|escapejs }}",
+        "{{ plan.id }}": {
+            min_amount: { { plan.min_amount } },
+            max_amount: { { plan.max_amount } },
+            min_profit_percentage: { { plan.min_profit_percentage } },
+            max_profit_percentage: { { plan.max_profit_percentage } },
+            duration_days: { { plan.duration_days } },
+            interval_hours: {% if plan.interval_hours %} { { plan.interval_hours } } {% else %} 0{% endif %},
+            name: "{{ plan.name|escapejs }}",
                 investment_type: "{{ plan.investment_type }}",
-                plan_type: "{{ plan.plan_type }}",
-                description: "{{ plan.description|escapejs }}"
-            }{% if not forloop.last %},{% endif %}
-            {% endfor %}
+                    plan_type: "{{ plan.plan_type }}",
+                        description: "{{ plan.description|escapejs }}"
+        } {% if not forloop.last %}, {% endif %}
+        {% endfor %}
         };
 
         // Initialize global variables
@@ -1247,10 +1383,10 @@ s0.parentNode.insertBefore(s1,s0);
             document.querySelectorAll('.wizard-step').forEach(step => {
                 step.classList.remove('active');
             });
-            
+
             // Add active class to current step
             document.getElementById(`step-${currentStep}`).classList.add('active');
-            
+
             // Update progress bar
             const progress = (currentStep / totalSteps) * 100;
             document.getElementById('investment-progress').style.width = `${progress}%`;
@@ -1273,60 +1409,60 @@ s0.parentNode.insertBefore(s1,s0);
         // Function to update plan details
         function updatePlanDetails() {
             const selectedPlan = plans[planSelect.value];
-            
+
             if (selectedPlan) {
                 // Show plan details card
                 planDetails.style.display = 'block';
-                
+
                 // Update wizard to step 2
                 goToStep(2);
-                
+
                 // Update plan details
-                document.getElementById('min-amount-value').textContent = 
-                    `$${parseFloat(selectedPlan.min_amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                
-                document.getElementById('max-amount-value').textContent = 
-                    `$${parseFloat(selectedPlan.max_amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                
-                document.getElementById('profit-range-value').textContent = 
+                document.getElementById('min-amount-value').textContent =
+                    `$${parseFloat(selectedPlan.min_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+                document.getElementById('max-amount-value').textContent =
+                    `$${parseFloat(selectedPlan.max_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+                document.getElementById('profit-range-value').textContent =
                     `${selectedPlan.min_profit_percentage}% - ${selectedPlan.max_profit_percentage}%`;
-                
+
                 // Update investment type
                 const investmentTypeMap = {
                     'SHORT_TERM': 'Short Term Trading',
                     'LONG_TERM': 'Long Term Investment'
                 };
-                document.getElementById('investment-type-value').textContent = 
+                document.getElementById('investment-type-value').textContent =
                     investmentTypeMap[selectedPlan.investment_type] || selectedPlan.investment_type;
-                
+
                 // Update plan type
                 const planTypeMap = {
                     'STARTER': 'Starter Plan',
                     'PRO': 'Pro Plan',
                     'ELITE': 'Elite Plan'
                 };
-                document.getElementById('plan-type-value').textContent = 
+                document.getElementById('plan-type-value').textContent =
                     planTypeMap[selectedPlan.plan_type] || selectedPlan.plan_type;
-                
+
                 // Update duration display
                 if (selectedPlan.investment_type === 'SHORT_TERM' && selectedPlan.interval_hours > 0) {
-                    document.getElementById('duration-value').textContent = 
+                    document.getElementById('duration-value').textContent =
                         `${selectedPlan.interval_hours} hours`;
                 } else {
                     const months = Math.round(selectedPlan.duration_days / 30);
-                    document.getElementById('duration-value').textContent = 
+                    document.getElementById('duration-value').textContent =
                         `${selectedPlan.duration_days} days (${months} months)`;
                 }
-                
+
                 // Update expected return
                 updateExpectedReturn();
-                
+
                 // Update balance display min/max
-                document.getElementById('min-investment').textContent = 
-                    `$${parseFloat(selectedPlan.min_amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                document.getElementById('max-investment').textContent = 
-                    `$${parseFloat(selectedPlan.max_amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                
+                document.getElementById('min-investment').textContent =
+                    `$${parseFloat(selectedPlan.min_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                document.getElementById('max-investment').textContent =
+                    `$${parseFloat(selectedPlan.max_amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
                 // Auto-focus amount input
                 amountInput.focus();
             } else {
@@ -1343,21 +1479,21 @@ s0.parentNode.insertBefore(s1,s0);
             if (selectedPlan && amount > 0) {
                 // Validate inputs
                 if (isNaN(selectedPlan.min_profit_percentage) || isNaN(selectedPlan.max_profit_percentage)) {
-                    document.getElementById('expected-return-value').innerHTML = 
+                    document.getElementById('expected-return-value').innerHTML =
                         `<span style="color: #dc3545;">Error: Invalid plan data</span>`;
                     return;
                 }
-                
+
                 // Update wizard to step 3
                 goToStep(3);
-                
+
                 // Calculate returns
                 const minProfit = amount * (selectedPlan.min_profit_percentage / 100);
                 const maxProfit = amount * (selectedPlan.max_profit_percentage / 100);
                 const minReturn = amount + minProfit;
                 const maxReturn = amount + maxProfit;
                 const avgProfit = (minProfit + maxProfit) / 2;
-                
+
                 // Format currency
                 const formatCurrency = (value) => {
                     return value.toLocaleString('en-US', {
@@ -1365,11 +1501,11 @@ s0.parentNode.insertBefore(s1,s0);
                         maximumFractionDigits: 2
                     });
                 };
-                
+
                 // Calculate daily/monthly profit
                 let dailyProfit = 0;
                 let monthlyProfit = 0;
-                
+
                 if (selectedPlan.investment_type === 'SHORT_TERM' && selectedPlan.interval_hours > 0) {
                     const hourlyProfit = avgProfit / selectedPlan.interval_hours;
                     dailyProfit = hourlyProfit * 24;
@@ -1378,7 +1514,7 @@ s0.parentNode.insertBefore(s1,s0);
                     dailyProfit = avgProfit / selectedPlan.duration_days;
                     monthlyProfit = dailyProfit * 30;
                 }
-                
+
                 // Update expected return display
                 document.getElementById('expected-return-value').innerHTML = `
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%;">
@@ -1401,7 +1537,7 @@ s0.parentNode.insertBefore(s1,s0);
                     </div>
                 `;
             } else {
-                document.getElementById('expected-return-value').innerHTML = 
+                document.getElementById('expected-return-value').innerHTML =
                     '<span style="color: #6c757d;">Enter investment amount to see expected returns</span>';
                 goToStep(2);
             }
@@ -1411,36 +1547,36 @@ s0.parentNode.insertBefore(s1,s0);
         function validateAmount() {
             const selectedPlan = plans[planSelect.value];
             const amount = parseFloat(amountInput.value) || 0;
-            
+
             if (!selectedPlan) {
                 amountInput.setCustomValidity('Please select an investment plan first');
                 return false;
             }
-            
+
             if (amount < selectedPlan.min_amount) {
                 amountInput.setCustomValidity(`Minimum investment is $${selectedPlan.min_amount}`);
                 return false;
             }
-            
+
             if (amount > selectedPlan.max_amount) {
                 amountInput.setCustomValidity(`Maximum investment is $${selectedPlan.max_amount}`);
                 return false;
             }
-            
+
             amountInput.setCustomValidity('');
             return true;
         }
 
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Initialize wizard
             updateWizardSteps();
-            
+
             // Event Listeners
             if (planSelect) {
-                planSelect.addEventListener('change', function() {
+                planSelect.addEventListener('change', function () {
                     updatePlanDetails();
-                    
+
                     // Auto-set amount to minimum when plan changes
                     const selectedPlan = plans[this.value];
                     if (selectedPlan) {
@@ -1451,40 +1587,40 @@ s0.parentNode.insertBefore(s1,s0);
                     }
                 });
             }
-            
+
             if (amountInput) {
-                amountInput.addEventListener('input', function() {
+                amountInput.addEventListener('input', function () {
                     if (validateAmount()) {
                         updateExpectedReturn();
                     }
                 });
-                
-                amountInput.addEventListener('blur', function() {
+
+                amountInput.addEventListener('blur', function () {
                     const selectedPlan = plans[planSelect.value];
                     if (selectedPlan) {
                         let amount = parseFloat(this.value) || 0;
-                        
+
                         // Enforce minimum
                         if (amount < selectedPlan.min_amount) {
                             this.value = selectedPlan.min_amount;
                         }
-                        
+
                         // Enforce maximum
                         if (amount > selectedPlan.max_amount) {
                             this.value = selectedPlan.max_amount;
                         }
-                        
+
                         updateExpectedReturn();
                     }
                 });
             }
-            
+
             // Form submission handler
             if (investmentForm && submitBtn) {
-                investmentForm.addEventListener('submit', function(e) {
+                investmentForm.addEventListener('submit', function (e) {
                     const selectedPlan = plans[planSelect.value];
                     const amount = parseFloat(amountInput.value) || 0;
-                    
+
                     if (!selectedPlan) {
                         e.preventDefault();
                         alert('Please select an investment plan');
@@ -1492,7 +1628,7 @@ s0.parentNode.insertBefore(s1,s0);
                         planSelect.focus();
                         return;
                     }
-                    
+
                     if (!validateAmount()) {
                         e.preventDefault();
                         alert(amountInput.validationMessage);
@@ -1500,35 +1636,35 @@ s0.parentNode.insertBefore(s1,s0);
                         amountInput.focus();
                         return;
                     }
-                    
+
                     // Show loading state
                     submitBtn.innerHTML = '<span class="loading-spinner"></span> Processing Investment...';
                     submitBtn.disabled = true;
-                    
+
                     // Add a small delay to show loading state
                     setTimeout(() => {
                         submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Investment Confirmed!';
                     }, 1000);
                 });
             }
-            
+
             // Initialize from URL parameter
             const urlParams = new URLSearchParams(window.location.search);
             const planId = urlParams.get('plan_id');
-            
+
             if (planId && plans[planId]) {
                 planSelect.value = planId;
                 updatePlanDetails();
             } else if (planSelect.value && plans[planSelect.value]) {
                 updatePlanDetails();
             }
-            
+
             // Initialize stock market ticker
             initializeStockTicker();
-            
+
             // Initialize Telegram button
             initializeTelegramButton();
-            
+
             // Initialize sidebar toggle
             initializeSidebar();
         });
@@ -1549,14 +1685,14 @@ s0.parentNode.insertBefore(s1,s0);
             function updateStockMarquee() {
                 const marquee = document.getElementById("stockMarquee");
                 if (!marquee) return;
-                
+
                 let stockHTML = '';
-                
+
                 stockData.forEach((stock) => {
                     const isPositive = stock.change >= 0;
                     const changeClass = isPositive ? 'stock-up' : 'stock-down';
                     const changeIcon = isPositive ? '▲' : '▼';
-                    
+
                     stockHTML += `
                         <div class="stock-item">
                             <span class="stock-symbol">${stock.symbol}</span>
@@ -1567,9 +1703,9 @@ s0.parentNode.insertBefore(s1,s0);
                         </div>
                     `;
                 });
-                
+
                 marquee.innerHTML = stockHTML;
-                
+
                 // Simulate price updates
                 stockData.forEach(stock => {
                     const change = (Math.random() - 0.5) * 2;
@@ -1587,7 +1723,7 @@ s0.parentNode.insertBefore(s1,s0);
         function initializeTelegramButton() {
             const telegramLink = document.querySelector('.telegram-link');
             if (telegramLink) {
-                telegramLink.addEventListener('click', function(e) {
+                telegramLink.addEventListener('click', function (e) {
                     e.preventDefault();
                     window.open(this.href, '_blank');
                 });
@@ -1599,19 +1735,19 @@ s0.parentNode.insertBefore(s1,s0);
             const sidebar = document.getElementById('sidebar');
             const closeBtn = document.querySelector('.close-sidebar');
             const openBtn = document.querySelector('.open-sidebar-btn');
-            
+
             if (closeBtn) {
                 closeBtn.addEventListener('click', toggleSidebar);
             }
-            
+
             if (openBtn) {
                 openBtn.addEventListener('click', toggleSidebar);
             }
-            
+
             // Close sidebar when clicking outside
-            document.addEventListener('click', function(event) {
-                if (sidebar.classList.contains('open') && 
-                    !sidebar.contains(event.target) && 
+            document.addEventListener('click', function (event) {
+                if (sidebar.classList.contains('open') &&
+                    !sidebar.contains(event.target) &&
                     !openBtn.contains(event.target)) {
                     toggleSidebar();
                 }
@@ -1630,10 +1766,11 @@ s0.parentNode.insertBefore(s1,s0);
             alert("Notifications feature coming soon!");
         }
     </script>
-    
+
     <!-- Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

@@ -1,9 +1,9 @@
 /********** Template CSS **********/
 :root {
-    --primary: #06A3DA;
-    --secondary: #34AD54;
-    --light: #EEF9FF;
-    --dark: #091E3E;
+    --primary: #ffcd75;
+    --secondary: #1e293b;
+    --light: #18181b;
+    --dark: #09090b;
 }
 
 
@@ -490,3 +490,163 @@ h6,
         margin-bottom: -75px;
     }
 }
+
+/* ==========================================
+   DARK GLASSMORPHISM THEMING & OVERRIDES
+   ========================================== */
+body {
+    background-color: #09090b !important;
+    color: #e4e4e7 !important; /* zinc-200 */
+}
+
+/* Make headings light */
+h1, h2, h3, h4, h5, h6, .text-dark, .text-body {
+    color: #ffffff !important;
+}
+
+p, span, small, label, .text-muted {
+    color: #a1a1aa !important; /* zinc-400 */
+}
+
+/* Keep brand titles white */
+.navbar-brand h1, .navbar-brand h1 *, .text-white, .navbar-nav .nav-link {
+    color: #ffffff !important;
+}
+
+/* Navbar styling overrides */
+.navbar {
+    background: rgba(9, 9, 11, 0.8) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.sticky-top.navbar-dark {
+    background: rgba(9, 9, 11, 0.95) !important;
+}
+.navbar-dark .navbar-nav .nav-link {
+    color: #a1a1aa !important;
+}
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active,
+.sticky-top.navbar-dark .navbar-nav .nav-link:hover,
+.sticky-top.navbar-dark .navbar-nav .nav-link.active {
+    color: var(--primary) !important;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    background-color: #18181b !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+}
+.dropdown-item {
+    color: #e4e4e7 !important;
+}
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+}
+
+/* Cards, containers, items: glassmorphism */
+.service-item, .testimonial-item, .team-item, .blog-item, .card, .summary-card, .investment-plan-card, .facts {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+    transition: all 0.3s ease;
+}
+
+.service-item:hover, .testimonial-item:hover, .team-item:hover, .blog-item:hover, .card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 32px 0 rgba(255, 205, 117, 0.1) !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #09090b !important; /* Dark text on gold */
+    font-weight: 700 !important;
+    border-radius: 9999px !important;
+    padding: 12px 28px !important;
+}
+.btn-primary:hover {
+    background-color: #ffe0a3 !important;
+    border-color: #ffe0a3 !important;
+    transform: scale(1.03);
+}
+
+.btn-secondary {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border-radius: 9999px !important;
+}
+.btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Form controls */
+.form-control, select, textarea {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+}
+.form-control:focus, select:focus, textarea:focus {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(255, 205, 117, 0.2) !important;
+}
+
+/* Modal styling */
+.modal-content {
+    background-color: #09090b !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 24px !important;
+}
+
+/* Table styling */
+.table {
+    color: #e4e4e7 !important;
+}
+.table th, .table td {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Custom overrides for specific elements */
+.facts {
+    background: rgba(9, 9, 11, 0.9) !important;
+}
+.bg-primary {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.bg-dark {
+    background-color: #09090b !important;
+}
+
+/* Carousel and headers */
+.carousel-caption {
+    background: rgba(9, 9, 11, 0.85) !important;
+    backdrop-filter: blur(8px);
+}
+.carousel-item img {
+    opacity: 0.3;
+}
+.bg-header {
+    background: linear-gradient(rgba(9, 9, 11, 0.85), rgba(9, 9, 11, 0.85)), url(../img/carousel-1.jpg) center center no-repeat !important;
+    background-size: cover !important;
+}
+.footer {
+    background: #09090b !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.back-to-top {
+    background-color: var(--primary) !important;
+    color: #09090b !important;
+}
+

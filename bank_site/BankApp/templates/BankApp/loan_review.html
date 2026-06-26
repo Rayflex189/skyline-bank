@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Review Loan Application - Skybridge Finance</title>
-<!--Start of Tawk.to Script-->
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fc33962525f11c38faecba/1jo0ij1kg';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <title>Review Loan Application - Axos Finance</title>
+    <!--Start of Tawk.to Script-->
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6a3e914d0858271d4af4e711/1js26f6la';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-    
+
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
@@ -41,7 +42,8 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         body {
-            background-color: #0a192f; /* Navy blue background */
+            background-color: #0a192f;
+            /* Navy blue background */
             color: #333;
             min-height: 100vh;
             display: flex;
@@ -542,6 +544,7 @@ s0.parentNode.insertBefore(s1,s0);
         }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <header class="header">
@@ -549,35 +552,35 @@ s0.parentNode.insertBefore(s1,s0);
             <div class="logo-icon">
                 <i class="fas fa-university"></i>
             </div>
-            <div class="logo-text">Skybridge<span>Finance</span></div>
+            <div class="logo-text">Axos<span>Finance</span></div>
         </div>
-        
+
         <nav class="nav-menu">
             <a href="/" class="nav-item">Dashboard</a>
             <a href="#" class="nav-item">Accounts</a>
             <a href="{% url 'apply_loan' %}" class="nav-item active">Loans</a>
             <a href="#" class="nav-item">Support</a>
         </nav>
-        
+
         <div class="user-info">
             <div class="user-avatar">
                 {% if user and user.username %}
-                    {{ user.username.0|upper }}
+                {{ user.username.0|upper }}
                 {% else %}
-                    U
+                U
                 {% endif %}
             </div>
             <span>
                 {% if user %}
-                    {% if user.get_full_name %}
-                        {{ user.get_full_name }}
-                    {% elif user.username %}
-                        {{ user.username }}
-                    {% else %}
-                        User
-                    {% endif %}
+                {% if user.get_full_name %}
+                {{ user.get_full_name }}
+                {% elif user.username %}
+                {{ user.username }}
                 {% else %}
-                    Guest
+                User
+                {% endif %}
+                {% else %}
+                Guest
                 {% endif %}
             </span>
         </div>
@@ -607,9 +610,9 @@ s0.parentNode.insertBefore(s1,s0);
                             <div class="applicant-label">Applicant</div>
                             <div class="applicant-value">
                                 {% if user.get_full_name %}
-                                    {{ user.get_full_name }}
+                                {{ user.get_full_name }}
                                 {% else %}
-                                    {{ user.username }}
+                                {{ user.username }}
                                 {% endif %}
                             </div>
                         </div>
@@ -722,7 +725,8 @@ s0.parentNode.insertBefore(s1,s0);
                         <span class="summary-label">Processing Fee (5%)</span>
                         <span class="summary-value">${{ processing_fee|floatformat:2 }}</span>
                     </div>
-                    <div class="summary-item" style="border-top: 2px solid rgba(255, 255, 255, 0.2); padding-top: 20px;">
+                    <div class="summary-item"
+                        style="border-top: 2px solid rgba(255, 255, 255, 0.2); padding-top: 20px;">
                         <span class="summary-label">Total Payable Amount</span>
                         <span class="summary-value total-payable">${{ total|floatformat:2 }}</span>
                     </div>
@@ -745,8 +749,10 @@ s0.parentNode.insertBefore(s1,s0);
                     </h3>
                     <div class="terms-box">
                         <ul>
-                            <li>By submitting this application, you agree to the terms and conditions of Skybridge Finance.</li>
-                            <li>The loan approval is subject to verification of your documents and credit assessment.</li>
+                            <li>By submitting this application, you agree to the terms and conditions of Axos Finance.
+                            </li>
+                            <li>The loan approval is subject to verification of your documents and credit assessment.
+                            </li>
                             <li>Interest will be charged from the date of disbursement at the rate mentioned above.</li>
                             <li>Early repayment may be subject to prepayment charges as per the bank's policy.</li>
                             <li>Late payments will incur additional charges and may affect your credit score.</li>
@@ -757,7 +763,8 @@ s0.parentNode.insertBefore(s1,s0);
                     <div class="checkbox-container">
                         <input type="checkbox" id="agree-terms" required>
                         <label for="agree-terms" class="checkbox-label">
-                            I have read and agree to the <a href="#">Terms and Conditions</a> and confirm that all information provided is accurate to the best of my knowledge.
+                            I have read and agree to the <a href="#">Terms and Conditions</a> and confirm that all
+                            information provided is accurate to the best of my knowledge.
                         </label>
                     </div>
                 </div>
@@ -766,7 +773,8 @@ s0.parentNode.insertBefore(s1,s0);
                 <form method="POST" id="loan-form">
                     {% csrf_token %}
                     <div class="action-buttons">
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'apply_loan' %}'">
+                        <button type="button" class="btn btn-secondary"
+                            onclick="window.location.href='{% url 'apply_loan' %}'">
                             <i class="fas fa-arrow-left"></i> Back to Edit
                         </button>
                         <button type="submit" class="btn btn-primary" id="submit-btn" disabled>
@@ -787,74 +795,75 @@ s0.parentNode.insertBefore(s1,s0);
             <a href="#" class="footer-link">FAQs</a>
         </div>
         <div class="copyright">
-            &copy; 2024 Skybridge Finance. All rights reserved.
+            &copy; 2024 Axos Finance. All rights reserved.
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Handle user info display
             const userAvatar = document.querySelector('.user-avatar');
             const userDisplayName = document.querySelector('.user-info span');
-            
+
             // Fix empty avatar
             if (userAvatar && userAvatar.textContent.trim() === '') {
                 userAvatar.textContent = 'U';
             }
-            
+
             // Fix empty display name
             if (userDisplayName && userDisplayName.textContent.trim() === '') {
                 userDisplayName.textContent = 'User';
             }
-            
+
             // Loan form handling
             const agreeCheckbox = document.getElementById('agree-terms');
             const submitBtn = document.getElementById('submit-btn');
             const loanForm = document.getElementById('loan-form');
-            
+
             if (agreeCheckbox && submitBtn && loanForm) {
                 // Initialize submit button state
                 submitBtn.disabled = !agreeCheckbox.checked;
-                
+
                 // Enable/disable submit button based on checkbox
-                agreeCheckbox.addEventListener('change', function() {
+                agreeCheckbox.addEventListener('change', function () {
                     submitBtn.disabled = !this.checked;
                 });
-                
+
                 // Form submission handler
-                loanForm.addEventListener('submit', function(e) {
+                loanForm.addEventListener('submit', function (e) {
                     if (!agreeCheckbox.checked) {
                         e.preventDefault();
                         alert('Please agree to the terms and conditions before submitting.');
                         return false;
                     }
-                    
+
                     // Show loading state
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
                     submitBtn.disabled = true;
-                    
+
                     // Allow form submission
                     return true;
                 });
             }
         });
     </script>
-        <script>
-     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("{% static 'sw.js' %}")
-        .then(registration => {
-            console.log('✅ Service Worker Registered:', registration);
-            
-            // Check for updates
-            registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                console.log('🔄 New service worker found:', newWorker);
-            });
-        })
-        .catch(error => {
-            console.log('❌ Service Worker registration failed:', error);
-        });
-    }
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{% static 'sw.js' %}")
+                .then(registration => {
+                    console.log('✅ Service Worker Registered:', registration);
+
+                    // Check for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        console.log('🔄 New service worker found:', newWorker);
+                    });
+                })
+                .catch(error => {
+                    console.log('❌ Service Worker registration failed:', error);
+                });
+        }
     </script>
 </body>
+
 </html>

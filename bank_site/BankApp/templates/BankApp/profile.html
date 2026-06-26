@@ -2,6 +2,7 @@
 {% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,37 +13,39 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-    
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fc33962525f11c38faecba/1jo0ij1kg';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6a3e914d0858271d4af4e711/1js26f6la';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-    
+
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
-    
+
     <!-- Libraries Stylesheet -->
     <link href="{% static 'lib/owlcarousel/assets/owl.carousels.min.css' %}" rel="stylesheet">
     <link href="{% static 'lib/animate/animates.min.css' %}" rel="stylesheet">
@@ -52,7 +55,7 @@ s0.parentNode.insertBefore(s1,s0);
 
     <!-- Template Stylesheet -->
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
-    <title>Profile - Skybridge Finance</title>
+    <title>Profile - Axos Finance</title>
 
     <style>
         :root {
@@ -65,70 +68,70 @@ s0.parentNode.insertBefore(s1,s0);
             --border-radius: 8px;
             --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
-        
+
         body {
             font-family: 'Rubik', sans-serif;
             background-color: #f8f9fa;
             color: var(--text-color);
             line-height: 1.6;
         }
-        
+
         .navbar {
             background-color: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 1rem 0;
         }
-        
+
         .navbar-brand {
             font-weight: 700;
             color: var(--secondary-color) !important;
             font-size: 1.5rem;
         }
-        
+
         .navbar-brand i {
             color: var(--primary-color);
         }
-        
+
         .nav-links {
             color: var(--secondary-color) !important;
             font-weight: 500;
             padding: 0.5rem 1rem !important;
             transition: color 0.3s ease;
         }
-        
+
         .nav-links:hover {
             color: var(--primary-color) !important;
         }
-        
+
         .main-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem 1rem;
         }
-        
+
         .page-header {
             text-align: center;
             margin-bottom: 3rem;
         }
-        
+
         .page-title {
             color: var(--secondary-color);
             font-weight: 700;
             margin-bottom: 0.5rem;
         }
-        
+
         .page-subtitle {
             color: #6c757d;
             font-size: 1.1rem;
         }
-        
+
         .profile-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
             margin-bottom: 2rem;
         }
-        
+
         .profile-card {
             background-color: white;
             border-radius: var(--border-radius);
@@ -136,30 +139,30 @@ s0.parentNode.insertBefore(s1,s0);
             padding: 2rem;
             transition: transform 0.3s ease;
         }
-        
+
         .profile-card:hover {
             transform: translateY(-5px);
         }
-        
+
         .card-header {
             border-bottom: 2px solid var(--primary-color);
             padding-bottom: 1rem;
             margin-bottom: 1.5rem;
         }
-        
+
         .card-title {
             color: var(--secondary-color);
             font-weight: 700;
             margin: 0;
             font-size: 1.3rem;
         }
-        
+
         .profile-info {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
         }
-        
+
         .profile-img {
             width: 120px;
             height: 120px;
@@ -169,7 +172,7 @@ s0.parentNode.insertBefore(s1,s0);
             margin: 0 auto 1.5rem;
             display: block;
         }
-        
+
         .info-item {
             display: flex;
             justify-content: space-between;
@@ -177,22 +180,22 @@ s0.parentNode.insertBefore(s1,s0);
             padding: 0.5rem 0;
             border-bottom: 1px solid #f0f0f0;
         }
-        
+
         .info-label {
             font-weight: 600;
             color: var(--secondary-color);
         }
-        
+
         .info-value {
             color: #6c757d;
         }
-        
+
         .balance-value {
             color: var(--accent-color);
             font-weight: 700;
             font-size: 1.1rem;
         }
-        
+
         .btn-primary-custom {
             background-color: var(--primary-color);
             border: none;
@@ -204,14 +207,14 @@ s0.parentNode.insertBefore(s1,s0);
             text-decoration: none;
             display: inline-block;
         }
-        
+
         .btn-primary-custom:hover {
             background-color: #0489b7;
             color: white;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(6, 163, 218, 0.3);
         }
-        
+
         .btn-danger-custom {
             background-color: #dc3545;
             border: none;
@@ -223,24 +226,24 @@ s0.parentNode.insertBefore(s1,s0);
             text-decoration: none;
             display: inline-block;
         }
-        
+
         .btn-danger-custom:hover {
             background-color: #c82333;
             color: white;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
         }
-        
+
         .action-section {
             text-align: center;
             padding: 1.5rem 0;
         }
-        
+
         .action-description {
             color: #6c757d;
             margin-bottom: 1rem;
         }
-        
+
         /* Status badges */
         .status-badge {
             padding: 0.25rem 0.75rem;
@@ -248,25 +251,25 @@ s0.parentNode.insertBefore(s1,s0);
             font-size: 0.8rem;
             font-weight: 600;
         }
-        
+
         .status-active {
             background-color: rgba(52, 173, 84, 0.1);
             color: var(--accent-color);
             border: 1px solid var(--accent-color);
         }
-        
+
         .status-pending {
             background-color: rgba(255, 193, 7, 0.1);
             color: #ffc107;
             border: 1px solid #ffc107;
         }
-        
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .profile-cards {
                 grid-template-columns: 1fr;
             }
-            
+
             .info-item {
                 flex-direction: column;
                 align-items: flex-start;
@@ -275,9 +278,11 @@ s0.parentNode.insertBefore(s1,s0);
         }
     </style>
 </head>
+
 <body>
     <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner"></div>
     </div>
     <!-- Spinner End -->
@@ -285,10 +290,11 @@ s0.parentNode.insertBefore(s1,s0);
     <nav class="navbar navbar-expand-md navbar-light border-bottom border-light">
         <div class="container-xxl">
             <a href="/" class="navbar-brand">
-                <span class="fw-bold"><i class="fa fa-university me-2"></i>Skybridge Finance</span>
+                <span class="fw-bold"><i class="fa fa-university me-2"></i>Axos Finance</span>
             </a>
             <!--toggle button for mobile nav-->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav"
+                aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!--navbar links-->
@@ -325,7 +331,8 @@ s0.parentNode.insertBefore(s1,s0);
                     <div class="profile-info">
                         <div class="info-item">
                             <span class="info-label">Full Name:</span>
-                            <span class="info-value">{{user_profile.first_name}} {{user_profile.middle_name}} {{user_profile.last_name}}</span>
+                            <span class="info-value">{{user_profile.first_name}} {{user_profile.middle_name}}
+                                {{user_profile.last_name}}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Email:</span>
@@ -349,7 +356,8 @@ s0.parentNode.insertBefore(s1,s0);
                         </div>
                         <div class="info-item">
                             <span class="info-label">Balance:</span>
-                            <span class="info-value balance-value">{{user_profile.currency}}{{user_profile.balance|intcomma}}</span>
+                            <span
+                                class="info-value balance-value">{{user_profile.currency}}{{user_profile.balance|intcomma}}</span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Country:</span>
@@ -377,9 +385,9 @@ s0.parentNode.insertBefore(s1,s0);
                             <i class="fas fa-edit me-2"></i>Edit Profile
                         </a>
                     </div>
-                    
+
                     <hr>
-                    
+
                     <!-- Security Section -->
                     <div class="action-section">
                         <h4 class="card-title">Security Settings</h4>
@@ -388,9 +396,9 @@ s0.parentNode.insertBefore(s1,s0);
                             <i class="fas fa-shield-alt me-2"></i>Security Settings
                         </a>
                     </div>
-                    
+
                     <hr>
-                    
+
                     <!-- Logout Section -->
                     <div class="action-section">
                         <h4 class="card-title">Logout</h4>
@@ -413,24 +421,25 @@ s0.parentNode.insertBefore(s1,s0);
     <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
     <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
     <script>
-     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("{% static 'sw.js' %}")
-        .then(registration => {
-            console.log('✅ Service Worker Registered:', registration);
-            
-            // Check for updates
-            registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                console.log('🔄 New service worker found:', newWorker);
-            });
-        })
-        .catch(error => {
-            console.log('❌ Service Worker registration failed:', error);
-        });
-    }
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{% static 'sw.js' %}")
+                .then(registration => {
+                    console.log('✅ Service Worker Registered:', registration);
+
+                    // Check for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        console.log('🔄 New service worker found:', newWorker);
+                    });
+                })
+                .catch(error => {
+                    console.log('❌ Service Worker registration failed:', error);
+                });
+        }
     </script>
     <!-- Template Javascript -->
     <script src="{% static 'js/mains.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

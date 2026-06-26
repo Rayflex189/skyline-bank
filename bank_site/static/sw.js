@@ -1,4 +1,4 @@
-const CACHE_NAME = 'skybridge-v2.0.1';
+const CACHE_NAME = 'axos-v2.0.1';
 const STATIC_ASSETS = [
   '/',
   // Original and all resized icons
@@ -66,7 +66,7 @@ self.addEventListener('push', event => {
   const data = event.data ? event.data.json() : {};
   
   const options = {
-    body: data.body || 'New update from SkyBridge Bank',
+    body: data.body || 'New update from Axos Bank',
     icon: '/static/img/blue-192x192.png',  // Updated
     badge: '/static/img/blue-192x192.png',  // Updated
     image: '/static/img/blue-192x192.png',  // Updated
@@ -90,6 +90,6 @@ self.addEventListener('push', event => {
   };
   
   event.waitUntil(
-    self.registration.showNotification('SkyBridge Bank', options)
+    self.registration.showNotification('Axos Bank', options)
   );
 });

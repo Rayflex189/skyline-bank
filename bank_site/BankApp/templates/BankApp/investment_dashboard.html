@@ -3,32 +3,33 @@
 {% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investment Dashboard - Skybridge </title>
+    <title>Investment Dashboard - Axos </title>
 
     <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fc33962525f11c38faecba/1jo0ij1kg';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6a3e914d0858271d4af4e711/1js26f6la';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-    
+
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
@@ -63,7 +64,8 @@ s0.parentNode.insertBefore(s1,s0);
             box-sizing: border-box;
         }
 
-        body, html {
+        body,
+        html {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
             color: var(--text-dark);
@@ -115,7 +117,8 @@ s0.parentNode.insertBefore(s1,s0);
             align-items: center;
         }
 
-        .notification-bell, .open-sidebar-btn {
+        .notification-bell,
+        .open-sidebar-btn {
             cursor: pointer;
             color: white;
             font-size: 1.4rem;
@@ -129,7 +132,8 @@ s0.parentNode.insertBefore(s1,s0);
             background: rgba(255, 255, 255, 0.1);
         }
 
-        .notification-bell:hover, .open-sidebar-btn:hover {
+        .notification-bell:hover,
+        .open-sidebar-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: scale(1.1) rotate(5deg);
         }
@@ -148,8 +152,17 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.2); }
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.7;
+                transform: scale(1.2);
+            }
         }
 
         .sidebar {
@@ -168,7 +181,9 @@ s0.parentNode.insertBefore(s1,s0);
             overflow: hidden;
         }
 
-        .sidebar.open { right: 0; }
+        .sidebar.open {
+            right: 0;
+        }
 
         .sidebar-header {
             padding: 25px;
@@ -471,13 +486,18 @@ s0.parentNode.insertBefore(s1,s0);
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
             animation: shine 3s infinite;
         }
 
         @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
         }
 
         .card-header h2 {
@@ -697,7 +717,8 @@ s0.parentNode.insertBefore(s1,s0);
             max-width: 120px;
         }
 
-        .nav-item.active, .nav-item:hover {
+        .nav-item.active,
+        .nav-item:hover {
             color: var(--primary);
             background: var(--primary-light);
             transform: translateY(-5px);
@@ -709,7 +730,8 @@ s0.parentNode.insertBefore(s1,s0);
             transition: all 0.3s ease;
         }
 
-        .nav-item.active .nav-icon, .nav-item:hover .nav-icon {
+        .nav-item.active .nav-icon,
+        .nav-item:hover .nav-icon {
             transform: scale(1.2);
         }
 
@@ -791,10 +813,23 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            33% { transform: translateY(-12px) rotate(5deg); }
-            66% { transform: translateY(5px) rotate(-5deg); }
-            100% { transform: translateY(0) rotate(0deg); }
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            33% {
+                transform: translateY(-12px) rotate(5deg);
+            }
+
+            66% {
+                transform: translateY(5px) rotate(-5deg);
+            }
+
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
         }
 
         .marquee {
@@ -815,8 +850,13 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes scrollLeft {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
         }
 
         .stock-item {
@@ -932,6 +972,7 @@ s0.parentNode.insertBefore(s1,s0);
                 transform: translateX(100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -942,6 +983,7 @@ s0.parentNode.insertBefore(s1,s0);
             from {
                 opacity: 1;
             }
+
             to {
                 opacity: 0;
             }
@@ -959,7 +1001,9 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Profit/Loss styling */
@@ -1056,11 +1100,13 @@ s0.parentNode.insertBefore(s1,s0);
         }
     </style>
 </head>
+
 <body>
     <!-- Telegram Floating Icon -->
     <div class="telegram-float">
         <a href="https://t.me/" class="telegram-link" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="telegram-icon">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram"
+                class="telegram-icon">
             <span class="telegram-tooltip">Join our Telegram group</span>
         </a>
     </div>
@@ -1068,30 +1114,31 @@ s0.parentNode.insertBefore(s1,s0);
     <!-- Messages Container -->
     <div class="messages-container" id="messagesContainer">
         {% if messages %}
-            {% for message in messages %}
-                <div class="alert-message alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}">
-                    <div class="alert-icon">
-                        <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
-                    </div>
-                    <div class="alert-content">
-                        <div class="alert-title">
-                            {% if message.tags == 'success' %}
-                                Success!
-                            {% elif message.tags == 'error' %}
-                                Error!
-                            {% else %}
-                                Info
-                            {% endif %}
-                        </div>
-                        <p>{{ message|safe }}</p>
-                    </div>
+        {% for message in messages %}
+        <div class="alert-message alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}">
+            <div class="alert-icon">
+                <i
+                    class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+            </div>
+            <div class="alert-content">
+                <div class="alert-title">
+                    {% if message.tags == 'success' %}
+                    Success!
+                    {% elif message.tags == 'error' %}
+                    Error!
+                    {% else %}
+                    Info
+                    {% endif %}
                 </div>
-            {% endfor %}
+                <p>{{ message|safe }}</p>
+            </div>
+        </div>
+        {% endfor %}
         {% endif %}
     </div>
 
     <header class="bank-header">
-        <h1>Skybridge Finance</h1>
+        <h1>Axos Finance</h1>
         <div class="header-actions">
             <div class="notification-bell" onclick="toggleNotifications()">
                 <i class="fas fa-bell"></i>
@@ -1111,7 +1158,8 @@ s0.parentNode.insertBefore(s1,s0);
             </button>
         </div>
         <div class="user-details">
-            <p><i class="fas fa-user"></i><strong>{{ user_profile.first_name }} {{ user_profile.last_name }}</strong></p>
+            <p><i class="fas fa-user"></i><strong>{{ user_profile.first_name }} {{ user_profile.last_name }}</strong>
+            </p>
             <p><i class="fas fa-envelope"></i>{{ user_profile.email }}</p>
             <p><i class="fas fa-id-card"></i>Account: {{ user_profile.account_number|default:"N/A" }}</p>
         </div>
@@ -1121,7 +1169,8 @@ s0.parentNode.insertBefore(s1,s0);
         </div>
         <ul>
             <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li class="active"><a href="{% url 'investment_dashboard' %}"><i class="fas fa-chart-line"></i> Investment Dashboard</a></li>
+            <li class="active"><a href="{% url 'investment_dashboard' %}"><i class="fas fa-chart-line"></i> Investment
+                    Dashboard</a></li>
             <li><a href="{% url 'investment_plans' %}"><i class="fas fa-coins"></i> Investment Plans</a></li>
             <li><a href="{% url 'create_investment' %}"><i class="fas fa-plus-circle"></i> New Investment</a></li>
             <li><a href="{% url 'bank_transfer' %}"><i class="fas fa-exchange-alt"></i> Transfer Funds</a></li>
@@ -1146,7 +1195,7 @@ s0.parentNode.insertBefore(s1,s0);
             <h1>Investment Dashboard</h1>
             <p>Track your investments, monitor performance, and manage your portfolio in real-time</p>
         </div>
-        
+
         <!-- Stats Grid -->
         <div class="stats-grid">
             <div class="stat-card">
@@ -1159,7 +1208,7 @@ s0.parentNode.insertBefore(s1,s0);
                 <div class="stat-value">${{ total_invested|intcomma|default:"0" }}</div>
                 <div class="stat-subtitle">Across all active investments</div>
             </div>
-            
+
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-name">Current Value</div>
@@ -1170,7 +1219,7 @@ s0.parentNode.insertBefore(s1,s0);
                 <div class="stat-value">${{ total_current_value|floatformat:2|intcomma|default:"0" }}</div>
                 <div class="stat-subtitle">Based on current progress</div>
             </div>
-            
+
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-name">Current Profit</div>
@@ -1178,7 +1227,8 @@ s0.parentNode.insertBefore(s1,s0);
                         <i class="fas fa-briefcase"></i>
                     </div>
                 </div>
-                <div class="stat-value {% if total_current_profit >= 0 %}profit-positive{% else %}profit-negative{% endif %}">
+                <div
+                    class="stat-value {% if total_current_profit >= 0 %}profit-positive{% else %}profit-negative{% endif %}">
                     ${{ total_current_profit|floatformat:2|intcomma|default:"0" }}
                 </div>
                 <div class="stat-subtitle">From active investments</div>
@@ -1219,7 +1269,8 @@ s0.parentNode.insertBefore(s1,s0);
                                 {% for investment_data in active_investments_data %}
                                 <tr>
                                     <td>
-                                        <a href="{% url 'investment_detail' investment_data.investment.id %}" class="investment-link">
+                                        <a href="{% url 'investment_detail' investment_data.investment.id %}"
+                                            class="investment-link">
                                             <i class="fas fa-chart-pie"></i>
                                             {{ investment_data.investment.investment_plan.name }}
                                         </a>
@@ -1230,7 +1281,8 @@ s0.parentNode.insertBefore(s1,s0);
                                             ${{ investment_data.current_value|floatformat:2|intcomma }}
                                         </div>
                                         <div style="font-size: 0.85rem; color: var(--text-light);">
-                                            Expected: ${{ investment_data.investment.max_expected_return|floatformat:2|intcomma }}
+                                            Expected: ${{
+                                            investment_data.investment.max_expected_return|floatformat:2|intcomma }}
                                         </div>
                                     </td>
                                     <td>
@@ -1244,17 +1296,22 @@ s0.parentNode.insertBefore(s1,s0);
                                     </td>
                                     <td>
                                         <div style="display: flex; align-items: center; gap: 10px;">
-                                            <div style="flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
-                                                <div style="height: 100%; background: var(--accent); width: {{ investment_data.progress_percentage }}%; border-radius: 3px;"></div>
+                                            <div
+                                                style="flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
+                                                <div
+                                                    style="height: 100%; background: var(--accent); width: {{ investment_data.progress_percentage }}%; border-radius: 3px;">
+                                                </div>
                                             </div>
-                                            <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-light);">
+                                            <span
+                                                style="font-size: 0.85rem; font-weight: 600; color: var(--text-light);">
                                                 {{ investment_data.progress_percentage|floatformat:1 }}%
                                             </span>
                                         </div>
                                     </td>
                                     <td class="action-column">
                                         <div class="action-buttons">
-                                            <a href="{% url 'investment_detail' investment_data.investment.id %}" class="btn-view">
+                                            <a href="{% url 'investment_detail' investment_data.investment.id %}"
+                                                class="btn-view">
                                                 <i class="fas fa-eye"></i> View
                                             </a>
                                         </div>
@@ -1272,7 +1329,8 @@ s0.parentNode.insertBefore(s1,s0);
                     <div class="empty-state">
                         <i class="fas fa-coins" style="color: var(--primary);"></i>
                         <h3>No Active Investments</h3>
-                        <p>You don't have any active investments. Start your investment journey today and watch your wealth grow!</p>
+                        <p>You don't have any active investments. Start your investment journey today and watch your
+                            wealth grow!</p>
                         <a href="{% url 'investment_plans' %}" class="btn-primary">
                             <i class="fas fa-plus"></i> Start Investing
                         </a>
@@ -1314,7 +1372,8 @@ s0.parentNode.insertBefore(s1,s0);
                                 {% for investment_data in completed_investments_data %}
                                 <tr>
                                     <td>
-                                        <a href="{% url 'investment_detail' investment_data.investment.id %}" class="investment-link">
+                                        <a href="{% url 'investment_detail' investment_data.investment.id %}"
+                                            class="investment-link">
                                             <i class="fas fa-chart-line"></i>
                                             {{ investment_data.investment.investment_plan.name }}
                                         </a>
@@ -1334,7 +1393,8 @@ s0.parentNode.insertBefore(s1,s0);
                                         </div>
                                     </td>
                                     <td>
-                                        {{ investment_data.investment.start_date|date:"M d" }} - {{ investment_data.investment.end_date|date:"M d, Y" }}
+                                        {{ investment_data.investment.start_date|date:"M d" }} - {{
+                                        investment_data.investment.end_date|date:"M d, Y" }}
                                     </td>
                                     <td>
                                         <span class="status-badge status-completed">
@@ -1344,7 +1404,8 @@ s0.parentNode.insertBefore(s1,s0);
                                     </td>
                                     <td class="action-column">
                                         <div class="action-buttons">
-                                            <a href="{% url 'investment_detail' investment_data.investment.id %}" class="btn-view">
+                                            <a href="{% url 'investment_detail' investment_data.investment.id %}"
+                                                class="btn-view">
                                                 <i class="fas fa-file-alt"></i> Details
                                             </a>
                                         </div>
@@ -1372,7 +1433,8 @@ s0.parentNode.insertBefore(s1,s0);
                     <a href="{% url 'create_investment' %}" class="btn-primary">
                         <i class="fas fa-plus-circle"></i> New Investment
                     </a>
-                    <a href="{% url 'investment_plans' %}" class="btn-primary" style="background: linear-gradient(135deg, #6C757D 0%, #495057 100%);">
+                    <a href="{% url 'investment_plans' %}" class="btn-primary"
+                        style="background: linear-gradient(135deg, #6C757D 0%, #495057 100%);">
                         <i class="fas fa-chart-bar"></i> View All Plans
                     </a>
                 </div>
@@ -1427,14 +1489,14 @@ s0.parentNode.insertBefore(s1,s0);
         function updateStockMarquee() {
             const marquee = document.getElementById("stockMarquee");
             if (!marquee) return;
-            
+
             let stockHTML = '';
-            
+
             stockData.forEach((stock) => {
                 const isPositive = stock.change >= 0;
                 const changeClass = isPositive ? 'stock-up' : 'stock-down';
                 const changeIcon = isPositive ? '▲' : '▼';
-                
+
                 stockHTML += `
                     <div class="stock-item">
                         <span class="stock-symbol">${stock.symbol}</span>
@@ -1445,9 +1507,9 @@ s0.parentNode.insertBefore(s1,s0);
                     </div>
                 `;
             });
-            
+
             marquee.innerHTML = stockHTML;
-            
+
             // Simulate price updates
             stockData.forEach(stock => {
                 const change = (Math.random() - 0.5) * 1.5;
@@ -1457,11 +1519,11 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         // Auto-hide messages after 5 seconds
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Initialize stock ticker
             updateStockMarquee();
             setInterval(updateStockMarquee, 10000);
-            
+
             // Auto-hide messages
             setTimeout(() => {
                 const messages = document.querySelectorAll('.alert-message');
@@ -1470,19 +1532,19 @@ s0.parentNode.insertBefore(s1,s0);
                     setTimeout(() => msg.remove(), 500);
                 });
             }, 5000);
-            
+
             // Close sidebar when clicking outside
-            document.addEventListener('click', function(event) {
+            document.addEventListener('click', function (event) {
                 const sidebar = document.getElementById('sidebar');
                 const openBtn = document.querySelector('.open-sidebar-btn');
-                
-                if (sidebar.classList.contains('open') && 
-                    !sidebar.contains(event.target) && 
+
+                if (sidebar.classList.contains('open') &&
+                    !sidebar.contains(event.target) &&
                     !openBtn.contains(event.target)) {
                     toggleSidebar();
                 }
             });
-            
+
             // Set current page as active in bottom nav
             const currentPage = window.location.pathname;
             const navItems = document.querySelectorAll('.nav-item');
@@ -1493,20 +1555,21 @@ s0.parentNode.insertBefore(s1,s0);
             });
         });
     </script>
-    
+
     <!-- Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
+            window.addEventListener('load', function () {
                 navigator.serviceWorker.register("{% static 'sw.js' %}")
-                .then(function(registration) {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                })
-                .catch(function(error) {
-                    console.log('ServiceWorker registration failed: ', error);
-                });
+                    .then(function (registration) {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(function (error) {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
             });
         }
     </script>
 </body>
+
 </html>

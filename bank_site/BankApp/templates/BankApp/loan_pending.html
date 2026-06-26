@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loan Pending Review - Skybridge Finance</title>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fc33962525f11c38faecba/1jo0ij1kg';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <title>Loan Pending Review - Axos Finance</title>
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6a3e914d0858271d4af4e711/1js26f6la';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-    
+
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
@@ -294,7 +295,9 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Progress Info */
@@ -653,6 +656,7 @@ s0.parentNode.insertBefore(s1,s0);
         }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <header class="header">
@@ -660,35 +664,35 @@ s0.parentNode.insertBefore(s1,s0);
             <div class="logo-icon">
                 <i class="fas fa-university"></i>
             </div>
-            <div class="logo-text">Skybridge<span>Finance</span></div>
+            <div class="logo-text">Axos<span>Finance</span></div>
         </div>
-        
+
         <nav class="nav-menu">
             <a href="/" class="nav-item">Dashboard</a>
             <a href="#" class="nav-item">Accounts</a>
             <a href="{% url 'apply_loan' %}" class="nav-item active">Loans</a>
             <a href="#" class="nav-item">Support</a>
         </nav>
-        
+
         <div class="user-info">
             <div class="user-avatar">
                 {% if user and user.username %}
-                    {{ user.username.0|upper }}
+                {{ user.username.0|upper }}
                 {% else %}
-                    U
+                U
                 {% endif %}
             </div>
             <span>
                 {% if user %}
-                    {% if user.get_full_name %}
-                        {{ user.get_full_name }}
-                    {% elif user.username %}
-                        {{ user.username }}
-                    {% else %}
-                        User
-                    {% endif %}
+                {% if user.get_full_name %}
+                {{ user.get_full_name }}
+                {% elif user.username %}
+                {{ user.username }}
                 {% else %}
-                    Guest
+                User
+                {% endif %}
+                {% else %}
+                Guest
                 {% endif %}
             </span>
         </div>
@@ -698,158 +702,161 @@ s0.parentNode.insertBefore(s1,s0);
     <main class="main-container">
         <div class="pending-container">
             {% if recent_loan %}
-                <!-- Pending Loan Status Card -->
-                <div class="pending-card">
-                    <div class="status-icon">
-                        <i class="fas fa-file-invoice-dollar"></i>
-                    </div>
-                    
-                    <h2>Your Loan Is Being Reviewed</h2>
-                    <p>Our team is currently reviewing your loan application. This process usually takes 1-2 business days. You will be notified via email and SMS once a decision has been made.</p>
-                    
-                    <div class="loader-container">
-                        <div class="loader"></div>
-                    </div>
-                    
-                    <div class="progress-info">
-                        <h3><i class="fas fa-tasks"></i> Application Progress</h3>
-                        
-                        <div class="timeline">
-                            <div class="timeline-step">
-                                <div class="step-icon completed">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <div class="step-label completed">Application Submitted</div>
+            <!-- Pending Loan Status Card -->
+            <div class="pending-card">
+                <div class="status-icon">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+
+                <h2>Your Loan Is Being Reviewed</h2>
+                <p>Our team is currently reviewing your loan application. This process usually takes 1-2 business days.
+                    You will be notified via email and SMS once a decision has been made.</p>
+
+                <div class="loader-container">
+                    <div class="loader"></div>
+                </div>
+
+                <div class="progress-info">
+                    <h3><i class="fas fa-tasks"></i> Application Progress</h3>
+
+                    <div class="timeline">
+                        <div class="timeline-step">
+                            <div class="step-icon completed">
+                                <i class="fas fa-check"></i>
                             </div>
-                            
-                            <div class="timeline-step">
-                                <div class="step-icon completed">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <div class="step-label completed">Document Review</div>
+                            <div class="step-label completed">Application Submitted</div>
+                        </div>
+
+                        <div class="timeline-step">
+                            <div class="step-icon completed">
+                                <i class="fas fa-check"></i>
                             </div>
-                            
-                            <div class="timeline-step">
-                                <div class="step-icon current">
-                                    <i class="fas fa-sync-alt"></i>
-                                </div>
-                                <div class="step-label current">Under Review</div>
+                            <div class="step-label completed">Document Review</div>
+                        </div>
+
+                        <div class="timeline-step">
+                            <div class="step-icon current">
+                                <i class="fas fa-sync-alt"></i>
                             </div>
-                            
-                            <div class="timeline-step">
-                                <div class="step-icon">
-                                    <i class="far fa-clock"></i>
-                                </div>
-                                <div class="step-label">Decision</div>
+                            <div class="step-label current">Under Review</div>
+                        </div>
+
+                        <div class="timeline-step">
+                            <div class="step-icon">
+                                <i class="far fa-clock"></i>
                             </div>
+                            <div class="step-label">Decision</div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Loan Details Card -->
-                <div class="loan-details-card">
-                    <h3><i class="fas fa-info-circle"></i> Application Details</h3>
-                    
-                    <div class="loan-grid">
-                        <div class="loan-item">
-                            <div class="loan-label">Loan Amount</div>
-                            <div class="loan-value">${{ recent_loan.amount|floatformat:2 }}</div>
-                            <div class="loan-subtext">Principal amount</div>
-                        </div>
-                        
-                        <div class="loan-item">
-                            <div class="loan-label">Loan Type</div>
-                            <div class="loan-value">{{ recent_loan.get_loan_type_display }}</div>
-                            <div class="loan-subtext">Type of loan</div>
-                        </div>
-                        
-                        {% if recent_loan.purpose %}
-                        <div class="loan-item">
-                            <div class="loan-label">Purpose</div>
-                            <div class="loan-value">{{ recent_loan.get_purpose_display }}</div>
-                            <div class="loan-subtext">Loan purpose</div>
-                        </div>
-                        {% endif %}
-                        
-                        <div class="loan-item">
-                            <div class="loan-label">Duration</div>
-                            <div class="loan-value">{{ recent_loan.duration }} months</div>
-                            <div class="loan-subtext">Repayment period</div>
-                        </div>
-                        
-                        <div class="loan-item">
-                            <div class="loan-label">Interest Rate</div>
-                            <div class="loan-value">{{ recent_loan.interest }}%</div>
-                            <div class="loan-subtext">Annual percentage rate</div>
-                        </div>
-                        
-                        <div class="loan-item">
-                            <div class="loan-label">Total Payable</div>
-                            <div class="loan-value">${{ recent_loan.total_payable|floatformat:2 }}</div>
-                            <div class="loan-subtext">Including interest</div>
-                        </div>
-                        
-                        {% if recent_loan.annual_income %}
-                        <div class="loan-item">
-                            <div class="loan-label">Annual Income</div>
-                            <div class="loan-value">${{ recent_loan.annual_income|floatformat:2 }}</div>
-                            <div class="loan-subtext">Applicant income</div>
-                        </div>
-                        {% endif %}
-                        
-                        {% if recent_loan.requested_date %}
-                        <div class="loan-item">
-                            <div class="loan-label">Requested Date</div>
-                            <div class="loan-value">{{ recent_loan.requested_date|date:"M d, Y" }}</div>
-                            <div class="loan-subtext">Disbursement date</div>
-                        </div>
-                        {% endif %}
+            <!-- Loan Details Card -->
+            <div class="loan-details-card">
+                <h3><i class="fas fa-info-circle"></i> Application Details</h3>
+
+                <div class="loan-grid">
+                    <div class="loan-item">
+                        <div class="loan-label">Loan Amount</div>
+                        <div class="loan-value">${{ recent_loan.amount|floatformat:2 }}</div>
+                        <div class="loan-subtext">Principal amount</div>
                     </div>
-                    
-                    <div class="application-id">
-                        <div class="id-label">Application ID:</div>
-                        <div class="id-value">#{{ recent_loan.id|stringformat:"06d" }}</div>
+
+                    <div class="loan-item">
+                        <div class="loan-label">Loan Type</div>
+                        <div class="loan-value">{{ recent_loan.get_loan_type_display }}</div>
+                        <div class="loan-subtext">Type of loan</div>
                     </div>
+
+                    {% if recent_loan.purpose %}
+                    <div class="loan-item">
+                        <div class="loan-label">Purpose</div>
+                        <div class="loan-value">{{ recent_loan.get_purpose_display }}</div>
+                        <div class="loan-subtext">Loan purpose</div>
+                    </div>
+                    {% endif %}
+
+                    <div class="loan-item">
+                        <div class="loan-label">Duration</div>
+                        <div class="loan-value">{{ recent_loan.duration }} months</div>
+                        <div class="loan-subtext">Repayment period</div>
+                    </div>
+
+                    <div class="loan-item">
+                        <div class="loan-label">Interest Rate</div>
+                        <div class="loan-value">{{ recent_loan.interest }}%</div>
+                        <div class="loan-subtext">Annual percentage rate</div>
+                    </div>
+
+                    <div class="loan-item">
+                        <div class="loan-label">Total Payable</div>
+                        <div class="loan-value">${{ recent_loan.total_payable|floatformat:2 }}</div>
+                        <div class="loan-subtext">Including interest</div>
+                    </div>
+
+                    {% if recent_loan.annual_income %}
+                    <div class="loan-item">
+                        <div class="loan-label">Annual Income</div>
+                        <div class="loan-value">${{ recent_loan.annual_income|floatformat:2 }}</div>
+                        <div class="loan-subtext">Applicant income</div>
+                    </div>
+                    {% endif %}
+
+                    {% if recent_loan.requested_date %}
+                    <div class="loan-item">
+                        <div class="loan-label">Requested Date</div>
+                        <div class="loan-value">{{ recent_loan.requested_date|date:"M d, Y" }}</div>
+                        <div class="loan-subtext">Disbursement date</div>
+                    </div>
+                    {% endif %}
                 </div>
 
-                <!-- Action Buttons -->
+                <div class="application-id">
+                    <div class="id-label">Application ID:</div>
+                    <div class="id-value">#{{ recent_loan.id|stringformat:"06d" }}</div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Return to Dashboard
+                </a>
+                <a href="{% url 'apply_loan' %}" class="btn btn-secondary">
+                    <i class="fas fa-plus-circle"></i> Apply for Another Loan
+                </a>
+            </div>
+            {% else %}
+            <!-- No Pending Loans Message -->
+            <div class="pending-card">
+                <div class="status-icon" style="background-color: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+
+                <h2>No Pending Applications</h2>
+                <p>You don't have any loan applications currently pending review. If you've recently submitted an
+                    application, it may have already been processed.</p>
+
                 <div class="action-buttons">
-                    <a href="/" class="btn btn-primary">
+                    <a href="{% url 'apply_loan' %}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> Apply for a Loan
+                    </a>
+                    <a href="/" class="btn btn-secondary">
                         <i class="fas fa-home"></i> Return to Dashboard
                     </a>
-                    <a href="{% url 'apply_loan' %}" class="btn btn-secondary">
-                        <i class="fas fa-plus-circle"></i> Apply for Another Loan
-                    </a>
                 </div>
-            {% else %}
-                <!-- No Pending Loans Message -->
-                <div class="pending-card">
-                    <div class="status-icon" style="background-color: rgba(59, 130, 246, 0.1); color: #3b82f6;">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    
-                    <h2>No Pending Applications</h2>
-                    <p>You don't have any loan applications currently pending review. If you've recently submitted an application, it may have already been processed.</p>
-                    
-                    <div class="action-buttons">
-                        <a href="{% url 'apply_loan' %}" class="btn btn-primary">
-                            <i class="fas fa-plus-circle"></i> Apply for a Loan
-                        </a>
-                        <a href="/" class="btn btn-secondary">
-                            <i class="fas fa-home"></i> Return to Dashboard
-                        </a>
-                    </div>
-                </div>
+            </div>
             {% endif %}
 
             <!-- Loan History Section -->
             {% if user_loans %}
             <div class="loan-history">
                 <h3><i class="fas fa-history"></i> Loan History</h3>
-                
+
                 <div class="history-list">
                     {% for loan in user_loans %}
-                    <div class="history-item {% if loan.status == 'Pending' %}pending{% elif loan.status == 'Approved' %}approved{% elif loan.status == 'Rejected' %}rejected{% endif %}">
+                    <div
+                        class="history-item {% if loan.status == 'Pending' %}pending{% elif loan.status == 'Approved' %}approved{% elif loan.status == 'Rejected' %}rejected{% endif %}">
                         <div class="history-details">
                             <h4>${{ loan.amount|floatformat:2 }} - {{ loan.get_loan_type_display }}</h4>
                             <p>Submitted: {{ loan.submitted_at|date:"M d, Y H:i" }}</p>
@@ -881,42 +888,42 @@ s0.parentNode.insertBefore(s1,s0);
             <a href="#" class="footer-link">FAQs</a>
         </div>
         <div class="copyright">
-            &copy; 2024 Skybridge Finance. All rights reserved.
+            &copy; 2024 Axos Finance. All rights reserved.
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Handle user info display
             const userAvatar = document.querySelector('.user-avatar');
             const userDisplayName = document.querySelector('.user-info span');
-            
+
             // Fix empty avatar
             if (userAvatar && userAvatar.textContent.trim() === '') {
                 userAvatar.textContent = 'U';
             }
-            
+
             // Fix empty display name
             if (userDisplayName && userDisplayName.textContent.trim() === '') {
                 userDisplayName.textContent = 'User';
             }
-            
+
             // Animate loader if it exists
             const loader = document.querySelector('.loader');
             if (loader) {
                 let colorIndex = 0;
                 const colors = ['#0a192f', '#3b82f6', '#1e40af'];
-                
+
                 function changeLoaderColor() {
                     loader.style.borderTopColor = colors[colorIndex];
                     loader.style.borderRightColor = colors[colorIndex];
                     colorIndex = (colorIndex + 1) % colors.length;
                 }
-                
+
                 // Change loader color every 2 seconds
                 setInterval(changeLoaderColor, 2000);
             }
-            
+
             // Update timeline progress every 10 seconds (for demo)
             const currentStep = document.querySelector('.step-icon.current');
             if (currentStep) {
@@ -926,19 +933,19 @@ s0.parentNode.insertBefore(s1,s0);
                         currentStep.classList.remove('current');
                         currentStep.classList.add('completed');
                         currentStep.innerHTML = '<i class="fas fa-check"></i>';
-                        
+
                         const currentLabel = document.querySelector('.step-label.current');
                         if (currentLabel) {
                             currentLabel.classList.remove('current');
                             currentLabel.classList.add('completed');
                         }
-                        
+
                         // Update next step
                         const nextStep = currentStep.parentElement.nextElementSibling;
                         if (nextStep) {
                             const nextIcon = nextStep.querySelector('.step-icon');
                             const nextLabel = nextStep.querySelector('.step-label');
-                            
+
                             if (nextIcon) {
                                 nextIcon.classList.add('current');
                                 nextIcon.innerHTML = '<i class="fas fa-sync-alt"></i>';
@@ -952,22 +959,23 @@ s0.parentNode.insertBefore(s1,s0);
             }
         });
     </script>
-        <script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("{% static 'sw.js' %}")
-        .then(registration => {
-            console.log('✅ Service Worker Registered:', registration);
-            
-            // Check for updates
-            registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                console.log('🔄 New service worker found:', newWorker);
-            });
-        })
-        .catch(error => {
-            console.log('❌ Service Worker registration failed:', error);
-        });
-    }
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{% static 'sw.js' %}")
+                .then(registration => {
+                    console.log('✅ Service Worker Registered:', registration);
+
+                    // Check for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        console.log('🔄 New service worker found:', newWorker);
+                    });
+                })
+                .catch(error => {
+                    console.log('❌ Service Worker registration failed:', error);
+                });
+        }
     </script>
 </body>
+
 </html>

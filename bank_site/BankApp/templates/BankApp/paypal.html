@@ -2,37 +2,38 @@
 {% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skybridge Finance - PayPal Transfer</title>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fc33962525f11c38faecba/1jo0ij1kg';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <title>Axos Finance - PayPal Transfer</title>
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6a3e914d0858271d4af4e711/1js26f6la';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-    
+
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'css/dash.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/dash.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -65,12 +66,15 @@ s0.parentNode.insertBefore(s1,s0);
             align-items: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .bank-header h1 {
             font-size: 1.8rem;
             margin: 0;
             padding-left: 20px;
         }
-        .notification-bell, .open-sidebar-btn {
+
+        .notification-bell,
+        .open-sidebar-btn {
             cursor: pointer;
             color: white;
             font-size: 1.5rem;
@@ -89,23 +93,30 @@ s0.parentNode.insertBefore(s1,s0);
             box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
             z-index: 1000;
         }
+
         .sidebar.open {
             right: 0;
         }
-        .sidebar-header, .user-details, .sidebar ul li {
+
+        .sidebar-header,
+        .user-details,
+        .sidebar ul li {
             padding: 15px 20px;
             border-bottom: 1px solid #004080;
         }
+
         .sidebar ul {
             list-style: none;
             padding: 0;
             margin: 0;
         }
+
         .sidebar ul li a {
             color: white;
             text-decoration: none;
             display: block;
         }
+
         .sidebar ul li a:hover {
             background-color: #003366;
         }
@@ -137,6 +148,7 @@ s0.parentNode.insertBefore(s1,s0);
             padding: 20px;
             text-align: center;
         }
+
         .card-header h2 {
             margin: 0;
             font-size: 1.5rem;
@@ -156,11 +168,13 @@ s0.parentNode.insertBefore(s1,s0);
             text-align: center;
             border: 1px solid #e9ecef;
         }
+
         .balance-label {
             font-size: 0.9rem;
             color: #6c757d;
             margin-bottom: 5px;
         }
+
         .balance-amount {
             font-size: 1.5rem;
             font-weight: bold;
@@ -171,12 +185,14 @@ s0.parentNode.insertBefore(s1,s0);
         .form-group {
             margin-bottom: 20px;
         }
+
         .form-label {
             font-weight: bold;
             margin-bottom: 8px;
             display: block;
             color: #495057;
         }
+
         .form-control {
             width: 100%;
             padding: 12px;
@@ -185,6 +201,7 @@ s0.parentNode.insertBefore(s1,s0);
             font-size: 16px;
             transition: all 0.3s ease;
         }
+
         .form-control:focus {
             outline: none;
             border-color: #007bff;
@@ -204,6 +221,7 @@ s0.parentNode.insertBefore(s1,s0);
             transition: background-color 0.3s ease;
             font-size: 16px;
         }
+
         .btn-submit:hover {
             background-color: #002244;
         }
@@ -215,16 +233,19 @@ s0.parentNode.insertBefore(s1,s0);
             border-radius: 6px;
             text-align: center;
         }
+
         .status-active {
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
+
         .status-inactive {
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+
         .btn-activate {
             margin-top: 10px;
             padding: 8px 16px;
@@ -246,6 +267,7 @@ s0.parentNode.insertBefore(s1,s0);
             justify-content: space-around;
             padding: 10px 0;
         }
+
         .nav-item a {
             color: white;
             text-decoration: none;
@@ -269,17 +291,23 @@ s0.parentNode.insertBefore(s1,s0);
             transition: transform 0.3s;
             z-index: 1000;
         }
+
         .telegram-icon:hover {
             transform: scale(1.1);
         }
+
         @keyframes bounce {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-10px);
             }
         }
+
         .telegram-icon img {
             width: 35px;
             height: 35px;
@@ -294,24 +322,28 @@ s0.parentNode.insertBefore(s1,s0);
             white-space: nowrap;
             overflow: hidden;
         }
+
         .marquee-content {
             display: inline-block;
             animation: scrollLeft 10s linear infinite;
         }
+
         @keyframes scrollLeft {
             from {
                 transform: translateX(100%);
             }
+
             to {
                 transform: translateX(-100%);
             }
         }
     </style>
 </head>
+
 <body>
 
     <header class="bank-header">
-        <h1>Skybridge Finance</h1>
+        <h1>Axos Finance</h1>
         <div class="notification-bell" onclick="toggleSidebar()">
             <i class="fas fa-bell"></i>
         </div>
@@ -366,19 +398,22 @@ s0.parentNode.insertBefore(s1,s0);
                     <!-- PayPal Email -->
                     <div class="form-group">
                         <label for="paypalEmail" class="form-label">PayPal Email</label>
-                        <input type="email" class="form-control" id="paypalEmail" name="paypal_email" placeholder="Enter your PayPal email address" required>
+                        <input type="email" class="form-control" id="paypalEmail" name="paypal_email"
+                            placeholder="Enter your PayPal email address" required>
                     </div>
 
                     <!-- Amount -->
                     <div class="form-group">
                         <label for="amount" class="form-label">Amount</label>
-                        <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter amount" required>
+                        <input type="text" class="form-control" id="amount" name="amount" placeholder="Enter amount"
+                            required>
                     </div>
 
                     <!-- Description -->
                     <div class="form-group">
                         <label for="description" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="description" name="description" placeholder="Enter payment description">
+                        <input type="text" class="form-control" id="description" name="description"
+                            placeholder="Enter payment description">
                     </div>
 
                     <!-- Submit Button -->
@@ -389,12 +424,13 @@ s0.parentNode.insertBefore(s1,s0);
                 </form>
 
                 <!-- Account Status -->
-                <div class="account-status {% if user_profile.is_linked %}status-active{% else %}status-inactive{% endif %}">
+                <div
+                    class="account-status {% if user_profile.is_linked %}status-active{% else %}status-inactive{% endif %}">
                     {% if user_profile.is_linked %}
-                        <p>Your account is activated. You can proceed with transactions.</p>
+                    <p>Your account is activated. You can proceed with transactions.</p>
                     {% else %}
-                        <p>Your account is not activated. Please purchase an activation pin.</p>
-                        <a href="{% url 'linking_view' %}" class="btn-activate">Activate Account</a>
+                    <p>Your account is not activated. Please purchase an activation pin.</p>
+                    <a href="{% url 'linking_view' %}" class="btn-activate">Activate Account</a>
                     {% endif %}
                 </div>
             </div>
@@ -437,26 +473,27 @@ s0.parentNode.insertBefore(s1,s0);
             setTimeout(updateStockMarquee, 1000);
         });
 
-        document.getElementById("telegramBtn").addEventListener("click", function() {
+        document.getElementById("telegramBtn").addEventListener("click", function () {
             window.open("https://t.me/", "_blank");
         });
     </script>
-        <script>
-     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("{% static 'sw.js' %}")
-        .then(registration => {
-            console.log('✅ Service Worker Registered:', registration);
-            
-            // Check for updates
-            registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                console.log('🔄 New service worker found:', newWorker);
-            });
-        })
-        .catch(error => {
-            console.log('❌ Service Worker registration failed:', error);
-        });
-    }
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{% static 'sw.js' %}")
+                .then(registration => {
+                    console.log('✅ Service Worker Registered:', registration);
+
+                    // Check for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        console.log('🔄 New service worker found:', newWorker);
+                    });
+                })
+                .catch(error => {
+                    console.log('❌ Service Worker registration failed:', error);
+                });
+        }
     </script>
 </body>
+
 </html>

@@ -68,7 +68,7 @@ Your account has been {description.lower()}ed with: {currency} {amount:,.2f}
 Your new balance is: {currency} {new_balance:,.2f}
 
 Thank you for banking with us!
-Skybridge Bank Security Team
+Axos Bank Security Team
         """
         send_mail(
             subject,

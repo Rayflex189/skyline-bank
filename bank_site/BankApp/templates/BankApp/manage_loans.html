@@ -2,32 +2,33 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Loans - Admin</title>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fc33962525f11c38faecba/1jo0ij1kg';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6a3e914d0858271d4af4e711/1js26f6la';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-    
+
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
@@ -538,12 +539,12 @@ s0.parentNode.insertBefore(s1,s0);
                 flex-direction: column;
                 gap: 20px;
             }
-            
+
             .admin-nav {
                 flex-wrap: wrap;
                 justify-content: center;
             }
-            
+
             .user-info {
                 border-left: none;
                 border-top: 2px solid var(--border-color);
@@ -552,95 +553,96 @@ s0.parentNode.insertBefore(s1,s0);
                 width: 100%;
                 justify-content: center;
             }
-            
+
             .main-container {
                 padding: 20px;
             }
-            
+
             .quick-stats {
                 grid-template-columns: 1fr;
             }
-            
+
             .filter-row {
                 flex-direction: column;
             }
-            
+
             .search-container {
                 min-width: 100%;
             }
-            
+
             .table-header {
                 flex-direction: column;
                 gap: 15px;
                 align-items: stretch;
             }
-            
+
             .table-actions {
                 flex-direction: column;
             }
-            
+
             .action-buttons-cell {
                 flex-direction: column;
             }
-            
+
             .btn-sm {
                 width: 100%;
                 justify-content: center;
             }
         }
-        
-.user-avatar {
-    width: 42px;
-    height: 42px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 600;
-    font-size: 18px;
-    flex-shrink: 0;
-}
 
-.user-avatar.with-image {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
 
-.user-info:hover {
-    cursor: pointer;
-}
+        .user-avatar.with-image {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
 
-.user-menu-dropdown {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    min-width: 200px;
-    z-index: 1000;
-    margin-top: 10px;
-}
+        .user-info:hover {
+            cursor: pointer;
+        }
 
-.user-menu-dropdown.show {
-    display: block;
-}
+        .user-menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            z-index: 1000;
+            margin-top: 10px;
+        }
+
+        .user-menu-dropdown.show {
+            display: block;
+        }
     </style>
 </head>
+
 <body>
     <!-- Messages Container -->
     <div class="alert-container">
         {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
         {% endif %}
     </div>
 
@@ -651,11 +653,11 @@ s0.parentNode.insertBefore(s1,s0);
                 <i class="fas fa-hand-holding-usd"></i>
             </div>
             <div class="logo-text">
-                <h1>SkyBridge Finance</h1>
+                <h1>Axos Finance</h1>
                 <p>Loan Management</p>
             </div>
         </div>
-        
+
         <nav class="admin-nav">
             <a href="{% url 'admin_dashboard' %}" class="nav-link">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
@@ -667,77 +669,85 @@ s0.parentNode.insertBefore(s1,s0);
                 <i class="fas fa-cog"></i> Django Admin
             </a>
         </nav>
-        
-        <div class="user-info" style="position: relative;">
-    <div style="display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="toggleUserMenu()">
-        <!-- Profile Picture -->
-        {% if user.userprofile.profile_picture %}
-            <div class="user-avatar" style="background-image: url('{{ user.userprofile.profile_picture.url }}'); background-size: cover; background-position: center;">
-                <span style="display: none;">{{ user.email|slice:":1"|upper }}</span>
-            </div>
-        {% else %}
-            <div class="user-avatar">
-                {{ user.email|slice:":1"|upper }}
-            </div>
-        {% endif %}
-        
-        <!-- User Details -->
-        <div>
-            <div style="font-weight: 600; font-size: 14px;">
-                {{ user.get_full_name|default:user.username }}
-            </div>
-            <div style="font-size: 12px; color: var(--text-light);">
-                {{ user.email|truncatechars:25 }}
-            </div>
-        </div>
-        <i class="fas fa-chevron-down" style="font-size: 12px; color: var(--text-light);"></i>
-    </div>
-    
-    <!-- User Menu Dropdown -->
-    <div id="userMenu" style="display: none; position: absolute; top: 100%; right: 0; background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); min-width: 200px; z-index: 1000; margin-top: 10px;">
-        <div style="padding: 20px; border-bottom: 1px solid var(--border-color);">
-            <div style="font-weight: 600; margin-bottom: 5px;">{{ user.get_full_name|default:user.username }}</div>
-            <div style="font-size: 12px; color: var(--text-light); margin-bottom: 10px;">{{ user.email }}</div>
-            <div style="font-size: 11px; color: var(--accent-blue);">
-                <i class="fas fa-shield-alt"></i> 
-                {% if user.is_superuser %}Super Administrator{% elif user.is_staff %}Administrator{% else %}User{% endif %}
-            </div>
-        </div>
-        <div style="padding: 10px 0;">
-            <a href="{% url 'profile' %}" style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--text-dark); text-decoration: none; transition: background 0.3s;">
-                <i class="fas fa-user"></i> My Profile
-            </a>
-            <a href="{% url 'reset_profile' %}" style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--text-dark); text-decoration: none; transition: background 0.3s;">
-                <i class="fas fa-cog"></i> Settings
-            </a>
-            <a href="{% url 'admin:index' %}" style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--text-dark); text-decoration: none; transition: background 0.3s;">
-                <i class="fas fa-cogs"></i> Django Admin
-            </a>
-        </div>
-        <div style="border-top: 1px solid var(--border-color); padding: 10px 0;">
-            <a href="{% url 'LogOut' %}" style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--danger-color); text-decoration: none; transition: background 0.3s;">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-        </div>
-    </div>
-</div>
 
-<script>
-    function toggleUserMenu() {
-        const menu = document.getElementById('userMenu');
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', function(event) {
-        const menu = document.getElementById('userMenu');
-        const userInfo = event.target.closest('.user-info');
-        
-        if (menu && !userInfo) {
-            menu.style.display = 'none';
-        }
-    });
-</script>
+        <div class="user-info" style="position: relative;">
+            <div style="display: flex; align-items: center; gap: 12px; cursor: pointer;" onclick="toggleUserMenu()">
+                <!-- Profile Picture -->
+                {% if user.userprofile.profile_picture %}
+                <div class="user-avatar"
+                    style="background-image: url('{{ user.userprofile.profile_picture.url }}'); background-size: cover; background-position: center;">
+                    <span style="display: none;">{{ user.email|slice:":1"|upper }}</span>
+                </div>
+                {% else %}
+                <div class="user-avatar">
+                    {{ user.email|slice:":1"|upper }}
+                </div>
+                {% endif %}
+
+                <!-- User Details -->
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">
+                        {{ user.get_full_name|default:user.username }}
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-light);">
+                        {{ user.email|truncatechars:25 }}
+                    </div>
+                </div>
+                <i class="fas fa-chevron-down" style="font-size: 12px; color: var(--text-light);"></i>
+            </div>
+
+            <!-- User Menu Dropdown -->
+            <div id="userMenu"
+                style="display: none; position: absolute; top: 100%; right: 0; background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); min-width: 200px; z-index: 1000; margin-top: 10px;">
+                <div style="padding: 20px; border-bottom: 1px solid var(--border-color);">
+                    <div style="font-weight: 600; margin-bottom: 5px;">{{ user.get_full_name|default:user.username }}
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-light); margin-bottom: 10px;">{{ user.email }}</div>
+                    <div style="font-size: 11px; color: var(--accent-blue);">
+                        <i class="fas fa-shield-alt"></i>
+                        {% if user.is_superuser %}Super Administrator{% elif user.is_staff %}Administrator{% else
+                        %}User{% endif %}
+                    </div>
+                </div>
+                <div style="padding: 10px 0;">
+                    <a href="{% url 'profile' %}"
+                        style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--text-dark); text-decoration: none; transition: background 0.3s;">
+                        <i class="fas fa-user"></i> My Profile
+                    </a>
+                    <a href="{% url 'reset_profile' %}"
+                        style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--text-dark); text-decoration: none; transition: background 0.3s;">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                    <a href="{% url 'admin:index' %}"
+                        style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--text-dark); text-decoration: none; transition: background 0.3s;">
+                        <i class="fas fa-cogs"></i> Django Admin
+                    </a>
+                </div>
+                <div style="border-top: 1px solid var(--border-color); padding: 10px 0;">
+                    <a href="{% url 'LogOut' %}"
+                        style="display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--danger-color); text-decoration: none; transition: background 0.3s;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function toggleUserMenu() {
+                const menu = document.getElementById('userMenu');
+                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            }
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function (event) {
+                const menu = document.getElementById('userMenu');
+                const userInfo = event.target.closest('.user-info');
+
+                if (menu && !userInfo) {
+                    menu.style.display = 'none';
+                }
+            });
+        </script>
     </header>
 
     <!-- Main Content -->
@@ -784,31 +794,30 @@ s0.parentNode.insertBefore(s1,s0);
                 <div class="filter-row">
                     <div class="search-container">
                         <i class="fas fa-search"></i>
-                        <input type="text" name="q" class="search-input" 
-                               placeholder="Search by name, email, or loan ID..." 
-                               value="{{ search_query }}">
+                        <input type="text" name="q" class="search-input"
+                            placeholder="Search by name, email, or loan ID..." value="{{ search_query }}">
                     </div>
-                    
+
                     <div class="filter-group">
-                        <button type="button" class="filter-btn {% if not status_filter %}active{% endif %}" 
-                                onclick="setFilter('status', '')">
+                        <button type="button" class="filter-btn {% if not status_filter %}active{% endif %}"
+                            onclick="setFilter('status', '')">
                             <i class="fas fa-filter"></i> All
                         </button>
-                        <button type="button" class="filter-btn {% if status_filter == 'Pending' %}active{% endif %}" 
-                                onclick="setFilter('status', 'Pending')">
+                        <button type="button" class="filter-btn {% if status_filter == 'Pending' %}active{% endif %}"
+                            onclick="setFilter('status', 'Pending')">
                             <i class="fas fa-clock"></i> Pending
                         </button>
-                        <button type="button" class="filter-btn {% if status_filter == 'Approved' %}active{% endif %}" 
-                                onclick="setFilter('status', 'Approved')">
+                        <button type="button" class="filter-btn {% if status_filter == 'Approved' %}active{% endif %}"
+                            onclick="setFilter('status', 'Approved')">
                             <i class="fas fa-check"></i> Approved
                         </button>
-                        <button type="button" class="filter-btn {% if status_filter == 'Rejected' %}active{% endif %}" 
-                                onclick="setFilter('status', 'Rejected')">
+                        <button type="button" class="filter-btn {% if status_filter == 'Rejected' %}active{% endif %}"
+                            onclick="setFilter('status', 'Rejected')">
                             <i class="fas fa-times"></i> Rejected
                         </button>
                     </div>
                 </div>
-                
+
                 <input type="hidden" name="status" id="statusFilter" value="{{ status_filter }}">
             </form>
         </div>
@@ -833,13 +842,13 @@ s0.parentNode.insertBefore(s1,s0);
                     </form>
                 </div>
             </div>
-            
+
             <div class="bulk-actions">
                 <input type="checkbox" id="selectAll" class="bulk-checkbox">
                 <label for="selectAll">Select All</label>
                 <span id="selectedCount" style="margin-left: auto; color: var(--text-light);">0 selected</span>
             </div>
-            
+
             <div class="table-responsive">
                 {% if loans %}
                 <table class="loan-table">
@@ -859,7 +868,7 @@ s0.parentNode.insertBefore(s1,s0);
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    
+
                     <tbody id="loanTableBody">
                         {% for loan in loans %}
                         <tr>
@@ -889,19 +898,19 @@ s0.parentNode.insertBefore(s1,s0);
                                         {% elif loan.status == 'Approved' %}fa-check
                                         {% else %}fa-times
                                         {% endif %}">
-                                    </i> 
+                                    </i>
                                     {{ loan.status }}
                                 </span>
                             </td>
                             <td>{{ loan.submitted_at|date:"M d, Y" }}</td>
                             <td class="action-buttons-cell">
                                 {% if loan.status == 'Pending' %}
-                                <a href="{% url 'approve_loan' loan.id %}" class="btn btn-success btn-sm" 
-                                   onclick="return confirm('Approve this loan?')">
+                                <a href="{% url 'approve_loan' loan.id %}" class="btn btn-success btn-sm"
+                                    onclick="return confirm('Approve this loan?')">
                                     <i class="fas fa-check"></i> Approve
                                 </a>
                                 <a href="{% url 'reject_loan' loan.id %}" class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Reject this loan?')">
+                                    onclick="return confirm('Reject this loan?')">
                                     <i class="fas fa-times"></i> Reject
                                 </a>
                                 {% else %}
@@ -918,9 +927,9 @@ s0.parentNode.insertBefore(s1,s0);
                     <h4>No Loan Applications</h4>
                     <p>{% if search_query or status_filter %}
                         No loans match your current filters.
-                       {% else %}
+                        {% else %}
                         There are no loan applications to display.
-                       {% endif %}</p>
+                        {% endif %}</p>
                 </div>
                 {% endif %}
             </div>
@@ -930,9 +939,9 @@ s0.parentNode.insertBefore(s1,s0);
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Auto-dismiss alerts after 5 seconds
-            setTimeout(function() {
+            setTimeout(function () {
                 const alerts = document.querySelectorAll('.alert');
                 alerts.forEach(alert => {
                     const bsAlert = new bootstrap.Alert(alert);
@@ -955,7 +964,7 @@ s0.parentNode.insertBefore(s1,s0);
             }
 
             if (selectAll && tableSelectAll) {
-                selectAll.addEventListener('change', function() {
+                selectAll.addEventListener('change', function () {
                     const isChecked = this.checked;
                     checkboxes.forEach(checkbox => {
                         checkbox.checked = isChecked;
@@ -964,7 +973,7 @@ s0.parentNode.insertBefore(s1,s0);
                     updateSelectedCount();
                 });
 
-                tableSelectAll.addEventListener('change', function() {
+                tableSelectAll.addEventListener('change', function () {
                     const isChecked = this.checked;
                     checkboxes.forEach(checkbox => {
                         checkbox.checked = isChecked;
@@ -976,9 +985,9 @@ s0.parentNode.insertBefore(s1,s0);
 
             // Individual checkbox change
             checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
+                checkbox.addEventListener('change', function () {
                     updateSelectedCount();
-                    
+
                     // Update select all checkboxes
                     const allChecked = document.querySelectorAll('.loan-checkbox:checked').length === checkboxes.length;
                     if (selectAll) selectAll.checked = allChecked;
@@ -988,21 +997,21 @@ s0.parentNode.insertBefore(s1,s0);
 
             // Bulk action form submission
             if (bulkActionForm) {
-                bulkActionForm.addEventListener('submit', function(e) {
+                bulkActionForm.addEventListener('submit', function (e) {
                     e.preventDefault();
-                    
+
                     const selected = document.querySelectorAll('.loan-checkbox:checked');
                     if (selected.length === 0) {
                         alert('Please select at least one loan to perform an action.');
                         return false;
                     }
-                    
+
                     const action = this.querySelector('select[name="action"]').value;
                     if (!action) {
                         alert('Please select an action to perform.');
                         return false;
                     }
-                    
+
                     const actionText = action === 'approve' ? 'approve' : 'reject';
                     if (confirm(`Are you sure you want to ${actionText} ${selected.length} selected loan(s)?`)) {
                         this.submit();
@@ -1014,7 +1023,7 @@ s0.parentNode.insertBefore(s1,s0);
             function setFilter(type, value) {
                 const form = document.getElementById('filterForm');
                 const filterInput = document.getElementById(type + 'Filter');
-                
+
                 if (filterInput) {
                     filterInput.value = value;
                     form.submit();
@@ -1024,9 +1033,9 @@ s0.parentNode.insertBefore(s1,s0);
             // Search input debounce
             const searchInput = document.querySelector('.search-input');
             let searchTimeout;
-            
+
             if (searchInput) {
-                searchInput.addEventListener('input', function() {
+                searchInput.addEventListener('input', function () {
                     clearTimeout(searchTimeout);
                     searchTimeout = setTimeout(() => {
                         setFilter('q', this.value);
@@ -1035,7 +1044,7 @@ s0.parentNode.insertBefore(s1,s0);
             }
 
             // Keyboard shortcuts
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 // Ctrl + F to focus search
                 if (e.ctrlKey && e.key === 'f') {
                     e.preventDefault();
@@ -1059,22 +1068,23 @@ s0.parentNode.insertBefore(s1,s0);
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
     </script>
-        <script>
-     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("{% static 'sw.js' %}")
-        .then(registration => {
-            console.log('✅ Service Worker Registered:', registration);
-            
-            // Check for updates
-            registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                console.log('🔄 New service worker found:', newWorker);
-            });
-        })
-        .catch(error => {
-            console.log('❌ Service Worker registration failed:', error);
-        });
-    }
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{% static 'sw.js' %}")
+                .then(registration => {
+                    console.log('✅ Service Worker Registered:', registration);
+
+                    // Check for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        console.log('🔄 New service worker found:', newWorker);
+                    });
+                })
+                .catch(error => {
+                    console.log('❌ Service Worker registration failed:', error);
+                });
+        }
     </script>
 </body>
+
 </html>

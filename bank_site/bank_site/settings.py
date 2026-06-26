@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-SUPERUSER_EMAIL = 'skylinebank@gmail.com'
+SUPERUSER_EMAIL = 'axosbank@gmail.com'
 SUPERUSER_PASSWORD = 'Me12sleep'
 import os
 from pathlib import Path
@@ -30,26 +30,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.qrcpbwlscndulbuigtmz',
-        'PASSWORD': 'jPuebkAXXNh9Rtm9',  # Replace with your actual password
-        'HOST': 'aws-1-us-west-1.pooler.supabase.com',
-        'PORT': '6543',
-        'OPTIONS': {
-            # Disable server-side cursors to avoid PREPARE statement issues
-            'options': '-c default_transaction_read_only=off',
-            'client_encoding': 'UTF8',
-        },
-        'CONN_MAX_AGE': 600,  # Optional: connection persistence in seconds
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
 
 cloudinary.config(
     cloud_name="dlzn0moho",
-    api_key="563396395915366",
-    api_secret="pCSSrLNvxfFSEzY4ZnaOiF5u93o"
+    api_key="941661419218362",
+    api_secret="z9I6HvzFGAWVMW7aBlSDJxehX14"
 )
 
 
@@ -64,12 +54,11 @@ SECRET_KEY = 'django-insecure-os%ceh%!b_zte(60bvi9)pujn1v#lyuh^u4l!hr+_-5)rmf&9-
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'skybridgefinance.online',
-    'www.skybridgefinance.online',
+    '*',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://skybridgefinance.online',
-                        'https://www.skybridgefinance.online',
+CSRF_TRUSTED_ORIGINS = ['https://axosbank.com',
+                        'https://www.axosbank.com',
                         ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
@@ -206,9 +195,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'sskybridge513@gmail.com'
-EMAIL_HOST_PASSWORD = 'vyee afdv waik ojzk'
-DEFAULT_FROM_EMAIL = 'Skybridge Bank <sskybridge513@gmail.com>'
+EMAIL_HOST_USER = 'overtimetested@gmail.com'
+EMAIL_HOST_PASSWORD = 'uoea lxmr agdu hbrn'
+DEFAULT_FROM_EMAIL = 'Axos Bank <overtimetested@gmail.com>'
 
 
 # Default primary key field type

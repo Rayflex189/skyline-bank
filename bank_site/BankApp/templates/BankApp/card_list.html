@@ -1,9 +1,10 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Your Credit Card - Skybridge Bank</title>
+    <title>Your Credit Card - Axos Bank</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Favicons -->
@@ -11,27 +12,29 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
     <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fc33962525f11c38faecba/1jo0ij1kg';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6a3e914d0858271d4af4e711/1js26f6la';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap"
+        rel="stylesheet">
 
     <style>
         :root {
@@ -100,6 +103,7 @@ s0.parentNode.insertBefore(s1,s0);
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -166,9 +170,17 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes floatCard {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
         }
 
         .credit-card::before {
@@ -255,7 +267,8 @@ s0.parentNode.insertBefore(s1,s0);
             text-align: right;
         }
 
-        .expiry, .cvv {
+        .expiry,
+        .cvv {
             font-family: 'Montserrat', monospace;
             font-size: 0.8rem;
             margin-bottom: 2px;
@@ -427,9 +440,12 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes bounce {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-10px);
             }
@@ -548,9 +564,11 @@ s0.parentNode.insertBefore(s1,s0);
             0% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-8px);
             }
+
             100% {
                 transform: translateY(0);
             }
@@ -573,6 +591,7 @@ s0.parentNode.insertBefore(s1,s0);
         }
     </style>
 </head>
+
 <body>
     <!-- Email Floating Icon -->
     <div class="email-float">
@@ -581,146 +600,150 @@ s0.parentNode.insertBefore(s1,s0);
             <span class="email-tooltip">Contact us via email</span>
         </a>
     </div>
-    
+
     <div class="main-container">
         <!-- Header Section -->
         <div class="header-section">
             <h1>Your Credit Card</h1>
-            <p>Skybridge Bank Premium Card</p>
+            <p>Axos Bank Premium Card</p>
         </div>
 
         {% if user_profile.is_card_issued and user_profile.card_number %}
-            <!-- Status Badge -->
-            <div>
-                <span class="status-badge status-{{ user_profile.card_status }}">
-                    <i class="fas fa-{% if user_profile.card_status == 'active' %}check-circle{% elif user_profile.card_status == 'pending' %}clock{% elif user_profile.card_status == 'blocked' %}ban{% else %}exclamation-circle{% endif %}"></i>
-                    {{ user_profile.card_status|title }}
-                </span>
+        <!-- Status Badge -->
+        <div>
+            <span class="status-badge status-{{ user_profile.card_status }}">
+                <i
+                    class="fas fa-{% if user_profile.card_status == 'active' %}check-circle{% elif user_profile.card_status == 'pending' %}clock{% elif user_profile.card_status == 'blocked' %}ban{% else %}exclamation-circle{% endif %}"></i>
+                {{ user_profile.card_status|title }}
+            </span>
+        </div>
+
+        <!-- Credit Card -->
+        <div
+            class="credit-card {% if user_profile.card_type == 'Visa' %}visa{% elif user_profile.card_type == 'Mastercard' %}mastercard{% endif %}">
+            <div class="card-header">
+                <div class="chip"></div>
+                <img src="{% static 'images/sky.png' %}" alt="Axos Bank" class="bank-logo">
             </div>
 
-            <!-- Credit Card -->
-            <div class="credit-card {% if user_profile.card_type == 'Visa' %}visa{% elif user_profile.card_type == 'Mastercard' %}mastercard{% endif %}">
-                <div class="card-header">
-                    <div class="chip"></div>
-                    <img src="{% static 'images/sky.png' %}" alt="Skybridge Bank" class="bank-logo">
-                </div>
-
-                <div class="card-number">
-                    {{ user_profile.card_number|slice:":4" }} {{ user_profile.card_number|slice:"4:8" }} {{ user_profile.card_number|slice:"8:12" }} {{ user_profile.card_number|slice:"12:16" }}
-                </div>
-
-                <div class="card-details">
-                    <div class="cardholder-name">
-                        {{ user_profile.cardholder_name|default:user_profile.user.get_full_name|upper }}
-                    </div>
-                    <div class="card-info">
-                        <div class="expiry">Expiry: {{ user_profile.expiry_date|date:"m/y" }}</div>
-                        <div class="cvv">CVV: ***</div>
-                    </div>
-                </div>
-
-                <div class="card-type">{{ user_profile.card_type|default:"PREMIUM"|upper }} • PLATINUM</div>
+            <div class="card-number">
+                {{ user_profile.card_number|slice:":4" }} {{ user_profile.card_number|slice:"4:8" }} {{
+                user_profile.card_number|slice:"8:12" }} {{ user_profile.card_number|slice:"12:16" }}
             </div>
 
-            <!-- Card Features -->
-            <div class="card-features">
-                <div class="feature">
-                    <i class="fas fa-shield-alt"></i>
-                    <p>Secure Chip Technology</p>
+            <div class="card-details">
+                <div class="cardholder-name">
+                    {{ user_profile.cardholder_name|default:user_profile.user.get_full_name|upper }}
                 </div>
-                <div class="feature">
-                    <i class="fas fa-globe"></i>
-                    <p>Worldwide Acceptance</p>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-mobile-alt"></i>
-                    <p>Contactless Payment</p>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-lock"></i>
-                    <p>24/7 Fraud Protection</p>
+                <div class="card-info">
+                    <div class="expiry">Expiry: {{ user_profile.expiry_date|date:"m/y" }}</div>
+                    <div class="cvv">CVV: ***</div>
                 </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="action-buttons">
-                <button class="btn btn-primary" onclick="toggleCVV()" id="cvvToggleBtn">
-                    <i class="fas fa-eye"></i>
-                    <span id="cvvToggleText">Show CVV</span>
-                </button>
-                <button class="btn btn-outline" onclick="window.print()">
-                    <i class="fas fa-print"></i>
-                    Print Card Details
-                </button>
+            <div class="card-type">{{ user_profile.card_type|default:"PREMIUM"|upper }} • PLATINUM</div>
+        </div>
+
+        <!-- Card Features -->
+        <div class="card-features">
+            <div class="feature">
+                <i class="fas fa-shield-alt"></i>
+                <p>Secure Chip Technology</p>
             </div>
-
-            <!-- Hidden CVV for toggle -->
-            <div id="cvvValue" style="display: none;">{{ user_profile.cvv }}</div>
-
-            <script>
-                let cvvVisible = false;
-                function toggleCVV() {
-                    const cvvValue = document.getElementById('cvvValue').innerText;
-                    const cvvElements = document.querySelectorAll('.cvv');
-                    const toggleBtn = document.getElementById('cvvToggleBtn');
-                    const toggleText = document.getElementById('cvvToggleText');
-                    
-                    cvvVisible = !cvvVisible;
-                    
-                    cvvElements.forEach(element => {
-                        if (cvvVisible) {
-                            element.innerHTML = `CVV: ${cvvValue}`;
-                            toggleText.innerHTML = 'Hide CVV';
-                            toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Hide CVV';
-                        } else {
-                            element.innerHTML = 'CVV: ***';
-                            toggleText.innerHTML = 'Show CVV';
-                            toggleBtn.innerHTML = '<i class="fas fa-eye"></i> Show CVV';
-                        }
-                    });
-                }
-            </script>
-
-            <!-- Security Notice -->
-            <div class="security-notice">
-                <i class="fas fa-exclamation-circle"></i>
-                <strong>Security Notice:</strong> Keep your card details secure. Do not share your CVV with anyone. 
-                Your card was issued on {{ user_profile.card_application_date|date:"F d, Y" }}.
+            <div class="feature">
+                <i class="fas fa-globe"></i>
+                <p>Worldwide Acceptance</p>
             </div>
+            <div class="feature">
+                <i class="fas fa-mobile-alt"></i>
+                <p>Contactless Payment</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-lock"></i>
+                <p>24/7 Fraud Protection</p>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="toggleCVV()" id="cvvToggleBtn">
+                <i class="fas fa-eye"></i>
+                <span id="cvvToggleText">Show CVV</span>
+            </button>
+            <button class="btn btn-outline" onclick="window.print()">
+                <i class="fas fa-print"></i>
+                Print Card Details
+            </button>
+        </div>
+
+        <!-- Hidden CVV for toggle -->
+        <div id="cvvValue" style="display: none;">{{ user_profile.cvv }}</div>
+
+        <script>
+            let cvvVisible = false;
+            function toggleCVV() {
+                const cvvValue = document.getElementById('cvvValue').innerText;
+                const cvvElements = document.querySelectorAll('.cvv');
+                const toggleBtn = document.getElementById('cvvToggleBtn');
+                const toggleText = document.getElementById('cvvToggleText');
+
+                cvvVisible = !cvvVisible;
+
+                cvvElements.forEach(element => {
+                    if (cvvVisible) {
+                        element.innerHTML = `CVV: ${cvvValue}`;
+                        toggleText.innerHTML = 'Hide CVV';
+                        toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Hide CVV';
+                    } else {
+                        element.innerHTML = 'CVV: ***';
+                        toggleText.innerHTML = 'Show CVV';
+                        toggleBtn.innerHTML = '<i class="fas fa-eye"></i> Show CVV';
+                    }
+                });
+            }
+        </script>
+
+        <!-- Security Notice -->
+        <div class="security-notice">
+            <i class="fas fa-exclamation-circle"></i>
+            <strong>Security Notice:</strong> Keep your card details secure. Do not share your CVV with anyone.
+            Your card was issued on {{ user_profile.card_application_date|date:"F d, Y" }}.
+        </div>
         {% else %}
-            <!-- No Card Message -->
-            <div class="no-card-message">
-                <i class="fas fa-credit-card"></i>
-                <h3>No Active Card Found</h3>
-                <p>You haven't applied for a credit card yet or your application is still pending.</p>
-                <a href="{% url 'application_for_credit_card' %}" class="btn btn-primary">
-                    <i class="fas fa-plus-circle"></i>
-                    Apply for Credit Card
-                </a>
-                <p style="margin-top: 20px; font-size: 0.85rem;">
-                    <i class="fas fa-info-circle"></i>
-                    Need your application fee code? Check your email or contact support.
-                </p>
-            </div>
+        <!-- No Card Message -->
+        <div class="no-card-message">
+            <i class="fas fa-credit-card"></i>
+            <h3>No Active Card Found</h3>
+            <p>You haven't applied for a credit card yet or your application is still pending.</p>
+            <a href="{% url 'application_for_credit_card' %}" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i>
+                Apply for Credit Card
+            </a>
+            <p style="margin-top: 20px; font-size: 0.85rem;">
+                <i class="fas fa-info-circle"></i>
+                Need your application fee code? Check your email or contact support.
+            </p>
+        </div>
         {% endif %}
     </div>
 
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register("{% static 'sw.js' %}")
-            .then(registration => {
-                console.log('✅ Service Worker Registered:', registration);
-                
-                registration.addEventListener('updatefound', () => {
-                    const newWorker = registration.installing;
-                    console.log('🔄 New service worker found:', newWorker);
+                .then(registration => {
+                    console.log('✅ Service Worker Registered:', registration);
+
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        console.log('🔄 New service worker found:', newWorker);
+                    });
+                })
+                .catch(error => {
+                    console.log('❌ Service Worker registration failed:', error);
                 });
-            })
-            .catch(error => {
-                console.log('❌ Service Worker registration failed:', error);
-            });
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

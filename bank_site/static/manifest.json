@@ -1,60 +1,66 @@
 {
-  "name": "SkyBridge Bank",
-  "short_name": "SkyBridge",
+  "name": "Axos Bank",
+  "short_name": "Axos",
   "description": "Secure cryptocurrency banking and transfers",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1A4A7A",
-  "theme_color": "#2A6EBB",
+  "background_color": "#09090B",
+  "theme_color": "#09090B",
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "en",
   "categories": ["finance", "business", "utilities"],
   "icons": [
     {
-      "src": "/static/img/blue-72x72.png",
+      "src": "/static/img/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/img/logo-72x72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/static/img/blue-96x96.png",
+      "src": "/static/img/logo-96x96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/static/img/blue-128x128.png",
+      "src": "/static/img/logo-128x128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/static/img/blue-144x144.png",
+      "src": "/static/img/logo-144x144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/static/img/blue-152x152.png",
+      "src": "/static/img/logo-152x152.png",
       "sizes": "152x152",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/static/img/blue-192x192.png",
+      "src": "/static/img/logo-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/static/img/blue-384x384.png",
+      "src": "/static/img/logo-384x384.png",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/static/img/blue-512x512.png",
+      "src": "/static/img/logo-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -62,11 +68,11 @@
   ],
   "screenshots": [
     {
-      "src": "/static/img/blue-screenshot.png",
+      "src": "/static/img/logo-screenshot.png",
       "sizes": "1170x2532",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "SkyBridge Bank Dashboard"
+      "label": "Axos Bank Dashboard"
     }
   ],
   "shortcuts": [
@@ -75,7 +81,7 @@
       "short_name": "Home",
       "description": "Go to main dashboard",
       "url": "/dashboard",
-      "icons": [{ "src": "/static/img/blue-96x96.png", "sizes": "96x96" }]
+      "icons": [{ "src": "/static/img/logo-96x96.png", "sizes": "96x96" }]
     }
   ]
 }

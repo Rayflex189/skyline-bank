@@ -2,31 +2,32 @@
 {% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investment Plans - Skyline Bank</title>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fc33962525f11c38faecba/1jo0ij1kg';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <title>Investment Plans - Axos Bank</title>
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6a3e914d0858271d4af4e711/1js26f6la';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-    
+
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
@@ -118,7 +119,9 @@ s0.parentNode.insertBefore(s1,s0);
             right: 0;
         }
 
-        .sidebar-header, .user-details, .sidebar ul li {
+        .sidebar-header,
+        .user-details,
+        .sidebar ul li {
             padding: 15px 20px;
             border-bottom: 1px solid var(--primary-color);
         }
@@ -430,6 +433,7 @@ s0.parentNode.insertBefore(s1,s0);
             from {
                 transform: translateX(100%);
             }
+
             to {
                 transform: translateX(-100%);
             }
@@ -491,9 +495,11 @@ s0.parentNode.insertBefore(s1,s0);
             0% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-10px);
             }
+
             100% {
                 transform: translateY(0);
             }
@@ -663,15 +669,17 @@ s0.parentNode.insertBefore(s1,s0);
         }
     </style>
 </head>
+
 <body>
     <!-- Telegram Floating Icon -->
     <div class="telegram-float">
         <a href="https://" class="telegram-link" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="telegram-icon">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram"
+                class="telegram-icon">
             <span class="telegram-tooltip">Join our Telegram group</span>
         </a>
     </div>
-    
+
     <!-- Header -->
     <div class="header">
         <div class="header-content">
@@ -701,12 +709,13 @@ s0.parentNode.insertBefore(s1,s0);
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <h2>Account Menu</h2>
-            <button onclick="toggleSidebar()" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">
+            <button onclick="toggleSidebar()"
+                style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="user-details">
-           <p>Name: <strong>{{ user_profile.first_name }}, {{ user_profile.last_name }}</strong></p>
+            <p>Name: <strong>{{ user_profile.first_name }}, {{ user_profile.last_name }}</strong></p>
             <p>Email: <strong>{{ user_profile.email }}</strong></p>
         </div>
         <ul>
@@ -780,7 +789,8 @@ s0.parentNode.insertBefore(s1,s0);
         </div>
 
         <!-- Balance Display -->
-        <div style="text-align: center; margin: 30px 0; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);">
+        <div
+            style="text-align: center; margin: 30px 0; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);">
             <div class="balance-label">AVAILABLE BALANCE FOR INVESTMENT</div>
             <div class="balance-amount">${{ user_profile.balance|intcomma }}</div>
         </div>
@@ -791,16 +801,17 @@ s0.parentNode.insertBefore(s1,s0);
             <div class="plans-grid">
                 {% for plan in starter_plans %}
                 <div class="plan-card">
-                    <div class="plan-header" style="background: linear-gradient(135deg, var(--starter-color), #2980b9);">
+                    <div class="plan-header"
+                        style="background: linear-gradient(135deg, var(--starter-color), #2980b9);">
                         <div class="plan-name">{{ plan.name }}</div>
                         <div class="profit-range-display">
                             {{ plan.min_profit_percentage }}% - {{ plan.max_profit_percentage }}%
                         </div>
                         <div class="plan-type">
                             {% if plan.investment_type == 'SHORT_TERM' %}
-                                <i class="fas fa-clock"></i> {{ plan.interval_hours }} Hours
+                            <i class="fas fa-clock"></i> {{ plan.interval_hours }} Hours
                             {% else %}
-                                <i class="fas fa-calendar-alt"></i> {{ plan.duration_days }} Days
+                            <i class="fas fa-calendar-alt"></i> {{ plan.duration_days }} Days
                             {% endif %}
                         </div>
                         <div class="profit-range">
@@ -820,9 +831,9 @@ s0.parentNode.insertBefore(s1,s0);
                             <i class="fas fa-calendar-alt"></i>
                             <span>
                                 {% if plan.investment_type == 'SHORT_TERM' %}
-                                    Duration: {{ plan.interval_hours }} Hours
+                                Duration: {{ plan.interval_hours }} Hours
                                 {% else %}
-                                    Duration: {{ plan.duration_days }} Days
+                                Duration: {{ plan.duration_days }} Days
                                 {% endif %}
                             </span>
                         </div>
@@ -840,9 +851,11 @@ s0.parentNode.insertBefore(s1,s0);
                         </div>
                         <div class="example-calculation">
                             <i class="fas fa-calculator"></i>
-                            Example: Invest ${{ plan.min_amount|floatformat:2 }} → Return ${{ plan.max_amount|floatformat:2 }}
+                            Example: Invest ${{ plan.min_amount|floatformat:2 }} → Return ${{
+                            plan.max_amount|floatformat:2 }}
                         </div>
-                        <a href="{% url 'create_investment' %}?plan={{ plan.id }}" class="btn-invest" style="background: var(--starter-color);">
+                        <a href="{% url 'create_investment' %}?plan={{ plan.id }}" class="btn-invest"
+                            style="background: var(--starter-color);">
                             <i class="fas fa-chart-line"></i> Invest Now
                         </a>
                     </div>
@@ -864,9 +877,9 @@ s0.parentNode.insertBefore(s1,s0);
                         </div>
                         <div class="plan-type">
                             {% if plan.investment_type == 'SHORT_TERM' %}
-                                <i class="fas fa-clock"></i> {{ plan.interval_hours }} Hours
+                            <i class="fas fa-clock"></i> {{ plan.interval_hours }} Hours
                             {% else %}
-                                <i class="fas fa-calendar-alt"></i> {{ plan.duration_days }} Days
+                            <i class="fas fa-calendar-alt"></i> {{ plan.duration_days }} Days
                             {% endif %}
                         </div>
                         <div class="profit-range">
@@ -886,9 +899,9 @@ s0.parentNode.insertBefore(s1,s0);
                             <i class="fas fa-calendar-alt"></i>
                             <span>
                                 {% if plan.investment_type == 'SHORT_TERM' %}
-                                    Duration: {{ plan.interval_hours }} Hours
+                                Duration: {{ plan.interval_hours }} Hours
                                 {% else %}
-                                    Duration: {{ plan.duration_days }} Days
+                                Duration: {{ plan.duration_days }} Days
                                 {% endif %}
                             </span>
                         </div>
@@ -906,9 +919,11 @@ s0.parentNode.insertBefore(s1,s0);
                         </div>
                         <div class="example-calculation">
                             <i class="fas fa-calculator"></i>
-                            Example: Invest ${{ plan.min_amount|floatformat:2 }} → Return ${{ plan.max_amount|floatformat:2 }}
+                            Example: Invest ${{ plan.min_amount|floatformat:2 }} → Return ${{
+                            plan.max_amount|floatformat:2 }}
                         </div>
-                        <a href="{% url 'create_investment' %}?plan={{ plan.id }}" class="btn-invest" style="background: var(--pro-color);">
+                        <a href="{% url 'create_investment' %}?plan={{ plan.id }}" class="btn-invest"
+                            style="background: var(--pro-color);">
                             <i class="fas fa-chart-line"></i> Invest Now
                         </a>
                     </div>
@@ -930,9 +945,9 @@ s0.parentNode.insertBefore(s1,s0);
                         </div>
                         <div class="plan-type">
                             {% if plan.investment_type == 'SHORT_TERM' %}
-                                <i class="fas fa-clock"></i> {{ plan.interval_hours }} Hours
+                            <i class="fas fa-clock"></i> {{ plan.interval_hours }} Hours
                             {% else %}
-                                <i class="fas fa-calendar-alt"></i> {{ plan.duration_days }} Days
+                            <i class="fas fa-calendar-alt"></i> {{ plan.duration_days }} Days
                             {% endif %}
                         </div>
                         <div class="profit-range">
@@ -952,9 +967,9 @@ s0.parentNode.insertBefore(s1,s0);
                             <i class="fas fa-calendar-alt"></i>
                             <span>
                                 {% if plan.investment_type == 'SHORT_TERM' %}
-                                    Duration: {{ plan.interval_hours }} Hours
+                                Duration: {{ plan.interval_hours }} Hours
                                 {% else %}
-                                    Duration: {{ plan.duration_days }} Days
+                                Duration: {{ plan.duration_days }} Days
                                 {% endif %}
                             </span>
                         </div>
@@ -972,9 +987,11 @@ s0.parentNode.insertBefore(s1,s0);
                         </div>
                         <div class="example-calculation">
                             <i class="fas fa-calculator"></i>
-                            Example: Invest ${{ plan.min_amount|floatformat:2 }} → Return ${{ plan.max_amount|floatformat:2 }}
+                            Example: Invest ${{ plan.min_amount|floatformat:2 }} → Return ${{
+                            plan.max_amount|floatformat:2 }}
                         </div>
-                        <a href="{% url 'create_investment' %}?plan={{ plan.id }}" class="btn-invest" style="background: var(--elite-color);">
+                        <a href="{% url 'create_investment' %}?plan={{ plan.id }}" class="btn-invest"
+                            style="background: var(--elite-color);">
                             <i class="fas fa-chart-line"></i> Invest Now
                         </a>
                     </div>
@@ -987,7 +1004,8 @@ s0.parentNode.insertBefore(s1,s0);
         {% if user_investments %}
         <div class="investments-section">
             <div class="card" style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); margin-top: 50px;">
-                <div class="card-header" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border-radius: 12px 12px 0 0; padding: 20px;">
+                <div class="card-header"
+                    style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border-radius: 12px 12px 0 0; padding: 20px;">
                     <h2 style="margin: 0; font-size: 1.8rem;">
                         <i class="fas fa-chart-bar" style="margin-right: 10px;"></i>Your Current Investments
                     </h2>
@@ -1011,7 +1029,8 @@ s0.parentNode.insertBefore(s1,s0);
                                     <td>{{ investment.investment_plan.name }}</td>
                                     <td>${{ investment.amount_invested|intcomma }}</td>
                                     <td>
-                                        ${{ investment.min_expected_return|intcomma }} - ${{ investment.max_expected_return|intcomma }}
+                                        ${{ investment.min_expected_return|intcomma }} - ${{
+                                        investment.max_expected_return|intcomma }}
                                     </td>
                                     <td>{{ investment.start_date|date:"M d, Y" }}</td>
                                     <td>{{ investment.end_date|date:"M d, Y" }}</td>
@@ -1033,7 +1052,8 @@ s0.parentNode.insertBefore(s1,s0);
             </div>
         </div>
         {% else %}
-        <div style="text-align: center; padding: 40px; margin: 40px 0; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);">
+        <div
+            style="text-align: center; padding: 40px; margin: 40px 0; background: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);">
             <i class="fas fa-chart-line" style="font-size: 3rem; color: #6c757d; margin-bottom: 20px;"></i>
             <h3 style="color: #495057;">No Active Investments</h3>
             <p style="color: #6c757d;">Start your investment journey by selecting a plan above.</p>
@@ -1082,7 +1102,7 @@ s0.parentNode.insertBefore(s1,s0);
         // Update stock marquee dynamically
         function updateStockMarquee() {
             const marquee = document.getElementById("stockMarquee");
-            const stockText = stockData.map(stock => 
+            const stockText = stockData.map(stock =>
                 `${stock.symbol}: $${stock.price.toFixed(2)} ${stock.change}`
             ).join(" | ");
             marquee.innerHTML = "📈 LIVE MARKETS: " + stockText;
@@ -1094,21 +1114,21 @@ s0.parentNode.insertBefore(s1,s0);
             planCards.forEach(card => {
                 const minAmountText = card.querySelector('.plan-feature:nth-child(1) span').textContent;
                 const maxAmountText = card.querySelector('.plan-feature:nth-child(2) span').textContent;
-                
+
                 const minAmount = parseFloat(minAmountText.replace('Minimum: $', '').replace(',', ''));
                 const maxAmount = parseFloat(maxAmountText.replace('Maximum: $', '').replace(',', ''));
-                
+
                 const profitRangeText = card.querySelector('.profit-range').textContent;
                 const profitMatch = profitRangeText.match(/(\d+\.?\d*)% - (\d+\.?\d*)%/);
-                
+
                 if (profitMatch) {
                     const minProfitPercent = parseFloat(profitMatch[1]);
                     const maxProfitPercent = parseFloat(profitMatch[2]);
-                    
+
                     // Calculate example returns
-                    const minInvestReturn = minAmount * (1 + minProfitPercent/100);
-                    const maxInvestReturn = maxAmount * (1 + maxProfitPercent/100);
-                    
+                    const minInvestReturn = minAmount * (1 + minProfitPercent / 100);
+                    const maxInvestReturn = maxAmount * (1 + maxProfitPercent / 100);
+
                     // Update example calculation
                     const exampleDiv = card.querySelector('.example-calculation');
                     if (exampleDiv) {
@@ -1125,7 +1145,7 @@ s0.parentNode.insertBefore(s1,s0);
         document.addEventListener("DOMContentLoaded", () => {
             setTimeout(updateStockMarquee, 1000);
             setTimeout(calculateProfitExamples, 1500);
-            
+
             // Update marquee every 30 seconds
             setInterval(updateStockMarquee, 30000);
         });
@@ -1140,23 +1160,24 @@ s0.parentNode.insertBefore(s1,s0);
             }
         });
     </script>
-    
+
     <script>
-     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("{% static 'sw.js' %}")
-        .then(registration => {
-            console.log('✅ Service Worker Registered:', registration);
-            
-            // Check for updates
-            registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                console.log('🔄 New service worker found:', newWorker);
-            });
-        })
-        .catch(error => {
-            console.log('❌ Service Worker registration failed:', error);
-        });
-    }
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{% static 'sw.js' %}")
+                .then(registration => {
+                    console.log('✅ Service Worker Registered:', registration);
+
+                    // Check for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        console.log('🔄 New service worker found:', newWorker);
+                    });
+                })
+                .catch(error => {
+                    console.log('❌ Service Worker registration failed:', error);
+                });
+        }
     </script>
 </body>
+
 </html>

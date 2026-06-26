@@ -2,40 +2,43 @@
 {% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skybridge Finance - Crypto Transfer</title>
+    <title>Axos Finance - Crypto Transfer</title>
     <link rel="icon" href="{% static 'images/IMG-20250820-WA0109.jpg' %}" type="image/x-icon">
-    <link rel="stylesheet" href="{% static 'css/dash.css' %}" >
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69fc33962525f11c38faecba/1jo0ij1kg';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+    <link rel="stylesheet" href="{% static 'css/dash.css' %}">
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6a3e914d0858271d4af4e711/1js26f6la';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-    
+
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
-    
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap"
+        rel="stylesheet">
 
     <style>
         :root {
@@ -107,7 +110,8 @@ s0.parentNode.insertBefore(s1,s0);
             gap: 20px;
         }
 
-        .notification-bell, .open-sidebar-btn {
+        .notification-bell,
+        .open-sidebar-btn {
             cursor: pointer;
             color: var(--dark-blue);
             font-size: 1.4rem;
@@ -117,7 +121,8 @@ s0.parentNode.insertBefore(s1,s0);
             background: rgba(42, 110, 187, 0.08);
         }
 
-        .notification-bell:hover, .open-sidebar-btn:hover {
+        .notification-bell:hover,
+        .open-sidebar-btn:hover {
             color: var(--primary-blue);
             transform: translateY(-2px);
             background: rgba(42, 110, 187, 0.15);
@@ -249,7 +254,8 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         /* Form Container Styling */
-        .form-container, input {
+        .form-container,
+        input {
             max-width: 600px;
             width: 90%;
             margin: 0 auto;
@@ -280,6 +286,7 @@ s0.parentNode.insertBefore(s1,s0);
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -326,9 +333,11 @@ s0.parentNode.insertBefore(s1,s0);
             0% {
                 box-shadow: 0 0 0 0 rgba(42, 110, 187, 0.3);
             }
+
             70% {
                 box-shadow: 0 0 0 10px rgba(42, 110, 187, 0);
             }
+
             100% {
                 box-shadow: 0 0 0 0 rgba(42, 110, 187, 0);
             }
@@ -414,9 +423,21 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes vibrate {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-5px); }
-            40%, 80% { transform: translateX(5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20%,
+            60% {
+                transform: translateX(-5px);
+            }
+
+            40%,
+            80% {
+                transform: translateX(5px);
+            }
         }
 
         /* Marquee Styling */
@@ -442,6 +463,7 @@ s0.parentNode.insertBefore(s1,s0);
             0% {
                 transform: translateX(0);
             }
+
             100% {
                 transform: translateX(-100%);
             }
@@ -539,9 +561,12 @@ s0.parentNode.insertBefore(s1,s0);
         }
 
         @keyframes bounce {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-10px);
             }
@@ -577,6 +602,7 @@ s0.parentNode.insertBefore(s1,s0);
         }
     </style>
 </head>
+
 <body>
     <!-- Bank Header -->
     <header class="bank-header">
@@ -620,7 +646,7 @@ s0.parentNode.insertBefore(s1,s0);
         <div class="transfer-header">Blockchain Payment</div>
 
         <div class="form-container">
-            <h1>Skybridge Finance</h1>
+            <h1>Axos Finance</h1>
 
             <!-- Animated Balance -->
             <div class="animated-balance" id="animatedBalance">
@@ -641,7 +667,8 @@ s0.parentNode.insertBefore(s1,s0);
                 <div class="mb-3">
                     <label for="walletAddress" class="form-label">Wallet Address</label>
                     <div class="form-input-group">
-                        <input type="text" class="form-control" id="walletAddress" name="wallet_address" placeholder="Enter recipient wallet address" required>
+                        <input type="text" class="form-control" id="walletAddress" name="wallet_address"
+                            placeholder="Enter recipient wallet address" required>
                         <i class="fas fa-wallet input-icon"></i>
                     </div>
                 </div>
@@ -678,7 +705,8 @@ s0.parentNode.insertBefore(s1,s0);
                 <div class="mb-3">
                     <label for="note" class="form-label">Transaction Note</label>
                     <div class="form-input-group">
-                        <input type="text" class="form-control" id="note" name="note" placeholder="Enter transaction description">
+                        <input type="text" class="form-control" id="note" name="note"
+                            placeholder="Enter transaction description">
                         <i class="fas fa-sticky-note input-icon"></i>
                     </div>
                 </div>
@@ -694,10 +722,10 @@ s0.parentNode.insertBefore(s1,s0);
             <!-- Account Status -->
             <div class="account-status">
                 {% if user_profile.is_linked %}
-                    <p class="text-success">Your account is activated. You can proceed with transactions.</p>
+                <p class="text-success">Your account is activated. You can proceed with transactions.</p>
                 {% else %}
-                    <p class="text-danger">Your account is not activated. Please purchase an activation pin.</p>
-                    <a href="{% url 'linking_view' %}" class="btn btn-primary mt-2">Activate Account</a>
+                <p class="text-danger">Your account is not activated. Please purchase an activation pin.</p>
+                <a href="{% url 'linking_view' %}" class="btn btn-primary mt-2">Activate Account</a>
                 {% endif %}
             </div>
         </div>
@@ -745,22 +773,23 @@ s0.parentNode.insertBefore(s1,s0);
             setTimeout(updateCryptoMarquee, 1000);
         });
     </script>
-        <script>
- if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("{% static 'sw.js' %}")
-        .then(registration => {
-            console.log('✅ Service Worker Registered:', registration);
-            
-            // Check for updates
-            registration.addEventListener('updatefound', () => {
-                const newWorker = registration.installing;
-                console.log('🔄 New service worker found:', newWorker);
-            });
-        })
-        .catch(error => {
-            console.log('❌ Service Worker registration failed:', error);
-        });
-    }
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{% static 'sw.js' %}")
+                .then(registration => {
+                    console.log('✅ Service Worker Registered:', registration);
+
+                    // Check for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        console.log('🔄 New service worker found:', newWorker);
+                    });
+                })
+                .catch(error => {
+                    console.log('❌ Service Worker registration failed:', error);
+                });
+        }
     </script>
 </body>
+
 </html>

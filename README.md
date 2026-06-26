@@ -1,2 +1,0 @@
-# skyline-bank
-bank website
