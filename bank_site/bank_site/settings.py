@@ -54,11 +54,11 @@ SECRET_KEY = 'django-insecure-os%ceh%!b_zte(60bvi9)pujn1v#lyuh^u4l!hr+_-5)rmf&9-
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '*',
+    'axosbank.guru',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://axosbank.com',
-                        'https://www.axosbank.com',
+CSRF_TRUSTED_ORIGINS = ['https://axosbank.guru',
+                        'https://www.axosbank.guru',
                         ]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
