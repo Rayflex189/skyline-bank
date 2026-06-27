@@ -55,6 +55,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
+print("ALLOWED_HOSTS env:", os.environ.get("ALLOWED_HOSTS"))
+print("ALLOWED_HOSTS parsed:", ALLOWED_HOSTS)
+
 CSRF_TRUSTED_ORIGINS = ['https://axosbank.guru',
                         'https://www.axosbank.guru',
                         ]
