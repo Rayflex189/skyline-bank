@@ -197,7 +197,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'overtimetested@gmail.com'
-EMAIL_HOST_PASSWORD = 'uoea lxmr agdu hbrn'
+EMAIL_HOST_PASSWORD = 'gdgq jxmp lwog anke'
 DEFAULT_FROM_EMAIL = 'Axos Bank <overtimetested@gmail.com>'
 
 
