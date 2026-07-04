@@ -868,6 +868,7 @@ def loan_approved(request, loan_id):
     return render(request, 'loan_approved.html', {'loan': loan})
 
 @unauthenticated_user
+@unauthenticated_user
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
