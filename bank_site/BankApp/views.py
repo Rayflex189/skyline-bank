@@ -873,32 +873,23 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
 
         if form.is_valid():
-            # Create user but don't activate yet
+            # Create and activate user
             user = form.save(commit=False)
-            user.is_active = False
+            user.is_active = True
             user.save()
 
-            # Create user profile
-            profile, created = UserProfile.objects.get_or_create(
-                user=user,
-                defaults={'is_email_verified': False}
-            )
-
-            profile.is_email_verified = False
+            # Create/update user profile
+            profile, created = UserProfile.objects.get_or_create(user=user)
+            profile.is_email_verified = True
             profile.save()
-
-            messages.success(
-                request,
-                "Registration successful! Please wait for your account to be activated."
-            )
 
             return redirect('user_login')
 
     else:
         form = CustomUserCreationForm()
 
-    return render(request, 'BankApp/register.html', {'form': form})
-
+    return render(request, 'BankApp/register.html', {'form': form}) 
+    
 def verify_email(request, signed_value):
     try:
         # Validate the signed user ID (max_age = 7 days = 604800 seconds)
