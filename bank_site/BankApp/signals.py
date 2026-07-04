@@ -59,24 +59,5 @@ def create_transaction_and_send_email(sender, instance, created, **kwargs):
             description=description
         )
 
-        # Send email alert
-        subject = f"💰 Your account has been {description.lower()}ed"
-        message = f"""
-Hi {instance.user.email},
-
-Your account has been {description.lower()}ed with: {currency} {amount:,.2f}
-Your new balance is: {currency} {new_balance:,.2f}
-
-Thank you for banking with us!
-Axos Bank Security Team
-        """
-        send_mail(
-            subject,
-            message,
-            settings.DEFAULT_FROM_EMAIL,
-            [instance.user.email],
-            fail_silently=False,
-        )
-
-        print(f"Balance updated for user: {instance.user.username}")
+        print(f"Balance updated for user: {instance.user.email}")
         print(f"{description}: {currency}{amount:,.2f} | New Balance: {currency}{new_balance:,.2f}")
