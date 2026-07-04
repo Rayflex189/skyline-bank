@@ -369,9 +369,9 @@ class UserProfileAdmin(admin.ModelAdmin):
             except UserProfile.DoesNotExist:
                 pass
         
-        # Call parent save method
-        super().save_model(request, obj, form, change)
-    
+        print("Saving UserProfile...")
+        obj.save()
+        print("UserProfile Saved.")
     actions = ['issue_card_for_selected', 'block_selected_cards', 'activate_selected_cards']
     
     def issue_card_for_selected(self, request, queryset):
