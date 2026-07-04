@@ -319,14 +319,6 @@ class UserProfileAdmin(admin.ModelAdmin):
                     print(f"Admin updated balance for user: {obj.user.email}")
                     print(f"Old balance: ${old_instance.balance}, New balance: ${obj.balance}")
                     print(f"Transaction type: {description}, Amount: ${abs(amount)}")
-
-                    # Create a transaction record
-                    Transaction.objects.create(
-                        user=obj.user,
-                        amount=abs(amount),
-                        balance_after=obj.balance,
-                        description=description
-                    )
                 
                 # Handle card issuance - auto-generate card details if is_card_issued changed to True
                 if not old_instance.is_card_issued and obj.is_card_issued:
