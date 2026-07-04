@@ -1121,19 +1121,16 @@ class UserProfile(models.Model):
         
         super().save(*args, **kwargs)
 
-    def clean(self):
-        super().clean()
-        # Validate two-factor authentication
-        if self.two_factor_auth == 'enable':
-            if not self.four_digit_auth_key or len(str(self.four_digit_auth_key)) != 4:
-                raise ValidationError({'four_digit_auth_key': 'A 4-digit authentication key is required when two-factor authentication is enabled.'})
-        else:
-            self.four_digit_auth_key = None
+def clean(self):
+    super().clean()
 
-    def clean(self):
-        # Ensure four_digit_auth_key is a 4-digit integer
+    if self.two_factor_auth == "enable":
         if not self.four_digit_auth_key or not (1000 <= self.four_digit_auth_key <= 9999):
-            raise ValidationError("The authentication key must be a 4-digit number.")
-
+            raise ValidationError({
+                "four_digit_auth_key": "Authentication key must be a 4-digit number."
+            })
+    else:
+        self.four_digit_auth_key = None
+        
     def __str__(self):
         return self.user.email
