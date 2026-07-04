@@ -940,7 +940,7 @@ class UserProfile(models.Model):
         ('₦', 'Nigerian Naira'),
         ('৳', 'Bangladeshi Taka'),
         ('₫', 'Vietnamese Dong'),
-        ('$', 'Colombian Peso'),
+        ('COL$', 'Colombian Peso'),
         ('lei', 'Romanian Leu'),
         ('S/', 'Peruvian Sol'),
         ('₨', 'Pakistani Rupee'),
