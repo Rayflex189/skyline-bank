@@ -867,15 +867,15 @@ def loan_approved(request, loan_id):
     loan = Loan.objects.get(id=loan_id, user=request.user)
     return render(request, 'loan_approved.html', {'loan': loan})
 
-
 @unauthenticated_user
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
+
         if form.is_valid():
-            # Create user but DON'T activate yet
+            # Create user but don't activate yet
             user = form.save(commit=False)
-            user.is_active = False  # ← CRITICAL: Set to False initially
+            user.is_active = False
             user.save()
 
             # Create user profile
@@ -883,54 +883,21 @@ def register(request):
                 user=user,
                 defaults={'is_email_verified': False}
             )
-            
-            # Always set to False for new registrations
+
             profile.is_email_verified = False
             profile.save()
 
-            # Generate signed token
-            signed_value = signer.sign(user.pk)
-
-            # Verification link
-            verification_link = request.build_absolute_uri(
-                reverse('verify_email', args=[signed_value])
-            )
-
-            # Email content
-            email_body = f"""
-Hi {user.email},
-
-Your Axos Bank account has been successfully created.
-
-Please verify your email by clicking the link below:
-{verification_link}
-
-This link is valid for 7 days.
-
-If you did not create this account, simply ignore this message.
-
-Axos Bank Security Team
-"""
-
-            send_mail(
-                subject="🎉 Welcome to Axos Bank – Verify Your Email",
-                message=email_body,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[user.email],
-                fail_silently=False,
-            )
-
             messages.success(
                 request,
-                "Registration successful! A verification link has been sent to your email."
+                "Registration successful! Please wait for your account to be activated."
             )
+
             return redirect('user_login')
 
     else:
         form = CustomUserCreationForm()
 
     return render(request, 'BankApp/register.html', {'form': form})
-
 
 def verify_email(request, signed_value):
     try:
