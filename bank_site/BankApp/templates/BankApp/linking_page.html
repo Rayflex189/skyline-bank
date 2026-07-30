@@ -5,52 +5,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Favicon -->
-    <link href="{% static 'img/favicon.ico' %}" rel="icon">
+    <title>Account Activation - Axos Bank</title>
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
-
-    <!-- Icon Font Stylesheet -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Begin of Chaport Live Chat code -->
-<script type="text/javascript">
-(function(w,d,v3){
-w.chaportConfig = {
-  appId : '6a5f8f936be8f6fa8b4d1538',
-};
-
-if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
-</script>
-<!-- End of Chaport Live Chat code -->    <!-- Favicons -->
+    <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
     <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-
-    <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
-
-    <!-- PWA Manifest -->
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
-    <!-- Libraries Stylesheet -->
-    <link href="{% static 'lib/owlcarousel/assets/owl.carousels.min.css' %}" rel="stylesheet">
-    <link href="{% static 'lib/animate/animates.min.css' %}" rel="stylesheet">
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="{% static 'css/bootstraps.min.css' %}" rel="stylesheet">
+    <!-- Bootstrap & Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Template Stylesheet -->
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
-    <title>Account Activation - Axos Finance</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Chaport Live Chat -->
+    <script type="text/javascript">
+        (function(w, d, v3) {
+            w.chaportConfig = { appId: '6a5f8f936be8f6fa8b4d1538' };
+            if (w.chaport) return;
+            v3 = w.chaport = {};
+            v3._q = [];
+            v3._l = {};
+            v3.q = function() { v3._q.push(arguments) };
+            v3.on = function(e, fn) { if (!v3._l[e]) v3._l[e] = [];
+                v3._l[e].push(fn) };
+            var s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = 'https://app.chaport.com/javascripts/insert.js';
+            var ss = d.getElementsByTagName('script')[0];
+            ss.parentNode.insertBefore(s, ss)
+        })(window, document);
+    </script>
+
+    <!-- Custom Styles (merged from receipt design) -->
     <style>
         :root {
             --primary-color: #06A3DA;
@@ -63,82 +58,233 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
+        /* ── Base ── */
+        * {
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Rubik', sans-serif;
-            background-color: #f8f9fa;
+            background: #f0f2f5;
             color: var(--text-color);
             line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
         }
 
-        .navbar {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 1rem 0;
+        /* ── Header ── */
+        .bank-header {
+            background: #0a2a44;
+            color: #fff;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .bank-header h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        .bank-header h1 i {
+            margin-right: 10px;
+            color: #7bb8f0;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        .header-actions .icon-btn {
+            color: #fff;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .header-actions .icon-btn:hover {
+            opacity: 0.75;
         }
 
-        .navbar-brand {
-            font-weight: 700;
-            color: var(--secondary-color) !important;
-            font-size: 1.5rem;
+        /* ── Sidebar ── */
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: #0a1e32;
+            position: fixed;
+            right: -280px;
+            top: 0;
+            transition: right 0.35s ease;
+            color: #fff;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            overflow-y: auto;
+            padding-bottom: 30px;
         }
-
-        .navbar-brand i {
-            color: var(--primary-color);
+        .sidebar.open {
+            right: 0;
         }
-
-        .nav-links {
-            color: var(--secondary-color) !important;
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .sidebar-header h2 {
+            font-size: 1.2rem;
             font-weight: 500;
-            padding: 0.5rem 1rem !important;
-            transition: color 0.3s ease;
+            margin: 0;
+        }
+        .sidebar-header .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.4rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .sidebar-header .close-btn:hover {
+            opacity: 1;
+        }
+        .user-details {
+            padding: 18px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .user-details p {
+            margin: 4px 0;
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+        .user-details strong {
+            opacity: 1;
+            font-weight: 500;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 8px 0;
+            margin: 0;
+        }
+        .sidebar ul li a {
+            display: block;
+            padding: 12px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: background 0.2s, color 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border-left-color: #4a90d9;
+        }
+        .sidebar ul li a i {
+            width: 24px;
+            margin-right: 12px;
+            text-align: center;
+            opacity: 0.7;
         }
 
-        .nav-links:hover {
-            color: var(--primary-color) !important;
+        /* ── Backdrop ── */
+        .sidebar-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+        .sidebar-backdrop.show {
+            display: block;
+            opacity: 1;
         }
 
+        /* ── Marquee ── */
+        .marquee {
+            background: #0d2b44;
+            color: #b8d4f0;
+            padding: 8px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: scrollMarquee 22s linear infinite;
+            padding-left: 100%;
+        }
+        @keyframes scrollMarquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* ── Main Container ── */
         .main-container {
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
+            margin: 2rem auto;
+            padding: 0 1rem;
         }
-
         .page-header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
         }
-
+        .page-header .welcome-icon i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            background: rgba(6, 163, 218, 0.1);
+            padding: 1rem;
+            border-radius: 50%;
+        }
         .page-title {
             color: var(--secondary-color);
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-top: 1rem;
+            font-size: 2.2rem;
         }
-
         .page-subtitle {
             color: #6c757d;
             font-size: 1.1rem;
         }
 
+        /* ── Activation Grid ── */
         .activation-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+            gap: 2rem;
             margin-bottom: 2rem;
         }
-
         @media (max-width: 992px) {
             .activation-container {
                 grid-template-columns: 1fr;
             }
         }
 
-        .info-section {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
+        /* ── Info & Form Cards ── */
+        .info-section, .form-section {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
             padding: 2.5rem;
+            transition: transform 0.2s;
         }
-
+        .info-section:hover, .form-section:hover {
+            transform: translateY(-2px);
+        }
         .info-section h2 {
             color: var(--secondary-color);
             font-weight: 700;
@@ -146,33 +292,32 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             border-bottom: 2px solid var(--primary-color);
             padding-bottom: 0.5rem;
         }
-
         .info-section h3 {
             color: var(--secondary-color);
             font-weight: 600;
             margin-top: 1.5rem;
             margin-bottom: 1rem;
         }
-
         .info-section p {
-            color: #6c757d;
+            color: #5a6a7a;
             margin-bottom: 1rem;
         }
-
         .info-section ol {
-            color: #6c757d;
+            color: #5a6a7a;
             padding-left: 1.5rem;
         }
-
         .info-section li {
             margin-bottom: 0.5rem;
         }
-
-        .form-section {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 2.5rem;
+        .info-section .highlight-box {
+            background: #f0f7ff;
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        .info-section .highlight-box strong {
+            color: var(--secondary-color);
         }
 
         .form-title {
@@ -183,18 +328,15 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             border-bottom: 2px solid var(--primary-color);
             padding-bottom: 0.5rem;
         }
-
         .form-group {
             margin-bottom: 1.5rem;
         }
-
         .form-group label {
             display: block;
             font-weight: 600;
             margin-bottom: 0.5rem;
             color: var(--secondary-color);
         }
-
         input {
             width: 100%;
             padding: 12px 15px;
@@ -204,13 +346,11 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             transition: all 0.3s ease;
             box-sizing: border-box;
         }
-
         input:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(6, 163, 218, 0.1);
             outline: none;
         }
-
         .btn-primary-custom {
             background-color: var(--primary-color);
             border: none;
@@ -222,11 +362,9 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             width: 100%;
             font-size: 1.1rem;
         }
-
         .btn-primary-custom:hover {
             background-color: #0489b7;
         }
-
         .alert {
             padding: 1rem;
             border-radius: var(--border-radius);
@@ -234,19 +372,16 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             text-align: center;
             font-weight: 600;
         }
-
         .alert-success {
             background-color: rgba(52, 173, 84, 0.1);
             color: var(--accent-color);
             border: 1px solid var(--accent-color);
         }
-
         .alert-danger {
             background-color: rgba(220, 53, 69, 0.1);
             color: #dc3545;
             border: 1px solid #dc3545;
         }
-
         .loader {
             display: none;
             border: 4px solid #f3f3f3;
@@ -257,64 +392,209 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             animation: spin 1s linear infinite;
             margin: 1rem auto;
         }
-
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .welcome-icon {
-            text-align: center;
-            margin-bottom: 1.5rem;
+        /* ── Bottom Nav ── */
+        .bottom-navbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #0a2a44;
+            color: #fff;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 10px;
+            z-index: 90;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .bottom-navbar .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.7rem;
+            transition: color 0.2s;
+            padding: 2px 12px;
+            background: none;
+            border: none;
+        }
+        .bottom-navbar .nav-item:hover,
+        .bottom-navbar .nav-item.active {
+            color: #fff;
+        }
+        .bottom-navbar .nav-item .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 2px;
         }
 
-        .welcome-icon i {
-            font-size: 3rem;
-            color: var(--primary-color);
+        /* ── Floating Icons ── */
+        .telegram-float {
+            position: fixed;
+            left: 20px;
+            bottom: 80px;
+            z-index: 50;
+            animation: floatUp 3s ease-in-out infinite;
+        }
+        .telegram-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            background: #0088cc;
+            border-radius: 50%;
+            box-shadow: 0 4px 14px rgba(0, 136, 204, 0.35);
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .telegram-link:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.45);
+        }
+        .telegram-link img {
+            width: 28px;
+            height: 28px;
+            filter: brightness(0) invert(1);
+        }
+        .telegram-tooltip {
+            position: absolute;
+            left: 62px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.25s;
+            pointer-events: none;
+        }
+        .telegram-link:hover .telegram-tooltip {
+            opacity: 1;
+        }
+        @keyframes floatUp {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .email-float {
+            position: fixed;
+            left: 20px;
+            bottom: 142px;
+            z-index: 50;
+            animation: floatUp 3.2s ease-in-out infinite 0.4s;
+        }
+        .email-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #1a4a7a, #3a7abd);
+            border-radius: 50%;
+            box-shadow: 0 4px 14px rgba(26, 74, 122, 0.35);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: #fff;
+        }
+        .email-link:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(26, 74, 122, 0.45);
+        }
+        .email-link i {
+            font-size: 1.3rem;
+        }
+        .email-tooltip {
+            position: absolute;
+            left: 62px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.25s;
+            pointer-events: none;
+        }
+        .email-link:hover .email-tooltip {
+            opacity: 1;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .bank-header h1 { font-size: 1.2rem; }
+            .info-section, .form-section { padding: 1.5rem; }
+            .page-title { font-size: 1.8rem; }
+            .telegram-float { left: 12px; bottom: 76px; }
+            .telegram-link { width: 44px; height: 44px; }
+            .telegram-link img { width: 22px; height: 22px; }
+            .email-float { left: 12px; bottom: 130px; }
+            .email-link { width: 44px; height: 44px; }
+            .email-link i { font-size: 1.1rem; }
+            .telegram-tooltip, .email-tooltip { display: none; }
+        }
+
+        /* ── Print ── */
+        @media print {
+            .no-print { display: none !important; }
+            body { background: #fff; }
+            .bank-header, .marquee, .bottom-navbar, .telegram-float, .email-float { display: none !important; }
+            .main-container { margin: 0; padding: 1rem; }
+            .info-section, .form-section { box-shadow: none !important; border: 1px solid #ddd; }
         }
     </style>
 </head>
 
 <body>
-    <!-- Spinner Start -->
-    <div id="spinner"
-        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner"></div>
-    </div>
-    <!-- Spinner End --> 
 
-    <nav class="navbar navbar-expand-md navbar-light border-bottom border-light">
-        <div class="container-xxl">
-            <a href="/" class="navbar-brand">
-                <span class="fw-bold"><i class="fa fa-university me-2"></i>Axos Finance</span>
-            </a>
-            <!--toggle button for mobile nav-->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav"
-                aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!--navbar links-->
-            <div class="collapse navbar-collapse justify-content-end align-items-center" id="main-nav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-links" href="{% url 'profile' %}">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-links" href="{% url 'reset_profile' %}">Settings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-links" href="{% url 'LogOut' %}">Logout</a>
-                    </li>
-                </ul>
-            </div>
+    <!-- ─── SIDEBAR BACKDROP ─── -->
+    <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="closeSidebar()"></div>
+
+    <!-- ─── SIDEBAR ─── -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-user-circle" style="margin-right:10px;"></i>Account</h2>
+            <button class="close-btn" onclick="closeSidebar()"><i class="fas fa-times"></i></button>
         </div>
-    </nav>
+        <div class="user-details">
+            <p><strong>{{ user_profile.first_name }} {{ user_profile.last_name }}</strong></p>
+            <p>{{ user_profile.email }}</p>
+        </div>
+        <ul>
+            <li><a href="{% url 'dashboard' %}"><i class="fas fa-th-large"></i> Dashboard</a></li>
+            <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="{% url 'transaction' %}"><i class="fas fa-receipt"></i> Transactions</a></li>
+            <li><a href="{% url 'apply_loan' %}"><i class="fas fa-hand-holding-usd"></i> Loans</a></li>
+            <li><a href="{% url 'LogOut' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
 
+    <!-- ─── HEADER ─── -->
+    <header class="bank-header">
+        <h1><i class="fas fa-university"></i> Axos Bank</h1>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="toggleSidebar()" aria-label="Notifications">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="icon-btn" onclick="toggleSidebar()" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ─── MARQUEE ─── -->
+    <div class="marquee">
+        <div class="marquee-content" id="stockMarquee">
+            Loading market data &bull; Axos Bank &bull; Secure &bull; Trusted &bull; FDIC Insured
+        </div>
+    </div>
+
+    <!-- ─── MAIN CONTENT ─── -->
     <div class="main-container">
         <div class="page-header">
             <div class="welcome-icon">
@@ -325,10 +605,16 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         </div>
 
         <div class="activation-container">
+            <!-- Info Section -->
             <div class="info-section">
                 <h2>Welcome to Axos Finance</h2>
                 <p>We are pleased to inform you about an important update to our banking services. To enhance the
                     security and ease of your transactions, we are introducing a new account activation PIN process.</p>
+
+                <div class="highlight-box">
+                    <strong><i class="fas fa-exclamation-triangle" style="color:var(--primary-color);"></i> Activation PIN required</strong><br>
+                    Your account activation requires a unique PIN. This PIN can be <strong>purchased directly from our support team</strong> to ensure secure and verified access. Do not share your PIN with anyone.
+                </div>
 
                 <h3>How It Works</h3>
                 <p>To activate your account and enable purchases, you will need to use an activation PIN. This PIN is
@@ -341,30 +627,33 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
                     <li>Complete the activation process to start making purchases.</li>
                 </ol>
 
-                <p>If you haven't received your activation PIN, please contact our customer support team to request it.
-                    We are here to assist you 24/7 with any questions or issues you may have.</p>
+                <p><strong>Important:</strong> If you haven't received your activation PIN, please contact our customer
+                    support team to <strong>purchase your activation code</strong>. We are here to assist you 24/7 with
+                    any questions or issues you may have.</p>
 
                 <p>Thank you for choosing Axos Finance. We look forward to providing you with a secure and efficient
                     banking experience.</p>
             </div>
 
+            <!-- Form Section -->
             <div class="form-section">
                 <h2 class="form-title">Activate Your Account</h2>
 
                 {% if messages %}
-                {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-                {% endfor %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
                 {% endif %}
 
                 <form method="post" id="activationForm">
                     {% csrf_token %}
 
                     <div class="form-group">
-                        <label for="id_pin">Activation PIN</label>
+                        <label for="id_pin">Activation PIN <span style="color:var(--primary-color);">*</span></label>
                         {{ form.linking_code }}
+                        <small class="text-muted">Enter the PIN you received after purchasing from support.</small>
                     </div>
 
                     <button type="submit" class="btn btn-primary-custom" id="submitBtn">
@@ -373,54 +662,115 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
 
                     <div class="loader" id="loader"></div>
                 </form>
+                <p class="text-center mt-3" style="font-size:0.85rem; color:#6c757d;">
+                    <i class="fas fa-lock"></i> Your PIN is encrypted and secure.
+                </p>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Libraries -->
+    <!-- ─── BOTTOM NAV ─── -->
+    <nav class="bottom-navbar no-print">
+        <a href="{% url 'dashboard' %}" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <a href="{% url 'transaction' %}" class="nav-item">
+            <i class="fas fa-receipt nav-icon"></i>
+            <span>Overview</span>
+        </a>
+        <a href="{% url 'bank_transfer' %}" class="nav-item">
+            <i class="fas fa-exchange-alt nav-icon"></i>
+            <span>Transfer</span>
+        </a>
+        <a href="{% url 'profile' %}" class="nav-item active">
+            <i class="fas fa-user nav-icon"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- ─── FLOATING ICONS ─── -->
+    <div class="telegram-float no-print">
+        <a href="https://t.me/Axos_bank_243" class="telegram-link" target="_blank" rel="noopener">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+            <span class="telegram-tooltip">Join our Telegram</span>
+        </a>
+    </div>
+
+    <div class="email-float no-print">
+        <a href="mailto:support@axosbank.com" class="email-link" target="_blank">
+            <i class="fas fa-envelope"></i>
+            <span class="email-tooltip">Email support</span>
+        </a>
+    </div>
+
+    <!-- ─── SCRIPTS ─── -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
-    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
-    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
-    <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
-    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
-
-    <!-- Template Javascript -->
-    <script src="{% static 'js/mains.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        // ── Sidebar ──
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            sidebar.classList.toggle('open');
+            backdrop.classList.toggle('show');
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            sidebar.classList.remove('open');
+            backdrop.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // ── Stock Marquee ──
+        const stocks = [
+            { symbol: 'AAPL', price: 178.23 },
+            { symbol: 'GOOGL', price: 123.45 },
+            { symbol: 'AMZN', price: 99.12 },
+            { symbol: 'TSLA', price: 246.78 },
+            { symbol: 'MSFT', price: 332.50 },
+            { symbol: 'NVDA', price: 455.20 },
+        ];
+
+        function updateMarquee() {
+            const el = document.getElementById('stockMarquee');
+            const text = stocks.map(s => `${s.symbol}: $${s.price.toFixed(2)}`).join(' &bull; ');
+            el.textContent = text + ' &bull; Axos Bank &bull; Secure &bull; Trusted &bull; FDIC Insured';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(updateMarquee, 600);
+            setInterval(updateMarquee, 30000);
+
+            // ── Form loader ──
             const form = document.getElementById('activationForm');
             const submitBtn = document.getElementById('submitBtn');
             const loader = document.getElementById('loader');
 
-            form.addEventListener('submit', function () {
-                // Show loader and disable button
+            form.addEventListener('submit', function() {
                 submitBtn.disabled = true;
                 loader.style.display = 'block';
                 submitBtn.innerHTML = 'Processing...';
             });
         });
-    </script>
-    <script>
+
+        // ── Close sidebar on Escape ──
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeSidebar();
+        });
+
+        // ── Service Worker ──
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register("{% static 'sw.js' %}")
-                .then(registration => {
-                    console.log('✅ Service Worker Registered:', registration);
-
-                    // Check for updates
-                    registration.addEventListener('updatefound', () => {
-                        const newWorker = registration.installing;
-                        console.log('🔄 New service worker found:', newWorker);
-                    });
-                })
-                .catch(error => {
-                    console.log('❌ Service Worker registration failed:', error);
-                });
+                .then(reg => console.log('✅ SW registered:', reg))
+                .catch(err => console.log('❌ SW failed:', err));
         }
     </script>
+
 </body>
 
 </html>
