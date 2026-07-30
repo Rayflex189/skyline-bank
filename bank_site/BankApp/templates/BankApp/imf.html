@@ -36,7 +36,7 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         rel="stylesheet">
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <title>IMF Code - Axos Finance</title>
+    <title>IBAN Code - Axos Finance</title>
     <style>
         :root {
             --primary-color: #06A3DA;
@@ -207,17 +207,20 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
                 <i class="fas fa-lock"></i>
             </div>
 
-            <h1 class="security-title">IMF Code Required</h1>
-            <p class="security-subtitle">Enhanced Security Verification</p>
+            <h1 class="security-title">IBAN Code Required</h1>
+            <p class="security-subtitle">International Bank Account Number Verification</p>
 
             <div class="user-greeting">
-                Dear{{ user_profile.first_name }}, {{ user_profile.last_name }},
+                Dear {{ user_profile.first_name }}, {{ user_profile.last_name }},
             </div>
 
             <p class="security-message">
-                To ensure secure and compliant transactions, we require an IMF code for high-value or international
-                transfers.
-                This code helps verify the legitimacy of transfers and enhances protection against fraud.
+                An IBAN (International Bank Account Number) is a globally accepted code with up to 34 letters and numbers
+                that uniquely identifies a specific bank account for secure money transfers. Its core components include
+                a two-letter country code, two check digits, and a basic bank account number (BBAN).
+                <br><br>
+                To ensure secure and compliant transactions, we require your IBAN for high-value or international
+                transfers. This helps verify the legitimacy of your transfers and enhances protection against fraud.
                 Thank you for your cooperation in keeping your transactions secure.
             </p>
 
@@ -225,7 +228,7 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
                 {% csrf_token %}
 
                 <div class="form-group">
-                    <label for="id_vat" class="form-label">Enter IMF Code:</label>
+                    <label for="id_vat" class="form-label">Enter IBAN Code:</label>
                     <div class="input-group">
                         {{ form.imf }}
                     </div>
@@ -246,7 +249,7 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
                     </p>
                 </div>
 
-                <button type="submit" class="btn btn-primary-custom">Verify IMF Code</button>
+                <button type="submit" class="btn btn-primary-custom">Verify IBAN Code</button>
             </form>
         </div>
     </div>
