@@ -899,7 +899,6 @@ class UserProfile(models.Model):
         ('Zimbabwe', 'Zimbabwe'),
     ]
     country = models.CharField(max_length=50, choices=COUNTRY_CHOICES, blank=True)
-    Ethiopian Birr'),
     currency_choices = [
     ('USD', 'US Dollar'),
     ('EUR', 'Euro'),
