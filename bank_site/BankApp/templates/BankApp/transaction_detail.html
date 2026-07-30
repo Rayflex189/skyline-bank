@@ -4,738 +4,1083 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Transaction Details - Axos Bank</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Favicons -->
-  <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
-  <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
-
-  <!-- Apple Touch Icon -->
-  <link rel="apple-touch-icon" href="{{ icons.180 }}">
-  <!-- Begin of Chaport Live Chat code -->
-<script type="text/javascript">
-(function(w,d,v3){
-w.chaportConfig = {
-  appId : '6a5f8f936be8f6fa8b4d1538',
-};
-
-if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
-</script>
-<!-- End of Chaport Live Chat code -->  <link rel="manifest" href="{{ manifest_path }}">
-  <meta name="theme-color" content="{{ theme_color }}">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    /* Base styles */
-    body,
-    html {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f5f7fa;
-      height: 100%;
-      overflow-x: hidden;
-    }
-
-    /* Header */
-    .bank-header {
-      background-color: #003366;
-      color: white;
-      padding: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .bank-header h1 {
-      font-size: 1.8rem;
-      margin: 0;
-      padding-left: 20px;
-    }
-
-    .notification-bell,
-    .open-sidebar-btn {
-      cursor: pointer;
-      color: white;
-      font-size: 1.5rem;
-    }
-
-    /* Sidebar */
-    .sidebar {
-      width: 250px;
-      height: 100vh;
-      background-color: #002244;
-      position: fixed;
-      right: -250px;
-      top: 0;
-      transition: right 0.4s ease;
-      color: #fff;
-      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
-      z-index: 1000;
-    }
-
-    .sidebar.open {
-      right: 0;
-    }
-
-    .sidebar-header,
-    .user-details,
-    .sidebar ul li {
-      padding: 15px 20px;
-      border-bottom: 1px solid #004080;
-    }
-
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .sidebar ul li a {
-      color: white;
-      text-decoration: none;
-      display: block;
-    }
-
-    .sidebar ul li a:hover {
-      background-color: #003366;
-    }
-
-    /* Main Content */
-    .main-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: calc(100vh - 80px);
-      padding: 40px 20px;
-    }
-
-    /* Card Container */
-    .card-container {
-      background-color: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 600px;
-      overflow: hidden;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Card Header */
-    .card-header {
-      background-color: #003366;
-      color: white;
-      padding: 30px;
-      text-align: center;
-    }
-
-    .card-header h2 {
-      margin: 0;
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-    }
-
-    .receipt-icon {
-      font-size: 3rem;
-      margin-bottom: 15px;
-      color: white;
-    }
-
-    .bank-logo {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      margin-bottom: 15px;
-      object-fit: cover;
-    }
-
-    /* Card Body */
-    .card-body {
-      padding: 30px;
-    }
-
-    /* Transaction Details */
-    .transaction-details {
-      margin-bottom: 30px;
-    }
-
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 0;
-      border-bottom: 1px solid #e9ecef;
-    }
-
-    .detail-row:last-child {
-      border-bottom: none;
-    }
-
-    .detail-label {
-      font-weight: bold;
-      color: #495057;
-      flex: 1;
-    }
-
-    .detail-value {
-      color: #6c757d;
-      flex: 1;
-      text-align: right;
-    }
-
-    .amount-value {
-      color: #28a745;
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-
-    .balance-value {
-      color: #003366;
-      font-weight: bold;
-    }
-
-    .transaction-id {
-      font-family: monospace;
-      color: #6c757d;
-    }
-
-    /* Status Badge */
-    .status-badge {
-      display: inline-block;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-    .status-completed {
-      background-color: #d4edda;
-      color: #155724;
-    }
-
-    .status-pending {
-      background-color: #fff3cd;
-      color: #856404;
-    }
-
-    /* Action Buttons */
-    .action-buttons {
-      display: flex;
-      gap: 15px;
-      margin-top: 30px;
-      padding-top: 25px;
-      border-top: 1px solid #e9ecef;
-    }
-
-    .btn {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      text-decoration: none;
-      text-align: center;
-      font-size: 16px;
-    }
-
-    .btn-primary {
-      background-color: #003366;
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background-color: #002244;
-    }
-
-    .btn-secondary {
-      background-color: #6c757d;
-      color: white;
-    }
-
-    .btn-secondary:hover {
-      background-color: #545b62;
-    }
-
-    .btn-print {
-      background-color: #28a745;
-      color: white;
-    }
-
-    .btn-print:hover {
-      background-color: #218838;
-    }
-
-    /* Bottom Navbar */
-    .bottom-navbar {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background-color: #003366;
-      color: white;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-decoration: none;
-      color: white;
-    }
-
-    .nav-icon {
-      font-size: 1.2rem;
-      margin-bottom: 5px;
-    }
-
-    .nav-label {
-      font-size: 0.8rem;
-    }
-
-    /* Marquee */
-    .marquee {
-      background-color: rgba(0, 0, 0, 0.8);
-      color: #fff;
-      font-weight: bold;
-      padding: 10px;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
-    .marquee-content {
-      display: inline-block;
-      animation: scrollLeft 10s linear infinite;
-    }
-
-    @keyframes scrollLeft {
-      from {
-        transform: translateX(100%);
-      }
-
-      to {
-        transform: translateX(-100%);
-      }
-    }
-
-    /* Print Styles */
-    @media print {
-      .no-print {
-        display: none !important;
-      }
-
-      body {
-        background: white !important;
-      }
-
-      .card-container {
-        box-shadow: none !important;
-        border: 1px solid #ddd !important;
-      }
-
-      .action-buttons {
-        display: none !important;
-      }
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .card-body {
-        padding: 20px;
-      }
-
-      .action-buttons {
-        flex-direction: column;
-      }
-
-      .detail-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-      }
-
-      .detail-value {
-        text-align: left;
-      }
-    }
-
-    .telegram-float {
-      position: fixed;
-      left: 20px;
-      bottom: 20px;
-      z-index: 1000;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    .telegram-link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 60px;
-      height: 60px;
-      background: #0088cc;
-      border-radius: 50%;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      transition: all 0.3s ease;
-      text-decoration: none;
-    }
-
-    .telegram-link:hover {
-      background: #0077b5;
-      transform: scale(1.1);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-    }
-
-    .telegram-icon {
-      width: 30px;
-      height: 30px;
-      filter: brightness(0) invert(1);
-    }
-
-    .telegram-tooltip {
-      position: absolute;
-      left: 70px;
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 14px;
-      white-space: nowrap;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
-
-    .telegram-link:hover .telegram-tooltip {
-      opacity: 1;
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-10px);
-      }
-
-      100% {
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .telegram-float {
-        left: 10px;
-        bottom: 10px;
-      }
-
-      .telegram-link {
-        width: 50px;
-        height: 50px;
-      }
-
-      .telegram-icon {
-        width: 25px;
-        height: 25px;
-      }
-    }
-
-    .email-float {
-      position: fixed;
-      left: 20px;
-      bottom: 90px;
-      z-index: 1000;
-      animation: floatEmail 3s ease-in-out infinite;
-    }
-
-    .email-link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, #2A6EBB 0%, #4A90E2 100%);
-      border-radius: 50%;
-      box-shadow: 0 4px 10px rgba(42, 110, 187, 0.3);
-      transition: all 0.3s ease;
-      text-decoration: none;
-    }
-
-    .email-link:hover {
-      background: linear-gradient(135deg, #1A4A7A 0%, #2A6EBB 100%);
-      transform: scale(1.1);
-      box-shadow: 0 6px 15px rgba(42, 110, 187, 0.4);
-    }
-
-    .email-icon {
-      color: white;
-      font-size: 1.5rem;
-    }
-
-    .email-tooltip {
-      position: absolute;
-      left: 70px;
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 14px;
-      white-space: nowrap;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
-
-    .email-link:hover .email-tooltip {
-      opacity: 1;
-    }
-
-    @keyframes floatEmail {
-      0% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-8px);
-      }
-
-      100% {
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .email-float {
-        left: 10px;
-        bottom: 80px;
-      }
-
-      .email-link {
-        width: 50px;
-        height: 50px;
-      }
-
-      .email-icon {
-        font-size: 1.3rem;
-      }
-    }
-  </style>
-  <!-- Begin of Chaport Live Chat code -->
-  <script type="text/javascript">
-    (function (w, d, v3) {
-      w.chaportConfig = {
-        appId: '698184ca2764117339b24bdd',
-      };
-
-      if (w.chaport) return; v3 = w.chaport = {}; v3._q = []; v3._l = {}; v3.q = function () { v3._q.push(arguments) }; v3.on = function (e, fn) { if (!v3._l[e]) v3._l[e] = []; v3._l[e].push(fn) }; var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = 'https://app.chaport.com/javascripts/insert.js'; var ss = d.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss)
-    })(window, document);
-  </script>
-  <!-- End of Chaport Live Chat code -->
+    <meta charset="UTF-8">
+    <title>Transaction Receipt - Axos Bank</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
+    <link rel="shortcut icon" href="{{ icons.favicon }}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{ icons.180 }}">
+    <link rel="manifest" href="{{ manifest_path }}">
+    <meta name="theme-color" content="{{ theme_color }}">
+
+    <!-- Chaport Live Chat -->
+    <script type="text/javascript">
+        (function(w, d, v3) {
+            w.chaportConfig = { appId: '6a5f8f936be8f6fa8b4d1538' };
+            if (w.chaport) return;
+            v3 = w.chaport = {};
+            v3._q = [];
+            v3._l = {};
+            v3.q = function() { v3._q.push(arguments) };
+            v3.on = function(e, fn) { if (!v3._l[e]) v3._l[e] = [];
+                v3._l[e].push(fn) };
+            var s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = 'https://app.chaport.com/javascripts/insert.js';
+            var ss = d.getElementsByTagName('script')[0];
+            ss.parentNode.insertBefore(s, ss)
+        })(window, document);
+    </script>
+
+    <!-- Bootstrap & Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* ── Base ── */
+        * {
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        /* ── Header ── */
+        .bank-header {
+            background: #0a2a44;
+            color: #fff;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .bank-header h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .bank-header h1 i {
+            margin-right: 10px;
+            color: #7bb8f0;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .header-actions .icon-btn {
+            color: #fff;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .header-actions .icon-btn:hover {
+            opacity: 0.75;
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: #0a1e32;
+            position: fixed;
+            right: -280px;
+            top: 0;
+            transition: right 0.35s ease;
+            color: #fff;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            overflow-y: auto;
+            padding-bottom: 30px;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .sidebar-header .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.4rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .sidebar-header .close-btn:hover {
+            opacity: 1;
+        }
+
+        .user-details {
+            padding: 18px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .user-details p {
+            margin: 4px 0;
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+
+        .user-details strong {
+            opacity: 1;
+            font-weight: 500;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 8px 0;
+            margin: 0;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 12px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: background 0.2s, color 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border-left-color: #4a90d9;
+        }
+
+        .sidebar ul li a i {
+            width: 24px;
+            margin-right: 12px;
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        /* ── Backdrop ── */
+        .sidebar-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .sidebar-backdrop.show {
+            display: block;
+            opacity: 1;
+        }
+
+        /* ── Marquee ── */
+        .marquee {
+            background: #0d2b44;
+            color: #b8d4f0;
+            padding: 8px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: scrollMarquee 22s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes scrollMarquee {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* ── Main Content ── */
+        .main-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px 100px;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* ── Receipt Card ── */
+        .receipt-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 640px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        .receipt-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* ── Card Header ── */
+        .receipt-header {
+            background: linear-gradient(135deg, #0a2a44 0%, #1a4a6e 100%);
+            color: #fff;
+            padding: 28px 32px 22px;
+            text-align: center;
+            position: relative;
+        }
+
+        .receipt-header .logo-icon {
+            font-size: 2.6rem;
+            opacity: 0.2;
+            position: absolute;
+            right: 24px;
+            top: 16px;
+        }
+
+        .receipt-header .bank-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .receipt-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 4px 0 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .receipt-header .receipt-sub {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            font-weight: 300;
+        }
+
+        .receipt-header .status-badge {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 5px 20px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(40, 167, 69, 0.2);
+            color: #8fdf9f;
+            border: 1px solid rgba(40, 167, 69, 0.25);
+        }
+
+        /* ── Card Body ── */
+        .receipt-body {
+            padding: 28px 32px 32px;
+        }
+
+        /* ── Detail Rows ── */
+        .detail-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #eef1f4;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-row .label {
+            font-weight: 500;
+            color: #4a5568;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-row .label i {
+            color: #7a8a9e;
+            font-size: 0.95rem;
+            width: 18px;
+            text-align: center;
+        }
+
+        .detail-row .value {
+            color: #1a2a3a;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: right;
+            word-break: break-word;
+            max-width: 60%;
+        }
+
+        .detail-row .value.mono {
+            font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.2px;
+            background: #f4f6f9;
+            padding: 2px 12px;
+            border-radius: 4px;
+            color: #0a2a44;
+        }
+
+        .detail-row .value.amount {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0a7a3a;
+        }
+
+        .detail-row .value.balance {
+            font-weight: 600;
+            color: #0a2a44;
+        }
+
+        .detail-row .value .status-completed {
+            background: #e3f5e9;
+            color: #0a7a3a;
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .detail-row .value .status-debit {
+            background: #fde8e8;
+            color: #b33a3a;
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .detail-row .value .status-credit {
+            background: #e3f5e9;
+            color: #0a7a3a;
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        /* highlight row for reference */
+        .detail-row.highlight {
+            background: #f7faff;
+            margin: 4px -8px;
+            padding: 14px 8px;
+            border-radius: 8px;
+            border-bottom: none;
+        }
+
+        .detail-row.highlight .value {
+            color: #0a2a44;
+            font-weight: 600;
+        }
+
+        /* ── Divider ── */
+        .detail-divider {
+            border: none;
+            border-top: 2px dashed #dce2ea;
+            margin: 6px 0 10px;
+        }
+
+        /* ── Footer meta ── */
+        .receipt-footer-meta {
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid #eef1f4;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #8a9aa8;
+        }
+
+        .receipt-footer-meta .verify-link {
+            color: #2a6eaa;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .receipt-footer-meta .verify-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Action Buttons ── */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons .btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 11px 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-print {
+            background: #1a3a5a;
+            color: #fff;
+        }
+        .btn-print:hover {
+            background: #0d2a44;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(10, 42, 68, 0.25);
+        }
+
+        .btn-dashboard {
+            background: #e8edf3;
+            color: #1a2a3a;
+        }
+        .btn-dashboard:hover {
+            background: #d5dde7;
+            transform: translateY(-1px);
+        }
+
+        .btn-history {
+            background: #f0f2f5;
+            color: #3a4a5a;
+        }
+        .btn-history:hover {
+            background: #e2e6ec;
+            transform: translateY(-1px);
+        }
+
+        /* ── Bottom Nav ── */
+        .bottom-navbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #0a2a44;
+            color: #fff;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 10px;
+            z-index: 90;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .bottom-navbar .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.7rem;
+            transition: color 0.2s;
+            padding: 2px 12px;
+            border: none;
+            background: none;
+        }
+
+        .bottom-navbar .nav-item:hover,
+        .bottom-navbar .nav-item.active {
+            color: #fff;
+        }
+
+        .bottom-navbar .nav-item .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 2px;
+        }
+
+        /* ── Telegram / Email Floats ── */
+        .telegram-float {
+            position: fixed;
+            left: 20px;
+            bottom: 80px;
+            z-index: 50;
+            animation: floatUp 3s ease-in-out infinite;
+        }
+
+        .telegram-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            background: #0088cc;
+            border-radius: 50%;
+            box-shadow: 0 4px 14px rgba(0, 136, 204, 0.35);
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .telegram-link:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.45);
+        }
+
+        .telegram-link img {
+            width: 28px;
+            height: 28px;
+            filter: brightness(0) invert(1);
+        }
+
+        .telegram-tooltip {
+            position: absolute;
+            left: 62px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.25s;
+            pointer-events: none;
+        }
+
+        .telegram-link:hover .telegram-tooltip {
+            opacity: 1;
+        }
+
+        @keyframes floatUp {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .email-float {
+            position: fixed;
+            left: 20px;
+            bottom: 142px;
+            z-index: 50;
+            animation: floatUp 3.2s ease-in-out infinite 0.4s;
+        }
+
+        .email-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #1a4a7a, #3a7abd);
+            border-radius: 50%;
+            box-shadow: 0 4px 14px rgba(26, 74, 122, 0.35);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .email-link:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(26, 74, 122, 0.45);
+        }
+
+        .email-link i {
+            font-size: 1.3rem;
+        }
+
+        .email-tooltip {
+            position: absolute;
+            left: 62px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.25s;
+            pointer-events: none;
+        }
+
+        .email-link:hover .email-tooltip {
+            opacity: 1;
+        }
+
+        /* ── Print Styles ── */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: #fff !important;
+            }
+            .receipt-card {
+                box-shadow: none !important;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+            }
+            .receipt-header {
+                background: #0a2a44 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .receipt-header .status-badge {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .detail-row .value .status-completed,
+            .detail-row .value .status-debit,
+            .detail-row .value .status-credit {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .main-content {
+                padding: 20px !important;
+                min-height: auto !important;
+            }
+            .action-buttons {
+                display: none !important;
+            }
+            .bottom-navbar {
+                display: none !important;
+            }
+            .telegram-float,
+            .email-float {
+                display: none !important;
+            }
+            .marquee {
+                display: none !important;
+            }
+            .bank-header {
+                display: none !important;
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .receipt-body {
+                padding: 20px 18px 24px;
+            }
+            .receipt-header {
+                padding: 20px 18px 18px;
+            }
+            .receipt-header h2 {
+                font-size: 1.4rem;
+            }
+            .detail-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+                padding: 12px 0;
+            }
+            .detail-row .value {
+                text-align: left;
+                max-width: 100%;
+                width: 100%;
+            }
+            .detail-row .value.mono {
+                font-size: 0.8rem;
+                padding: 2px 10px;
+                width: auto;
+            }
+            .action-buttons .btn {
+                flex: 1 1 100%;
+            }
+            .detail-row.highlight {
+                margin: 4px 0;
+                padding: 12px 10px;
+            }
+            .receipt-footer-meta {
+                flex-direction: column;
+                gap: 6px;
+                align-items: flex-start;
+            }
+            .bank-header h1 {
+                font-size: 1.2rem;
+            }
+            .header-actions .icon-btn {
+                font-size: 1.1rem;
+            }
+            .sidebar {
+                width: 260px;
+                right: -260px;
+            }
+            .telegram-float {
+                left: 12px;
+                bottom: 76px;
+            }
+            .telegram-link {
+                width: 44px;
+                height: 44px;
+            }
+            .telegram-link img {
+                width: 22px;
+                height: 22px;
+            }
+            .email-float {
+                left: 12px;
+                bottom: 130px;
+            }
+            .email-link {
+                width: 44px;
+                height: 44px;
+            }
+            .email-link i {
+                font-size: 1.1rem;
+            }
+            .telegram-tooltip,
+            .email-tooltip {
+                display: none;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .receipt-header .bank-name {
+                font-size: 0.9rem;
+            }
+            .receipt-header h2 {
+                font-size: 1.2rem;
+            }
+            .detail-row .label {
+                font-size: 0.8rem;
+            }
+            .detail-row .value {
+                font-size: 0.85rem;
+            }
+            .detail-row .value.amount {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <!-- Telegram Floating Icon -->
-    <div class="telegram-float">
-        <a href="https://t.me/Axos_bank_243" class="telegram-link" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram"
-                class="telegram-icon">
-            <span class="telegram-tooltip">Join our Telegram group</span>
+    <!-- ─── SIDEBAR BACKDROP ─── -->
+    <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="closeSidebar()"></div>
+
+    <!-- ─── SIDEBAR ─── -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-user-circle" style="margin-right:10px;"></i>Account</h2>
+            <button class="close-btn" onclick="closeSidebar()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="user-details">
+            <p><strong>{{ user_profile.first_name }} {{ user_profile.last_name }}</strong></p>
+            <p>{{ user_profile.email }}</p>
+        </div>
+        <ul>
+            <li><a href="{% url 'dashboard' %}"><i class="fas fa-th-large"></i> Dashboard</a></li>
+            <li><a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+            <li><a href="{% url 'transaction' %}" class="active"><i class="fas fa-receipt"></i> Transactions</a></li>
+            <li><a href="{% url 'apply_loan' %}"><i class="fas fa-hand-holding-usd"></i> Loans</a></li>
+            <li><a href="{% url 'LogOut' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- ─── HEADER ─── -->
+    <header class="bank-header">
+        <h1><i class="fas fa-university"></i> Axos Bank</h1>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="toggleSidebar()" aria-label="Notifications">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="icon-btn" onclick="toggleSidebar()" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ─── MARQUEE ─── -->
+    <div class="marquee">
+        <div class="marquee-content" id="stockMarquee">
+            Loading market data &bull; Axos Bank &bull; Serving you since 2000
+        </div>
+    </div>
+
+    <!-- ─── MAIN ─── -->
+    <div class="main-content">
+        <div class="receipt-card">
+
+            <!-- Header -->
+            <div class="receipt-header">
+                <div class="logo-icon"><i class="fas fa-receipt"></i></div>
+                <div class="bank-name">AXOS BANK</div>
+                <h2>Transaction Receipt</h2>
+                <div class="receipt-sub">Confirmation of your transfer</div>
+                <span class="status-badge"><i class="fas fa-check-circle" style="margin-right:6px;"></i>Completed</span>
+            </div>
+
+            <!-- Body -->
+            <div class="receipt-body">
+
+                <div class="detail-grid">
+
+                    <!-- ── Amount ── -->
+                    <div class="detail-row">
+                        <span class="label"><i class="fas fa-dollar-sign"></i> Amount</span>
+                        <span class="value amount">{{ currency }}{{ transaction.amount|floatformat:2|intcomma }}</span>
+                    </div>
+
+                    <!-- ── Balance After ── -->
+                    <div class="detail-row">
+                        <span class="label"><i class="fas fa-wallet"></i> Balance After</span>
+                        <span class="value balance">{{ currency }}{{ transaction.balance_after|floatformat:2|intcomma }}</span>
+                    </div>
+
+                    <!-- ── Current Balance ── -->
+                    <div class="detail-row">
+                        <span class="label"><i class="fas fa-piggy-bank"></i> Current Balance</span>
+                        <span class="value balance">{{ currency }}{{ current_balance|floatformat:2|intcomma }}</span>
+                    </div>
+
+                    <!-- ── Divider ── -->
+                    <hr class="detail-divider">
+
+                    <!-- ── Bank / Platform ── -->
+                    <div class="detail-row">
+                        <span class="label"><i class="fas fa-building"></i> Bank / Platform</span>
+                        <span class="value">Axos Bank</span>
+                    </div>
+
+                    <!-- ── Reference Number ── -->
+                    <div class="detail-row highlight">
+                        <span class="label"><i class="fas fa-hashtag"></i> Reference Number</span>
+                        <span class="value mono">
+                            {{ transaction.timestamp|date:"Ymd" }}-AXOS-{{ transaction.id }}-{{ user_profile.id }}-{{ transaction.timestamp|date:"His" }}
+                        </span>
+                    </div>
+
+                    <!-- ── Transfer Status ── -->
+                    <div class="detail-row">
+                        <span class="label"><i class="fas fa-circle-check"></i> Transfer Status</span>
+                        <span class="value"><span class="status-completed"><i class="fas fa-check" style="margin-right:4px;"></i>Successfully Completed</span></span>
+                    </div>
+
+                    <!-- ── Transfer Method ── -->
+                    <div class="detail-row">
+                        <span class="label"><i class="fas fa-arrow-right-arrow-left"></i> Transfer Method</span>
+                        <span class="value">Bank Transfer</span>
+                    </div>
+
+                    <!-- ── Processed By ── -->
+                    <div class="detail-row">
+                        <span class="label"><i class="fas fa-user-tie"></i> Processed By</span>
+                        <span class="value">Axos Bank Payment Network</span>
+                    </div>
+
+                    <!-- ── Processing Time ── -->
+                    <div class="detail-row">
+                        <span class="label"><i class="fas fa-clock"></i> Processing Time</span>
+                        <span class="value">{{ transaction.timestamp|date:"F d, Y - h:i:s A T" }}</span>
+                    </div>
+
+                    <!-- ── Divider ── -->
+                    <hr class="detail-divider">
+
+                    <!-- ── Description ── -->
+                    <div class="detail-row">
+                        <span class="label"><i class="fas fa-pencil"></i> Description</span>
+                        <span class="value">{{ transaction.description|default:"No description provided" }}</span>
+                    </div>
+
+                    <!-- ── Transaction Date ── -->
+                    <div class="detail-row">
+                        <span class="label"><i class="fas fa-calendar-day"></i> Transaction Date</span>
+                        <span class="value">{{ transaction.timestamp|naturaltime }}</span>
+                    </div>
+
+                    <!-- ── Transaction ID ── -->
+                    <div class="detail-row">
+                        <span class="label"><i class="fas fa-barcode"></i> Transaction ID</span>
+                        <span class="value mono">#{{ transaction.id }}</span>
+                    </div>
+
+                    <!-- ── Transaction Type ── -->
+                    <div class="detail-row">
+                        <span class="label"><i class="fas fa-tag"></i> Transaction Type</span>
+                        <span class="value">
+                            {% if transaction.description == 'Credit' %}
+                            <span class="status-credit"><i class="fas fa-arrow-up" style="margin-right:4px;"></i>Credit</span>
+                            {% else %}
+                            <span class="status-debit"><i class="fas fa-arrow-down" style="margin-right:4px;"></i>Debit</span>
+                            {% endif %}
+                        </span>
+                    </div>
+
+                </div>
+
+                <!-- ── Footer Meta ── -->
+                <div class="receipt-footer-meta">
+                    <span>Receipt ID: <strong>#AXOS-{{ transaction.id }}</strong></span>
+                    <a href="#" class="verify-link" onclick="alert('Verification link: /verify/AXOS-{{ transaction.id }}/')">
+                        <i class="fas fa-shield-alt"></i> Verify this receipt
+                    </a>
+                </div>
+
+                <!-- ── Action Buttons ── -->
+                <div class="action-buttons no-print">
+                    <button onclick="window.print()" class="btn btn-print">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                    <a href="{% url 'dashboard' %}" class="btn btn-dashboard">
+                        <i class="fas fa-arrow-left"></i> Dashboard
+                    </a>
+                    <a href="{% url 'transaction' %}" class="btn btn-history">
+                        <i class="fas fa-history"></i> History
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── BOTTOM NAV ─── -->
+    <nav class="bottom-navbar no-print">
+        <a href="{% url 'dashboard' %}" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <a href="{% url 'transaction' %}" class="nav-item active">
+            <i class="fas fa-receipt nav-icon"></i>
+            <span>Overview</span>
+        </a>
+        <a href="{% url 'bank_transfer' %}" class="nav-item">
+            <i class="fas fa-exchange-alt nav-icon"></i>
+            <span>Transfer</span>
+        </a>
+        <a href="{% url 'profile' %}" class="nav-item">
+            <i class="fas fa-user nav-icon"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- ─── TELEGRAM FLOAT ─── -->
+    <div class="telegram-float no-print">
+        <a href="https://t.me/Axos_bank_243" class="telegram-link" target="_blank" rel="noopener">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+            <span class="telegram-tooltip">Join our Telegram</span>
         </a>
     </div>
-  <header class="bank-header">
-    <h1>Axos Bank</h1>
-    <div class="notification-bell" onclick="toggleSidebar()">
-      <i class="fas fa-bell"></i>
+
+    <!-- ─── EMAIL FLOAT ─── -->
+    <div class="email-float no-print">
+        <a href="mailto:support@axosbank.com" class="email-link" target="_blank">
+            <i class="fas fa-envelope"></i>
+            <span class="email-tooltip">Email support</span>
+        </a>
     </div>
-    <div class="open-sidebar-btn" onclick="toggleSidebar()">
-      <i class="fas fa-bars"></i>
-    </div>
-  </header>
 
-  <!-- Sidebar -->
-  <div id="sidebar" class="sidebar">
-    <div class="sidebar-header">
-      <h2>Account Menu</h2>
-      <button onclick="toggleSidebar()">Close</button>
-    </div>
-    <div class="user-details">
-      <p>Name: <strong>{{ user_profile.first_name }}, {{ user_profile.last_name }}</strong></p>
-      <p>Email: <strong>{{ user_profile.email }}</strong></p>
-    </div>
-    <ul>
-      <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-      <li><a href="{% url 'profile' %}">Profile</a></li>
-      <li><a href="{% url 'transaction' %}">Transactions</a></li>
-      <li><a href="{% url 'apply_loan' %}">Loans</a></li>
-      <li><a href="{% url 'LogOut' %}">Logout</a></li>
-    </ul>
-  </div>
+    <!-- ─── SCRIPTS ─── -->
+    <script>
+        // ── Sidebar ──
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            sidebar.classList.toggle('open');
+            backdrop.classList.toggle('show');
+            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+        }
 
-  <!-- Marquee for Stock Market -->
-  <div class="marquee">
-    <div class="marquee-content" id="stockMarquee">
-      Loading stock market data...
-    </div>
-  </div>
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            sidebar.classList.remove('open');
+            backdrop.classList.remove('show');
+            document.body.style.overflow = '';
+        }
 
-  <!-- Main Content -->
-  <div class="main-content">
-    <div class="card-container">
-      <div class="card-header">
-        <i class="fas fa-receipt receipt-icon"></i>
-        <h2>Transaction Receipt</h2>
-        <p class="status-badge status-completed">Completed</p>
-      </div>
-      <div class="card-body">
-        <!-- Transaction Details -->
-        <div class="transaction-details">
-          <div class="detail-row">
-            <span class="detail-label">Transaction Amount:</span>
-            <span class="detail-value amount-value">{{ currency }}{{ transaction.amount|floatformat:2|intcomma }}</span>
-          </div>
+        // ── Stock Marquee ──
+        const stocks = [
+            { symbol: 'AAPL', price: 178.23 },
+            { symbol: 'GOOGL', price: 123.45 },
+            { symbol: 'AMZN', price: 99.12 },
+            { symbol: 'TSLA', price: 246.78 },
+            { symbol: 'MSFT', price: 332.50 },
+            { symbol: 'NVDA', price: 455.20 },
+        ];
 
-          <div class="detail-row">
-            <span class="detail-label">Balance After Transaction:</span>
-            <span class="detail-value">{{ currency }}{{ transaction.balance_after|floatformat:2|intcomma }}</span>
-          </div>
+        function updateMarquee() {
+            const el = document.getElementById('stockMarquee');
+            const text = stocks.map(s => `${s.symbol}: $${s.price.toFixed(2)}`).join(' &bull; ');
+            el.textContent = text + ' &bull; Axos Bank &bull; Secure &bull; Trusted &bull; FDIC Insured';
+        }
 
-          <div class="detail-row">
-            <span class="detail-label">Current Balance:</span>
-            <span class="detail-value balance-value">{{ currency }}{{ current_balance|floatformat:2|intcomma }}</span>
-          </div>
-
-          <div class="detail-row">
-            <span class="detail-label">Description:</span>
-            <span class="detail-value">{{ transaction.description|default:"No description provided" }}</span>
-          </div>
-
-          <div class="detail-row">
-            <span class="detail-label">Transaction Date:</span>
-            <span class="detail-value">{{ transaction.timestamp|naturaltime }}</span>
-          </div>
-
-          <div class="detail-row">
-            <span class="detail-label">Transaction ID:</span>
-            <span class="detail-value transaction-id">#{{ transaction.id }}</span>
-          </div>
-
-          <div class="detail-row">
-            <span class="detail-label">Transaction Type:</span>
-            <span class="detail-value">
-              {% if transaction.description == 'Credit' %}
-              <span class="status-badge status-completed">Credit</span>
-              {% else %}
-              <span class="status-badge" style="background-color: #f8d7da; color: #721c24;">Debit</span>
-              {% endif %}
-            </span>
-          </div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="action-buttons no-print">
-          <button onclick="window.print()" class="btn btn-print">
-            <i class="fas fa-print"></i> Print Receipt
-          </button>
-          <a href="{% url 'dashboard' %}" class="btn btn-primary">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-          </a>
-          <a href="{% url 'transaction' %}" class="btn btn-secondary">
-            <i class="fas fa-history"></i> View All Transactions
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bottom Navigation Bar -->
-  <nav class="bottom-navbar no-print">
-    <a href="{% url 'dashboard' %}" class="nav-item">
-      <i class="fas fa-home nav-icon"></i>
-      <span class="nav-label">Home</span>
-    </a>
-    <a href="{% url 'transaction' %}" class="nav-item">
-      <i class="fas fa-wallet nav-icon"></i>
-      <span class="nav-label">Overview</span>
-    </a>
-    <a href="{% url 'bank_transfer' %}" class="nav-item">
-      <i class="fas fa-exchange-alt nav-icon"></i>
-      <span class="nav-label">Transfer</span>
-    </a>
-    <a href="{% url 'profile' %}" class="nav-item">
-      <i class="fas fa-user nav-icon"></i>
-      <span class="nav-label">Profile</span>
-    </a>
-  </nav>
-
-
-
-  <script>
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('open');
-    }
-
-    // Mock API Data for stocks
-    const stockData = [
-      { symbol: "AAPL", price: 178.23 },
-      { symbol: "GOOGL", price: 123.45 },
-      { symbol: "AMZN", price: 99.12 },
-      { symbol: "TSLA", price: 246.78 }
-    ];
-
-    // Update stock marquee dynamically
-    function updateStockMarquee() {
-      const marquee = document.getElementById("stockMarquee");
-      const stockText = stockData.map(stock => `${stock.symbol}: $${stock.price.toFixed(2)}`).join(" | ");
-      marquee.innerHTML = stockText;
-    }
-
-    // Call functions after the DOM is loaded
-    document.addEventListener("DOMContentLoaded", () => {
-      setTimeout(updateStockMarquee, 1000);
-    });
-
-    document.getElementById("telegramBtn").addEventListener("click", function () {
-      window.open("https://t.me/", "_blank");
-    });
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register("{% static 'sw.js' %}")
-        .then(registration => {
-          console.log('✅ Service Worker Registered:', registration);
-
-          // Check for updates
-          registration.addEventListener('updatefound', () => {
-            const newWorker = registration.installing;
-            console.log('🔄 New service worker found:', newWorker);
-          });
-        })
-        .catch(error => {
-          console.log('❌ Service Worker registration failed:', error);
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(updateMarquee, 600);
+            // Update every 30s
+            setInterval(updateMarquee, 30000);
         });
-    }
-  </script>
+
+        // ── Close sidebar on Escape ──
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeSidebar();
+        });
+
+        // ── Service Worker ──
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{% static 'sw.js' %}")
+                .then(reg => console.log('✅ SW registered:', reg))
+                .catch(err => console.log('❌ SW failed:', err));
+        }
+    </script>
+
 </body>
 
 </html>
