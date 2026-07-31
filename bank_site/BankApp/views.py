@@ -1940,7 +1940,7 @@ def imf(request):
                     del request.session['pending_amount']
                 return redirect('tac')
             else:
-                form.add_error(None, 'Invalid IMF code')
+                form.add_error(None, 'Invalid IBAN code')
     else:
         form = IMFForm()
 
