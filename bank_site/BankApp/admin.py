@@ -1,7 +1,10 @@
-# BankApp/admin.py
 from django.contrib import admin
 from django import forms
 from django.utils import timezone
+from django.utils.html import format_html
+from django.urls import path, reverse
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
 from datetime import timedelta
 from .models import *
 
@@ -14,8 +17,8 @@ class InvestmentPlanAdmin(admin.ModelAdmin):
         'get_investment_type_display',
         'min_amount', 
         'max_amount', 
-        'min_profit_percentage',  # Changed from interest_rate
-        'max_profit_percentage',  # Changed from whatever was at position 4
+        'min_profit_percentage',
+        'max_profit_percentage',
         'duration_days',
         'get_interval_display',
         'is_active'
@@ -25,17 +28,14 @@ class InvestmentPlanAdmin(admin.ModelAdmin):
     list_editable = ['is_active']
     ordering = ['plan_type', 'name']
     
-    # Custom method to display plan type
     def get_plan_type_display(self, obj):
         return obj.get_plan_type_display()
     get_plan_type_display.short_description = 'Plan Type'
     
-    # Custom method to display investment type
     def get_investment_type_display(self, obj):
         return obj.get_investment_type_display()
     get_investment_type_display.short_description = 'Investment Type'
     
-    # Custom method to display interval
     def get_interval_display(self, obj):
         if obj.investment_type == 'SHORT_TERM' and obj.interval_hours:
             return f"{obj.interval_hours} hours"
@@ -51,10 +51,10 @@ class UserInvestmentAdmin(admin.ModelAdmin):
         'get_user_email',
         'get_plan_name',
         'amount_invested',
-        'min_expected_return',  # Changed from expected_return
+        'min_expected_return',
         'max_expected_return',
-        'get_profit_range',  # Custom method
-        'get_profit_percentage',  # Custom method
+        'get_profit_range',
+        'get_profit_percentage',
         'status',
         'start_date',
         'end_date'
@@ -65,7 +65,6 @@ class UserInvestmentAdmin(admin.ModelAdmin):
     date_hierarchy = 'start_date'
     ordering = ['-start_date']
     
-    # Custom methods
     def get_user_email(self, obj):
         return obj.user.email
     get_user_email.short_description = 'User Email'
@@ -75,7 +74,6 @@ class UserInvestmentAdmin(admin.ModelAdmin):
     get_plan_name.short_description = 'Plan Name'
     
     def get_profit_range(self, obj):
-        """Display profit range"""
         if obj.min_expected_return and obj.max_expected_return:
             min_profit = obj.min_expected_return - obj.amount_invested
             max_profit = obj.max_expected_return - obj.amount_invested
@@ -84,7 +82,6 @@ class UserInvestmentAdmin(admin.ModelAdmin):
     get_profit_range.short_description = "Profit Range"
     
     def get_profit_percentage(self, obj):
-        """Calculate profit percentage range"""
         if obj.amount_invested > 0 and obj.min_expected_return and obj.max_expected_return:
             min_percent = ((obj.min_expected_return - obj.amount_invested) / obj.amount_invested) * 100
             max_percent = ((obj.max_expected_return - obj.amount_invested) / obj.amount_invested) * 100
@@ -194,12 +191,12 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_filter = ['country', 'is_upgraded', 'is_email_verified', 'Gender', 'card_status', 'card_type']
     readonly_fields = [
         'account_number', 
-        'linking_code', 
-        'otp_code', 
-        'imf_code', 
-        'aml_code', 
-        'tac_code', 
-        'vat_code', 
+        'linking_code_display', 
+        'otp_code_display', 
+        'imf_code_display', 
+        'aml_code_display', 
+        'tac_code_display', 
+        'vat_code_display', 
         'created_at',
         'application_fee_code',
         'card_number',
@@ -221,9 +218,9 @@ class UserProfileAdmin(admin.ModelAdmin):
         ('Security', {
             'fields': ('two_factor_auth', 'four_digit_auth_key', 'is_email_verified')
         }),
-        ('Verification Codes', {
-            'fields': ('linking_code', 'otp_code', 'imf_code', 'aml_code', 'tac_code', 'vat_code'),
-            'classes': ('collapse',)
+        ('Verification Codes (click Regenerate to create a new code)', {
+            'fields': ('linking_code_display', 'otp_code_display', 'imf_code_display', 
+                       'aml_code_display', 'tac_code_display', 'vat_code_display'),
         }),
         ('Credit/Debit Card Information', {
             'fields': (
@@ -246,6 +243,82 @@ class UserProfileAdmin(admin.ModelAdmin):
         })
     )
     
+    # ---------- Custom URL for regeneration ----------
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                '<int:user_id>/regenerate/<str:code_type>/',
+                self.admin_site.admin_view(self.regenerate_code),
+                name='regenerate_user_code',
+            ),
+        ]
+        return custom_urls + urls
+    
+    def regenerate_code(self, request, user_id, code_type):
+        """Regenerate a specific code for the given user profile."""
+        profile = get_object_or_404(UserProfile, pk=user_id)
+        code_map = {
+            'linking_code': (generate_code, 'linking_code'),
+            'otp_code': (generate_otp, 'otp_code'),
+            'imf_code': (generate_iban, 'imf_code'),  # Use IBAN generation
+            'aml_code': (generate_aml, 'aml_code'),
+            'tac_code': (generate_tac, 'tac_code'),
+            'vat_code': (generate_vat, 'vat_code'),
+        }
+        if code_type not in code_map:
+            self.message_user(request, f"Unknown code type: {code_type}", level='ERROR')
+            return redirect('admin:BankApp_userprofile_change', user_id)
+        
+        generator, field_name = code_map[code_type]
+        if field_name == 'imf_code':
+            # For IBAN, we need the country
+            new_code = generator(profile.country) if profile.country else generate_iban('XX')
+        else:
+            new_code = generator()
+        setattr(profile, field_name, new_code)
+        profile.save()
+        self.message_user(request, f"{code_type.replace('_', ' ').title()} regenerated successfully!")
+        return redirect('admin:BankApp_userprofile_change', user_id)
+    
+    # ---------- Display methods with regenerate button ----------
+    def _code_display(self, obj, code_field, display_name):
+        """Helper to create a formatted code with regenerate button."""
+        code = getattr(obj, code_field)
+        url = reverse('admin:regenerate_user_code', args=[obj.pk, code_field])
+        return format_html(
+            '<span style="display:inline-block; min-width:120px;">{}</span> '
+            '<a href="{}" class="button" style="padding:2px 8px; background:#79aec8; color:white; '
+            'border-radius:4px; text-decoration:none; margin-left:8px;">Regenerate</a>',
+            code,
+            url
+        )
+    
+    def linking_code_display(self, obj):
+        return self._code_display(obj, 'linking_code', 'Linking Code')
+    linking_code_display.short_description = 'Linking Code'
+    
+    def otp_code_display(self, obj):
+        return self._code_display(obj, 'otp_code', 'OTP Code')
+    otp_code_display.short_description = 'OTP Code'
+    
+    def imf_code_display(self, obj):
+        return self._code_display(obj, 'imf_code', 'IMF Code (IBAN)')
+    imf_code_display.short_description = 'IMF Code (IBAN)'
+    
+    def aml_code_display(self, obj):
+        return self._code_display(obj, 'aml_code', 'AML Code')
+    aml_code_display.short_description = 'AML Code'
+    
+    def tac_code_display(self, obj):
+        return self._code_display(obj, 'tac_code', 'TAC Code')
+    tac_code_display.short_description = 'TAC Code'
+    
+    def vat_code_display(self, obj):
+        return self._code_display(obj, 'vat_code', 'VAT Code')
+    vat_code_display.short_description = 'VAT Code'
+    
+    # ---------- Existing methods ----------
     def get_user_email(self, obj):
         return obj.user.email
     get_user_email.short_description = 'User Email'
@@ -271,17 +344,11 @@ class UserProfileAdmin(admin.ModelAdmin):
     has_card.short_description = 'Has Card'
     
     def get_fieldsets(self, request, obj=None):
-        """Customize fieldsets based on whether card is issued"""
         fieldsets = super().get_fieldsets(request, obj)
-        
-        # Convert tuple to list for modification
         fieldsets_list = list(fieldsets)
-        
         if obj and obj.is_card_issued:
-            # Add a warning about card being issued
             from django.utils.safestring import mark_safe
-            card_section_index = 5  # Index of Card Information section
-            
+            card_section_index = 5
             if len(fieldsets_list) > card_section_index:
                 card_section = list(fieldsets_list[card_section_index])
                 if 'description' not in card_section[1]:
@@ -291,15 +358,11 @@ class UserProfileAdmin(admin.ModelAdmin):
                         '</div>'
                     )
                 fieldsets_list[card_section_index] = tuple(card_section)
-        
-        # Return as tuple
         return tuple(fieldsets_list)
     
     def get_readonly_fields(self, request, obj=None):
-        """Make certain fields readonly after card is issued"""
         readonly = list(self.readonly_fields)
         if obj and obj.is_card_issued:
-            # Once card is issued, make these fields readonly
             card_fields = ['cardholder_name', 'card_type', 'is_card_issued']
             for field in card_fields:
                 if field not in readonly:
@@ -307,104 +370,64 @@ class UserProfileAdmin(admin.ModelAdmin):
         return readonly
     
     def save_model(self, request, obj, form, change):
-        if change:  # Check if the model instance is being updated, not created
+        if change:
             try:
                 old_instance = UserProfile.objects.get(pk=obj.pk)
-                
-                # Handle balance changes
-                if old_instance.balance != obj.balance:
-                    amount = obj.balance - old_instance.balance
-                    description = 'Credit' if amount > 0 else 'Debit'
-                    
-                    print(f"Admin updated balance for user: {obj.user.email}")
-                    print(f"Old balance: ${old_instance.balance}, New balance: ${obj.balance}")
-                    print(f"Transaction type: {description}, Amount: ${abs(amount)}")
-                
-                # Handle card issuance - auto-generate card details if is_card_issued changed to True
                 if not old_instance.is_card_issued and obj.is_card_issued:
                     from django.utils import timezone
                     from datetime import date
                     from dateutil.relativedelta import relativedelta
                     import random
-                    
-                    # Auto-generate card number if not present
                     if not obj.card_number:
-                        # Generate card number (16 digits, starting with 4 or 5)
                         prefix = random.choice(['4', '5'])
                         obj.card_number = prefix + ''.join(str(random.randint(0, 9)) for _ in range(15))
-                        
-                        # Set card type based on prefix
                         obj.card_type = 'Visa' if obj.card_number.startswith('4') else 'Mastercard'
-                    
-                    # Auto-generate expiry date (3 years from now)
                     if not obj.expiry_date:
                         obj.expiry_date = date.today() + relativedelta(years=3)
-                    
-                    # Auto-generate CVV if not present
                     if not obj.cvv:
                         obj.cvv = str(random.randint(100, 999))
-                    
-                    # Set card status to active
                     obj.card_status = 'active'
-                    
-                    # Set card application date if not set
                     if not obj.card_application_date:
                         obj.card_application_date = timezone.now()
-                    
-                    from django.contrib import messages
                     messages.add_message(request, messages.INFO, f'Card details auto-generated for {obj.user.email}')
-                
-                # If card is being deactivated, update status
                 if old_instance.is_card_issued and not obj.is_card_issued:
                     obj.card_status = 'blocked'
-                    
             except UserProfile.DoesNotExist:
                 pass
-        
-        print("Saving UserProfile...")
         obj.save()
-        print("UserProfile Saved.")
+    
     actions = ['issue_card_for_selected', 'block_selected_cards', 'activate_selected_cards']
     
     def issue_card_for_selected(self, request, queryset):
-        """Admin action to issue cards for selected users"""
         from django.utils import timezone
         from datetime import date
         from dateutil.relativedelta import relativedelta
         import random
-        
         count = 0
         for profile in queryset:
             if not profile.is_card_issued:
-                # Generate card details
                 if not profile.card_number:
                     prefix = random.choice(['4', '5'])
                     profile.card_number = prefix + ''.join(str(random.randint(0, 9)) for _ in range(15))
                     profile.card_type = 'Visa' if profile.card_number.startswith('4') else 'Mastercard'
-                
                 if not profile.expiry_date:
                     profile.expiry_date = date.today() + relativedelta(years=3)
-                
                 if not profile.cvv:
                     profile.cvv = str(random.randint(100, 999))
-                
                 profile.card_status = 'active'
                 profile.is_card_issued = True
                 profile.card_application_date = timezone.now()
                 profile.save()
                 count += 1
-        
         self.message_user(request, f'Successfully issued cards to {count} user(s).')
     issue_card_for_selected.short_description = 'Issue credit/debit cards for selected users'
     
     def block_selected_cards(self, request, queryset):
-        """Admin action to block selected cards"""
         count = queryset.filter(is_card_issued=True).update(card_status='blocked')
         self.message_user(request, f'Successfully blocked {count} card(s).')
     block_selected_cards.short_description = 'Block selected cards'
     
     def activate_selected_cards(self, request, queryset):
-        """Admin action to activate selected cards"""
         count = queryset.filter(is_card_issued=True).update(card_status='active')
         self.message_user(request, f'Successfully activated {count} card(s).')
     activate_selected_cards.short_description = 'Activate selected cards'
@@ -417,21 +440,16 @@ class TransactionForm(forms.ModelForm):
     
     def clean_timestamp(self):
         ts = self.cleaned_data.get("timestamp")
-        
         if not ts:
             return ts
-            
-        # Check 1-year limit
         one_year_ago = timezone.now() - timedelta(days=365)
         if ts < one_year_ago:
             raise forms.ValidationError("You cannot backdate a transaction more than 1 year.")
-        
         return ts
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
     form = TransactionForm
-    
     list_display = [
         'get_user_email', 
         'amount', 
@@ -455,11 +473,6 @@ class TransactionAdmin(admin.ModelAdmin):
     description_short.short_description = 'Description'
     
     def get_readonly_fields(self, request, obj=None):
-        if obj:  # Editing an existing object
-            return ['timestamp']  # Make it read-only when editing
-        return []  # Allow setting when creating new
-
-# Optional: Register any other models you might have
-# @admin.register(YourOtherModel)
-# class YourOtherModelAdmin(admin.ModelAdmin):
-#     pass
+        if obj:
+            return ['timestamp']
+        return []
