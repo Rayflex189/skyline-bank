@@ -1,7 +1,8 @@
 # At the top of views.py, add this import:
 from datetime import date, datetime
 import datetime as dt  # Alternative if you need both
-# Django Core Imports
+from django.contrib import messages
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -868,28 +869,48 @@ def loan_approved(request, loan_id):
     return render(request, 'loan_approved.html', {'loan': loan})
 
 @unauthenticated_user
-@unauthenticated_user
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
 
         if form.is_valid():
-            # Create and activate user
-            user = form.save(commit=False)
-            user.is_active = True
-            user.save()
+            try:
+                # Create the user account
+                user = form.save(commit=False)
+                user.is_active = True
+                user.save()
 
-            # Create/update user profile
-            profile, created = UserProfile.objects.get_or_create(user=user)
-            profile.is_email_verified = True
-            profile.save()
+                # Create or update the user's profile
+                profile, created = UserProfile.objects.get_or_create(
+                    user=user
+                )
+                profile.is_email_verified = True
+                profile.save()
 
-            return redirect('user_login')
+                messages.success(
+                    request,
+                    'Your account has been created successfully. '
+                    'You can now sign in.'
+                )
+
+                return redirect('user_login')
+
+            except Exception:
+                # Avoid exposing internal errors to users
+                messages.error(
+                    request,
+                    'We could not complete your registration. '
+                    'Please try again.'
+                )
 
     else:
         form = CustomUserCreationForm()
 
-    return render(request, 'BankApp/register.html', {'form': form}) 
+    return render(
+        request,
+        'BankApp/register.html',
+        {'form': form}
+    )
     
 def verify_email(request, signed_value):
     try:
