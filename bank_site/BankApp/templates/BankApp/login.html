@@ -71,40 +71,53 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         margin-bottom: 20px;
     }
 
-    /* Keep input text aligned while typing */
-    .login-form input.form-control {
-        display: block;
-        width: 100%;
-        height: 48px;
-        padding: 12px 15px;
-        border: 1px solid #ced4da;
-        border-radius: 6px;
-        background-color: #fff;
-        color: #212529;
-        font-size: 16px;
-        line-height: 1.5;
-        box-sizing: border-box;
+    /* Login text fields: force readable text and stable alignment */
+    .login-form form input.form-control[type="email"],
+    .login-form form input.form-control[type="password"] {
+        display: block !important;
+        width: 100% !important;
+        height: 48px !important;
+        min-height: 48px !important;
+        padding: 12px 15px !important;
+        margin: 0 !important;
+        border: 1px solid #ced4da !important;
+        border-radius: 6px !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+        color: #212529 !important;
+        -webkit-text-fill-color: #212529 !important;
+        caret-color: #212529 !important;
+        font-family: inherit !important;
+        font-size: 16px !important;
+        font-weight: 400 !important;
+        line-height: 22px !important;
+        letter-spacing: normal !important;
+        text-align: left !important;
+        text-indent: 0 !important;
+        box-sizing: border-box !important;
+        opacity: 1 !important;
+        transform: none !important;
+        appearance: none;
+        -webkit-appearance: none;
         outline: none;
-        transform: none;
-        transition: border-color 0.25s ease,
-                    box-shadow 0.25s ease;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
-    /* Prevent the input from enlarging when focused */
-    .login-form input.form-control:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
-        transform: none;
+    .login-form form input.form-control[type="email"]:focus,
+    .login-form form input.form-control[type="password"]:focus {
+        border-color: #007bff !important;
+        background: #ffffff !important;
+        color: #212529 !important;
+        -webkit-text-fill-color: #212529 !important;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15) !important;
+        transform: none !important;
     }
 
-    /* Placeholder styling */
-    .login-form input.form-control::placeholder {
-        color: #9ca3af;
-        opacity: 1;
-    }
-
-    .login-form input.form-control:focus::placeholder {
-        color: #9ca3af;
+    .login-form form input.form-control[type="email"]::placeholder,
+    .login-form form input.form-control[type="password"]::placeholder {
+        color: #6b7280 !important;
+        -webkit-text-fill-color: #6b7280 !important;
+        opacity: 1 !important;
     }
 
     .login-form label {
