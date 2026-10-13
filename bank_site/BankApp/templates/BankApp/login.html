@@ -51,52 +51,110 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
 
     <!-- Template Stylesheet -->
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
-    <style>
+    
+<style>
+    .login-form {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .login-form h2 {
+        margin-bottom: 25px;
+        font-weight: 700;
+        color: #1e3a8a;
+    }
+
+    .form-group {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    /* Keep input text aligned while typing */
+    .login-form input.form-control {
+        display: block;
+        width: 100%;
+        height: 48px;
+        padding: 12px 15px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        background-color: #fff;
+        color: #212529;
+        font-size: 16px;
+        line-height: 1.5;
+        box-sizing: border-box;
+        outline: none;
+        transform: none;
+        transition: border-color 0.25s ease,
+                    box-shadow 0.25s ease;
+    }
+
+    /* Prevent the input from enlarging when focused */
+    .login-form input.form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+        transform: none;
+    }
+
+    /* Placeholder styling */
+    .login-form input.form-control::placeholder {
+        color: #9ca3af;
+        opacity: 1;
+    }
+
+    .login-form input.form-control:focus::placeholder {
+        color: #9ca3af;
+    }
+
+    .login-form label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #374151;
+    }
+
+    /* Remember Me checkbox */
+    .login-form .form-check-input {
+        width: 16px;
+        height: 16px;
+        margin-top: 5px;
+        padding: 0;
+        transform: none;
+    }
+
+    .login-form .form-check-label {
+        display: inline-block;
+        margin-left: 5px;
+        font-weight: 400;
+    }
+
+    .btn-custom {
+        background-color: #1e3a8a;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 12px;
+        font-weight: 600;
+        transition: background-color 0.25s ease;
+    }
+
+    .btn-custom:hover {
+        background-color: #163172;
+        color: #fff;
+    }
+
+    .login-form a {
+        color: #1e3a8a;
+    }
+
+    @media (max-width: 576px) {
         .login-form {
-            background-color: #fff;
-            /* White background for form */
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 22px 18px;
         }
+    }
+</style>
 
-        .form-control {
-            border-radius: 5px;
-        }
-
-        .btn-custom {
-            background-color: #007bff;
-            /* Bootstrap primary color */
-            color: white;
-        }
-
-        .form-group {
-            position: relative;
-        }
-
-        input {
-            padding: 10px 15px;
-            border: 2px solid #ccc;
-            width: 100%;
-            border-radius: 5px;
-            outline: none;
-            transition: border-color 0.3s ease, transform 0.3s ease;
-        }
-
-        input:focus {
-            border-color: #007bff;
-            transform: scale(1.05);
-        }
-
-        input::placeholder {
-            color: #aaa;
-            transition: color 0.3s ease;
-        }
-
-        input:focus::placeholder {
-            color: transparent;
-        }
-    </style>
 </head>
 
 <body>
